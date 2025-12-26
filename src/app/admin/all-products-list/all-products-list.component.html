@@ -1,0 +1,67 @@
+<main>
+  <div class="list-container">
+    <div class="heading">
+      <div class="title-hint">
+        <p class="title">Products Lists</p>
+        <p class="sub-title">
+          List of Products that present in DataBase [Note: Only Active products
+          will be shown to users].
+        </p>
+      </div>
+      <div class="heading-btn-box">
+        <button class="btn btn-outline-secondary">+ Bulk Products</button>
+      </div>
+    </div>
+    <table class="table table-hover custom-table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product name</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Description</th>
+          <th scope="col">Tax (%)</th>
+          <th scope="col">Product Code</th>
+          <th scope="col">is Active</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of productsList; track $index;let i=$index) {
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.stock_count }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.tax_percent }}</td>
+          <td>{{ item.hsn_code }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': item.is_active === 1,
+                'bg-danger': item.is_active === 0
+              }"
+            >
+              {{ item.is_active === 1 ? "Active" : "In-Active" }}
+            </span>
+          </td>
+          <td>
+            <div class="actions-container">
+              <img
+                class="edit-img"
+                src="assets/admin-img/edit.svg"
+                alt="edit"
+              />
+              <img
+                class="delete-img"
+                src="assets/admin-img/delete.svg"
+                alt="edit"
+              />
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</main>
