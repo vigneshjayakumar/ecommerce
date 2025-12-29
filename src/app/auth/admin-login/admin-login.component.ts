@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { tap } from 'rxjs/internal/operators/tap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-login',
@@ -21,6 +21,7 @@ export class AdminLoginComponent implements OnInit {
 
   private authService = inject(AuthService);
   private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.checkIfLoginOrSignUp();
@@ -83,8 +84,9 @@ export class AdminLoginComponent implements OnInit {
   }
 
   checkRefresh() {
-    this.authService
-      .refreshAccessToken()
-      .subscribe((res) => console.log('REFRESH', res));
+    const query = {
+      authPage: this.isSignupScreen ? 'login' : 'signup',
+    };
+    this.router.navigate(['/login'], { queryParams: query });
   }
 }

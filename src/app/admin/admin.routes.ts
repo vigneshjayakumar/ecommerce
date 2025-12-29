@@ -11,6 +11,10 @@ export const adminRoutes: Routes = [
         path: 'products-list',
         component: AllProductsListComponent,
       },
+      {
+        path: '**',
+        redirectTo: 'products-list',
+      },
     ],
   },
 ];

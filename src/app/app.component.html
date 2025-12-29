@@ -23,7 +23,11 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="'/login'">Login</a>
+          @if(!isUserLoggedIn){
+          <a class="nav-link" (click)="onUserLogin()">Login</a>
+          }@else {
+          <a class="nav-link" (click)="onUserLogout()">Logout</a>
+          }
         </li>
       </ul>
     </div>

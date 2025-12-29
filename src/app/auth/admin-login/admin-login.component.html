@@ -41,7 +41,7 @@
         {{ isSignupScreen ? "Sign-Up" : "Login" }}
       </button>
       <button class="btn btn-primary" type="button" (click)="checkRefresh()">
-        {{ "REFRESH" }}
+        Switch to {{ !isSignupScreen ? " Sign-Up " : " Login " }} page
       </button>
     </div>
   </form>

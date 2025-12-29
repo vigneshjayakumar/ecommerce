@@ -42,7 +42,7 @@
                 'bg-danger': item.is_active === 0
               }"
             >
-              {{ item.is_active === 1 ? "Active" : "In-Active" }}
+              {{ item.is_active === 1 ? "Active" : "Not active" }}
             </span>
           </td>
           <td>
@@ -52,11 +52,13 @@
                 src="assets/admin-img/edit.svg"
                 alt="edit"
               />
+              @if(item.is_active === 1){
               <img
                 class="delete-img"
                 src="assets/admin-img/delete.svg"
-                alt="edit"
+                alt="delete"
               />
+              }
             </div>
           </td>
         </tr>
