@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { tap } from 'rxjs/internal/operators/tap';
 
 import { AuthService } from './auth/auth.service';
-import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   selector: 'app-root',
@@ -13,21 +13,21 @@ import { tap } from 'rxjs/internal/operators/tap';
 })
 export class AppComponent {
   private authService = inject(AuthService);
+  private router = inject(Router);
+
   isUserLoggedIn = false;
   isUserSubs = this.authService.accessTokenObs
-    .pipe(
-      tap((user) => {
-        console.log('USER LOGIN', user);
-        this.isUserLoggedIn = !!user;
-      })
-    )
+    .pipe(tap((user) => (this.isUserLoggedIn = !!user)))
     .subscribe();
-  constructor(private router: Router) {
+
+  constructor() {
     this.authService.refreshAccessToken().subscribe();
   }
+
   onUserLogin() {
     this.router.navigate(['/login'], { queryParams: { authPage: 'login' } });
   }
+
   onUserLogout() {
     this.authService
       .logOut()

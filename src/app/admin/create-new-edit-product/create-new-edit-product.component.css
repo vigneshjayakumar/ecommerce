@@ -1,0 +1,18 @@
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
