@@ -20,6 +20,7 @@ export class AdminProductService {
     stockCount: 0,
     taxPercent: 0,
     hsnCode: '',
+    isActive: 0,
   };
 
   set Product_details(details: TPostNewProductPayload) {
@@ -78,4 +79,5 @@ export type TPostNewProductPayload = {
   hsnCode: string;
   taxPercent: number;
   price: number;
+  isActive: 0 | 1;
 };

@@ -22,6 +22,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
   newProductForm!: FormGroup;
   postProductSubs!: Subscription;
   buttonLable = 'Create';
+  isActiveProduct = true;
 
   private adminProductService = inject(AdminProductService);
   private activatedRoute = inject(ActivatedRoute);
@@ -36,6 +37,8 @@ export class CreateNewEditProductComponent implements OnDestroy {
           this.editId = +id;
           this.dataToBeEdited = this.adminProductService.Product_details;
           this.buttonLable = 'Edit';
+          this.isActiveProduct =
+            this.adminProductService.Product_details.isActive === 0;
           this.initForm();
           this.populateForms();
         } else {
@@ -53,6 +56,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
       stockCount: this.dataToBeEdited?.stockCount,
       taxPercentage: this.dataToBeEdited?.taxPercent,
       skuCode: this.dataToBeEdited?.hsnCode,
+      isActive: this.dataToBeEdited?.isActive,
     });
     this.newProductForm.controls['skuCode'].disable();
   }
@@ -67,8 +71,10 @@ export class CreateNewEditProductComponent implements OnDestroy {
         validators: [Validators.required],
       }),
       skuCode: new FormControl('', { validators: [Validators.required] }),
+      isActive: new FormControl(false, { validators: [Validators.required] }),
     });
   }
+
   onSubmit() {
     const payload: TPostNewProductPayload = {
       productName: this.newProductForm.controls['productName'].value,
@@ -77,6 +83,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
       stockCount: this.newProductForm.controls['stockCount'].value,
       taxPercent: this.newProductForm.controls['taxPercentage'].value,
       hsnCode: this.newProductForm.controls['skuCode'].value,
+      isActive: this.newProductForm.controls['isActive'].value ? 1 : 0,
     };
     if (this.editId) {
       return this.postEditProduct(payload);

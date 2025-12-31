@@ -42,6 +42,7 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
       stockCount: productDetails.stock_count,
       taxPercent: productDetails.tax_percent,
       price: productDetails.price,
+      isActive: productDetails.is_active,
     };
     this.adminProductService.Product_details = data;
     this.router.navigate(['/admin/edit/', productDetails.id]);
