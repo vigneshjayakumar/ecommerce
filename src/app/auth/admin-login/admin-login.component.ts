@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AdminLoginComponent implements OnInit {
   userLoginForm!: FormGroup;
   isSignupScreen = true;
+  isNewUser = false;
 
   private authService = inject(AuthService);
   private activatedRoute = inject(ActivatedRoute);
@@ -29,26 +30,51 @@ export class AdminLoginComponent implements OnInit {
   }
 
   onSubmitLogin() {
-    console.log(this.userLoginForm.value);
     const email = this.userLoginForm.controls['email'].value;
     const password = this.userLoginForm.controls['password'].value;
     const confirmPassword =
       this.userLoginForm.controls?.['confirmPassword'].value ?? '';
-    if (this.isSignupScreen) {
+    if (this.isSignupScreen && !this.isNewUser) {
       this.authService
         .postSignUp(email, password, confirmPassword)
         .pipe(
           tap((res) => {
-            console.log('SUCCESSFULLY SIGN IN', res);
-            this.onClearLogin();
-            this.isSignupScreen = false;
+            if (res.response.newUser) {
+              this.isNewUser = res.response.newUser;
+            } else {
+              this.onClearLogin();
+              this.isSignupScreen = false;
+              this.router.navigate(['/login'], {
+                queryParams: { authPage: 'login' },
+              });
+            }
           })
         )
         .subscribe();
+    } else if (!this.isNewUser) {
+      this.authService.postLogin(email, password).subscribe();
     } else {
+      const userName = this.userLoginForm.controls['userName'].value;
+      const phoneNumber = this.userLoginForm.controls['phoneNumber'].value;
+      const payload = {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        phoneNumber: phoneNumber,
+        userName: userName,
+      };
       this.authService
-        .postLogin(email, password)
-        .pipe(tap((res) => console.log('User Login', res)))
+        .postRegisterUser(payload)
+        .pipe(
+          tap((res) => {
+            this.onClearLogin();
+            this.isSignupScreen = false;
+            this.isNewUser = false;
+            this.router.navigate(['/login'], {
+              queryParams: { authPage: 'login' },
+            });
+          })
+        )
         .subscribe();
     }
   }
@@ -66,7 +92,6 @@ export class AdminLoginComponent implements OnInit {
           } else {
             this.isSignupScreen = true;
           }
-          console.log(query);
         })
       )
       .subscribe();
@@ -77,6 +102,8 @@ export class AdminLoginComponent implements OnInit {
         validators: [Validators.email, Validators.required],
       }),
       password: new FormControl('', { validators: [Validators.required] }),
+      userName: new FormControl('', { validators: [Validators.required] }),
+      phoneNumber: new FormControl(null, { validators: [Validators.required] }),
       confirmPassword: new FormControl('', {
         validators: [Validators.required],
       }),

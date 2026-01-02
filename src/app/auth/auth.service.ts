@@ -24,15 +24,10 @@ export class AuthService {
       password: password,
       confirmPassword: confirmPassword,
     };
-    return this.httpClient
-      .post(`${environment.localURL}/login/signup`, payload)
-      .pipe(
-        tap(() =>
-          this.router.navigate(['/login'], {
-            queryParams: { authPage: 'login' },
-          })
-        )
-      );
+    return this.httpClient.post<TPostSignupRes>(
+      `${environment.localURL}/user/signup`,
+      payload
+    );
   }
 
   postLogin(email: string, password: string) {
@@ -41,13 +36,15 @@ export class AuthService {
       password: password,
     };
     return this.httpClient
-      .post<TPostLoginRes>(`${environment.localURL}/login/login`, payload, {
+      .post<TPostLoginRes>(`${environment.localURL}/user/login`, payload, {
         withCredentials: true,
       })
       .pipe(
         tap((res) => {
-          this.updateAccessToken(res.accessToken);
-          this.router.navigate(['/admin']);
+          this.updateAccessToken(res.response.accessToken);
+          if (res.response.accessToken) {
+            this.router.navigate(['/admin']);
+          }
         })
       );
   }
@@ -55,7 +52,7 @@ export class AuthService {
   refreshAccessToken() {
     return this.httpClient
       .post<Omit<TPostLoginRes, 'message'>>(
-        `${environment.localURL}/login/refresh`,
+        `${environment.localURL}/user/refresh`,
         {},
         {
           withCredentials: true,
@@ -63,7 +60,7 @@ export class AuthService {
       )
       .pipe(
         tap((res) => {
-          this.updateAccessToken(res.accessToken);
+          this.updateAccessToken(res.response.accessToken);
         })
       );
   }
@@ -75,7 +72,7 @@ export class AuthService {
   logOut() {
     return this.httpClient
       .post(
-        `${environment.localURL}/login/logout`,
+        `${environment.localURL}/user/logout`,
         {},
         { withCredentials: true }
       )
@@ -87,6 +84,14 @@ export class AuthService {
           });
         })
       );
+  }
+
+  postRegisterUser(userDetails: TRegisterUserDetails) {
+    return this.httpClient.post(
+      `${environment.localURL}/user/registerUser`,
+      userDetails,
+      { withCredentials: true }
+    );
   }
 
   private updateAccessToken(status: string | null) {
@@ -103,5 +108,20 @@ type TSignUpPayload = {
 
 type TPostLoginRes = {
   message: string;
-  accessToken: string;
+  response: {
+    accessToken: string;
+  };
+};
+
+type TPostSignupRes = {
+  message: string;
+  response: {
+    newUser?: boolean;
+    infoMessage?: string;
+  };
+};
+
+type TRegisterUserDetails = TSignUpPayload & {
+  userName: string;
+  phoneNumber: string;
 };
