@@ -1,9 +1,11 @@
 export type TAdminProductList = {
   message: string;
-  products: TProduct[];
+  response:{
+    products: TProduct[];
+  }
 };
 
-type TProduct = {
+export type TProduct = {
   id: number;
   product_name: string;
   price: number;

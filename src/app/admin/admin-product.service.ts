@@ -2,8 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
-import { TAdminProductList } from './all-products-list/all-products.modal';
 import { map } from 'rxjs/internal/operators/map';
+
+import {
+  TAdminProductList,
+  TProduct,
+} from './all-products-list/all-products.modal';
 import { ApiHttpService } from '../api-http.service';
 
 @Injectable({
@@ -13,33 +17,6 @@ export class AdminProductService {
   private httpClient = inject(HttpClient);
   private apiService = inject(ApiHttpService);
 
-  private productDetails: TPostNewProductPayload = {
-    productName: '',
-    description: '',
-    price: 0,
-    stockCount: 0,
-    taxPercent: 0,
-    hsnCode: '',
-    isActive: 0,
-  };
-
-  set Product_details(details: TPostNewProductPayload) {
-    this.productDetails = details;
-  }
-
-  get Product_details() {
-    return this.productDetails;
-  }
-
-  //   postNewproduct(productDetails: TPostNewProductPayload) {
-  //     return this.apiService.apiHttp('post',environment.localURL,'admin',['addProduct'],productDetails).post(
-  //       `${environment.localURL}/admin/addProduct`,
-  //       productDetails,
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //   }
   postNewproduct(productDetails: TPostNewProductPayload) {
     return this.httpClient.post(
       `${environment.localURL}/admin/addProduct`,
@@ -60,7 +37,22 @@ export class AdminProductService {
     );
   }
 
-  getAllProductsList(): Observable<TAdminProductList['products']> {
+  getProductDetailById(productId: number) {
+    return this.httpClient.get<TProductByIdRes>(
+      `${environment.localURL}/admin/product/${productId}`,
+      { withCredentials: true }
+    );
+  }
+
+  postDeleteProductById(productId: number) {
+    return this.httpClient.post(
+      `${environment.localURL}/admin/deleteProduct`,
+      { productId: productId },
+      { withCredentials: true }
+    );
+  }
+
+  getAllProductsList(): Observable<TAdminProductList['response']['products']> {
     return this.apiService
       .apiHttp<never, TAdminProductList, never>(
         'get',
@@ -68,7 +60,7 @@ export class AdminProductService {
         'admin',
         ['products']
       )
-      .pipe(map((res) => res.products));
+      .pipe(map((res) => res.response.products));
   }
 }
 
@@ -81,3 +73,5 @@ export type TPostNewProductPayload = {
   price: number;
   isActive: 0 | 1;
 };
+
+type TProductByIdRes = { message: string; response: { product: TProduct } };

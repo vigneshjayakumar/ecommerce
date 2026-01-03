@@ -14,5 +14,12 @@
 .btn-container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     gap: 16px;
+}
+
+.form-group-checkbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription, switchMap, tap } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ import { AdminProductService } from '../admin-product.service';
 })
 export class AllProductsListComponent implements OnInit, OnDestroy {
   subsList: Subscription[] = [];
-  productsList: TAdminProductList['products'] = [];
+  productsList: TAdminProductList['response']['products'] = [];
 
   constructor(
     private adminProductService: AdminProductService,
@@ -22,30 +22,26 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const subs = this.adminProductService
-      .getAllProductsList()
-      .pipe(
-        tap((res) => {
-          this.productsList = res;
-          console.log('RESPONES LISTS', this.productsList);
-        })
-      )
-      .subscribe();
+    const subs = this.getAllProductsList().subscribe();
     this.subsList.push(subs);
   }
 
-  onEdit(productDetails: (typeof this.productsList)[0]) {
-    const data = {
-      productName: productDetails.product_name,
-      description: productDetails.description,
-      hsnCode: productDetails.hsn_code,
-      stockCount: productDetails.stock_count,
-      taxPercent: productDetails.tax_percent,
-      price: productDetails.price,
-      isActive: productDetails.is_active,
-    };
-    this.adminProductService.Product_details = data;
-    this.router.navigate(['/admin/edit/', productDetails.id]);
+  onEdit(productId: number) {
+    this.router.navigate(['/admin/edit/', productId]);
+  }
+  onDelete(productId: number) {
+    this.adminProductService
+      .postDeleteProductById(productId)
+      .pipe(switchMap((res) => this.getAllProductsList()))
+      .subscribe();
+  }
+
+  private getAllProductsList() {
+    return this.adminProductService.getAllProductsList().pipe(
+      tap((productList) => {
+        this.productsList = productList;
+      })
+    );
   }
 
   ngOnDestroy(): void {

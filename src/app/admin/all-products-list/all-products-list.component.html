@@ -51,13 +51,14 @@
                 class="edit-img"
                 src="assets/admin-img/edit.svg"
                 alt="edit"
-                (click)="onEdit(item)"
+                (click)="onEdit(item.id)"
               />
               @if(item.is_active === 1){
               <img
                 class="delete-img"
                 src="assets/admin-img/delete.svg"
                 alt="delete"
+                (click)="onDelete(item.id)"
               />
               }
             </div>

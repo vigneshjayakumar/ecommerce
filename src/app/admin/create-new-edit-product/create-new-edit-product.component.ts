@@ -11,6 +11,7 @@ import {
 } from '../admin-product.service';
 import { Subscription, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { TProduct } from '../all-products-list/all-products.modal';
 
 @Component({
   selector: 'app-create-new-edit-product',
@@ -27,7 +28,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
   private adminProductService = inject(AdminProductService);
   private activatedRoute = inject(ActivatedRoute);
 
-  dataToBeEdited: TPostNewProductPayload | null = null;
+  dataToBeEdited: TProduct | null = null;
   editId: number | null = null;
   paramsIdSubs = this.activatedRoute.paramMap
     .pipe(
@@ -35,12 +36,19 @@ export class CreateNewEditProductComponent implements OnDestroy {
         const id = params.get('id');
         if (id) {
           this.editId = +id;
-          this.dataToBeEdited = this.adminProductService.Product_details;
           this.buttonLable = 'Edit';
-          this.isActiveProduct =
-            this.adminProductService.Product_details.isActive === 0;
+          this.adminProductService
+            .getProductDetailById(this.editId)
+            .pipe(
+              tap((res) => {
+                console.log('PRODUCT', res.response.product);
+                this.dataToBeEdited = res.response.product;
+                this.isActiveProduct = this.dataToBeEdited.is_active === 0;
+                this.populateForms();
+              })
+            )
+            .subscribe();
           this.initForm();
-          this.populateForms();
         } else {
           this.initForm();
         }
@@ -50,13 +58,13 @@ export class CreateNewEditProductComponent implements OnDestroy {
 
   private populateForms() {
     this.newProductForm.setValue({
-      productName: this.dataToBeEdited?.productName,
+      productName: this.dataToBeEdited?.product_name,
       description: this.dataToBeEdited?.description,
       price: this.dataToBeEdited?.price,
-      stockCount: this.dataToBeEdited?.stockCount,
-      taxPercentage: this.dataToBeEdited?.taxPercent,
-      skuCode: this.dataToBeEdited?.hsnCode,
-      isActive: this.dataToBeEdited?.isActive,
+      stockCount: this.dataToBeEdited?.stock_count,
+      taxPercentage: this.dataToBeEdited?.tax_percent,
+      skuCode: this.dataToBeEdited?.hsn_code,
+      isActive: this.dataToBeEdited?.is_active,
     });
     this.newProductForm.controls['skuCode'].disable();
   }

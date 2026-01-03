@@ -54,12 +54,16 @@
         formControlName="skuCode"
       />
     </div>
-    <div class="form-group">
-      <label for="isActive">isActive</label>
+    <div class="form-group-checkbox">
+      <label for="isActive">In Stock?</label>
       <input type="checkbox" name="isActive" formControlName="isActive" />
     </div>
     <div class="btn-container">
+      @if(!this.editId){
       <button class="btn btn-outline-secondary" type="button">Clear</button>
+      }@else {
+      <div class="ghost"></div>
+      }
       <button class="btn btn-outline-primary" type="submit">
         {{ buttonLable }}
       </button>
