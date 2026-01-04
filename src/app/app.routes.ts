@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
 
 export const appRoutes: Routes = [
@@ -10,5 +11,14 @@ export const appRoutes: Routes = [
   {
     path: 'login',
     component: AdminLoginComponent,
+  },
+  {
+    path: '',
+    redirectTo: 'admin',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'admin',
   },
 ];

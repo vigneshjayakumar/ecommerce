@@ -1,0 +1,55 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px
+}
+
+.merchant-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #5c5c5c33;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    padding: 0 8px;
+}
+
+.title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.sub-title, label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.client-details {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding-bottom: 24px;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #5c5c5c33;
+    margin-bottom: 40px;
+
+    .btn-box {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 24px;
+    }
+}

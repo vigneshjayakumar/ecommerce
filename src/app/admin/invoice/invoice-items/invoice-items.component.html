@@ -1,0 +1,82 @@
+<main>
+  <div class="item-container">
+    <table class="table table-hover custom-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product name</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Tax rate</th>
+          <th>Amount</th>
+          <th class="add-list-btn" (click)="addFormEle()">+</th>
+        </tr>
+      </thead>
+      <tbody [formGroup]="parentForm">
+        <ng-container formArrayName="invoiceItemsArr">
+          @for (item of invoiceItemArr.controls; track item; let i = $index) {
+          <tr [formGroupName]="i">
+            <th>{{ i + 1 }}</th>
+            <td>
+              <select
+                class="form-control"
+                id="product_name"
+                formControlName="productName"
+              >
+                @for (product of productList; track product.id;let
+                productindex=$index) {
+                <option [value]="product.product_name">
+                  {{ product.product_name }}
+                </option>
+                }
+              </select>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                type="number"
+                formControlName="quantity"
+              />
+            </td>
+            <td>
+              <input
+                class="form-control"
+                type="number"
+                formControlName="rate"
+              />
+            </td>
+            <td>
+              <input
+                class="form-control"
+                type="number"
+                formControlName="taxRate"
+              />
+            </td>
+            <td>
+              <input
+                class="form-control"
+                type="number"
+                formControlName="amount"
+              />
+            </td>
+            @if(i!==0){
+            <td class="actions-container">
+              <img
+                class="delete-img"
+                src="assets/admin-img/delete.svg"
+                (click)="onDeleteFormEle(i)"
+              />
+            </td>
+            }
+          </tr>
+          }
+        </ng-container>
+      </tbody>
+    </table>
+    <div class="btn-container">
+      <button type="button" (click)="onCalculateTotalAmount()">
+        Calculate Total Amount
+      </button>
+    </div>
+  </div>
+</main>

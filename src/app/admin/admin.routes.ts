@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { AdminComponent } from './admin.component';
 import { AllProductsListComponent } from './all-products-list/all-products-list.component';
 import { CreateNewEditProductComponent } from './create-new-edit-product/create-new-edit-product.component';
@@ -21,8 +22,13 @@ export const adminRoutes: Routes = [
         component: CreateNewEditProductComponent,
       },
       {
+        path: 'invoice',
+        loadChildren: () =>
+          import('./invoice/invoice.routes').then((m) => m.InvoiceRoutes),
+      },
+      {
         path: '**',
-        redirectTo: 'products-list',
+        redirectTo: 'invoice',
       },
     ],
   },

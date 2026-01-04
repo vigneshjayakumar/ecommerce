@@ -1,0 +1,81 @@
+<main>
+  <div class="main-container">
+    <div class="merchant-details">
+      <p class="title">{{ merchantInfo.tenant_name }}</p>
+      <div class="details">
+        <div class="address-details">
+          <p class="sub-title">{{ merchantInfo.address }}</p>
+          <p class="sub-title">{{ merchantInfo.country }}</p>
+          <p class="sub-title">{{ merchantInfo.state }}</p>
+          <p class="sub-title">{{ merchantInfo.pincode }}</p>
+        </div>
+        <div class="gstin">
+          <p class="sub-title">
+            {{ merchantInfo.gstin }}
+          </p>
+          <p class="sub-title">
+            {{ merchantInfo.email_id }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="customerDetailsForm">
+      <div class="client-details">
+        <div class="form-group">
+          <label for="productName">Cutomer name*</label>
+          <input
+            class="form-control"
+            type="text"
+            name="productName"
+            formControlName="name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Phone number*</label>
+          <input
+            class="form-control"
+            type="number"
+            name="phoneNumber"
+            formControlName="phoneNumber"
+          />
+        </div>
+        <div class="form-group">
+          <label for="gstin">Customer GST number*</label>
+          <input
+            class="form-control"
+            type="text"
+            name="gstin"
+            formControlName="gstin"
+          />
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea
+            class="form-control"
+            name="address"
+            id="address"
+            cols="30"
+            rows="1"
+            formControlName="address"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+    <div class="invoice-items">
+      <app-invoice-items></app-invoice-items>
+    </div>
+    <div class="btn-container">
+      <div class="ghost-box"></div>
+      <div class="btn-box">
+        <button type="button" class="btn btn-outline-secondary">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="onVerifyInvoice()"
+        >
+          Verify
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
