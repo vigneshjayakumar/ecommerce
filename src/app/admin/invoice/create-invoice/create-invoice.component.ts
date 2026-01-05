@@ -3,22 +3,28 @@ import { tap } from 'rxjs/internal/operators/tap';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 
-import { InvoiceService, TMerchantInfo } from '../invoice.service';
+import {
+  InvoiceService,
+  TInvoicePostPayload,
+  TMerchantInfo,
+} from '../invoice.service';
 import { InvoiceItemsComponent } from '../invoice-items/invoice-items.component';
 
 @Component({
   selector: 'app-create-invoice',
-  imports: [ReactiveFormsModule, InvoiceItemsComponent],
+  imports: [ReactiveFormsModule, InvoiceItemsComponent, FormsModule],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.css',
 })
 export class CreateInvoiceComponent implements OnInit {
   private invoiceService = inject(InvoiceService);
-
+  showInvoiceToggleBtn = false;
+  invoiceType = false;
   merchantInfo: TMerchantInfo = {
     tenant_name: '',
     address: '',
@@ -35,14 +41,37 @@ export class CreateInvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.invoiceService
       .fetchMerchentDetails()
-      .pipe(tap((details) => (this.merchantInfo = details)))
+      .pipe(
+        tap((details) => {
+          this.merchantInfo = details;
+          if (this.merchantInfo.gstin !== '') {
+            this.showInvoiceToggleBtn = true;
+          }
+        })
+      )
       .subscribe();
     this.initForm();
   }
   onVerifyInvoice() {
-    console.log(this.customerDetailsForm.value);
+    const currentDate = new Date();
+    const payload: TInvoicePostPayload = {
+      invoiceType: this.invoiceType === true ? 'GST' : 'NON-GST',
+      invoiceDate:
+        currentDate.getDate() +
+        '-' +
+        (currentDate.getMonth() + 1) +
+        '-' +
+        currentDate.getFullYear(),
+      customer: this.customerDetailsForm.getRawValue(),
+      items: [],
+    };
+    console.log(this.customerDetailsForm.value, payload);
   }
-
+  onInvoiceTypeChange() {
+    if (this.invoiceType)
+      return this.customerDetailsForm.get('gstin')?.enable();
+    this.customerDetailsForm.get('gstin')?.disable();
+  }
   private initForm() {
     this.customerDetailsForm = new FormGroup({
       name: new FormControl('', { validators: [Validators.required] }),
@@ -50,5 +79,6 @@ export class CreateInvoiceComponent implements OnInit {
       gstin: new FormControl('', { validators: [Validators.required] }),
       address: new FormControl('', { validators: [Validators.required] }),
     });
+    this.customerDetailsForm.get('gstin')?.disable();
   }
 }

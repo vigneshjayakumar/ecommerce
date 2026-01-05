@@ -43,3 +43,18 @@ export type TMerchantInfo = {
   email_id: string;
   pincode: number;
 };
+
+export type TInvoicePostPayload = {
+  invoiceType: 'GST' | 'NON-GST';
+  invoiceDate: string;
+  customer: {
+    name: string;
+    gstin: string | null;
+    phoneNumber: string;
+    address: string | null;
+  };
+  items: {
+    productId: number;
+    quantity: number;
+  }[];
+};

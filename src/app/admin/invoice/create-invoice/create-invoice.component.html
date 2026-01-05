@@ -19,6 +19,13 @@
         </div>
       </div>
     </div>
+    @if(showInvoiceToggleBtn){
+    <input
+      type="checkbox"
+      (change)="onInvoiceTypeChange()"
+      [(ngModel)]="invoiceType"
+    />
+    }
     <form [formGroup]="customerDetailsForm">
       <div class="client-details">
         <div class="form-group">
