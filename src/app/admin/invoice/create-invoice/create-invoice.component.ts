@@ -52,7 +52,9 @@ export class CreateInvoiceComponent implements OnInit {
       .subscribe();
     this.initForm();
   }
-  onVerifyInvoice() {
+  private onVerifyInvoice(
+    productIdArr: { productId: number; quantity: number }[]
+  ) {
     const currentDate = new Date();
     const payload: TInvoicePostPayload = {
       invoiceType: this.invoiceType === true ? 'GST' : 'NON-GST',
@@ -63,15 +65,25 @@ export class CreateInvoiceComponent implements OnInit {
         '-' +
         currentDate.getFullYear(),
       customer: this.customerDetailsForm.getRawValue(),
-      items: [],
+      items: productIdArr,
     };
-    console.log(this.customerDetailsForm.value, payload);
+    this.invoiceService.post_Invoice_details = payload;
   }
   onInvoiceTypeChange() {
     if (this.invoiceType)
       return this.customerDetailsForm.get('gstin')?.enable();
     this.customerDetailsForm.get('gstin')?.disable();
   }
+
+  onValuesEmit(event: { productId: number; quantity: number }[]) {
+    const quantityArray = event;
+    this.onVerifyInvoice(quantityArray);
+    this.invoiceService
+      .validateInvoiceDetails()
+      .pipe(tap((res) => console.log('Validate Invoice Details', res)))
+      .subscribe();
+  }
+
   private initForm() {
     this.customerDetailsForm = new FormGroup({
       name: new FormControl('', { validators: [Validators.required] }),

@@ -31,3 +31,18 @@
     justify-content: center;
     cursor: pointer;
 }
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #5c5c5c33;
+    margin-bottom: 40px;
+
+    .btn-box {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 24px;
+    }
+}

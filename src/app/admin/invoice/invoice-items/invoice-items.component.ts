@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -11,6 +18,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
+import { InvoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-items',
@@ -19,6 +27,7 @@ import { TProduct } from '../../all-products-list/all-products.modal';
   styleUrl: './invoice-items.component.css',
 })
 export class InvoiceItemsComponent implements OnInit, OnDestroy {
+  @Output() emitIvoiceValues = new EventEmitter();
   invoiceItemForm!: FormGroup;
   parentForm = new FormGroup({
     invoiceItemsArr: new FormArray([]),
@@ -26,6 +35,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
   productList: TProduct[] = [];
 
   private adminService = inject(AdminProductService);
+
   private subscriptionsArr: (Subscription | undefined)[] = [];
   constructor() {
     const formInitGroup = this.initForm();
@@ -103,7 +113,22 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
     }
   }
   onCalculateTotalAmount() {
-    console.log(this.invoiceItemArr.getRawValue());
+    const invoiceItems = this.filterChoosenProductIdAndQuantity();
+    this.emitIvoiceValues.emit(invoiceItems);
+  }
+
+  private filterChoosenProductIdAndQuantity() {
+    const itemsArr = this.invoiceItemArr.getRawValue();
+    const productIdQtyArr: { productId: number; quantity: number }[] = [];
+    itemsArr.forEach((ele) => {
+      const found = this.productList.find(
+        (product) => product.product_name === ele.productName
+      );
+      if (found) {
+        productIdQtyArr.push({ productId: found.id, quantity: ele.quantity });
+      }
+    });
+    return productIdQtyArr;
   }
 
   ngOnDestroy(): void {

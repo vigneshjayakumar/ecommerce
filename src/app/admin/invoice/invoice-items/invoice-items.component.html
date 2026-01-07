@@ -70,13 +70,37 @@
             }
           </tr>
           }
+          <tr></tr>
+          <td></td>
+          <td></td>
+          <td>Total</td>
+          <td>2000</td>
+          <td>2000</td>
+          <td>2000</td>
         </ng-container>
       </tbody>
     </table>
     <div class="btn-container">
-      <button type="button" (click)="onCalculateTotalAmount()">
-        Calculate Total Amount
-      </button>
+      <div class="ghost-box"></div>
+      <div class="btn-box">
+        <button type="button" class="btn btn-outline-secondary">Cancel</button>
+        @if(true){
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="onCalculateTotalAmount()"
+        >
+          Calculate Amount
+        </button>
+        }
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="onCalculateTotalAmount()"
+        >
+          Generate Invoice
+        </button>
+      </div>
     </div>
   </div>
 </main>

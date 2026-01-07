@@ -69,20 +69,7 @@
       </div>
     </form>
     <div class="invoice-items">
-      <app-invoice-items></app-invoice-items>
-    </div>
-    <div class="btn-container">
-      <div class="ghost-box"></div>
-      <div class="btn-box">
-        <button type="button" class="btn btn-outline-secondary">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-outline-primary"
-          (click)="onVerifyInvoice()"
-        >
-          Verify
-        </button>
-      </div>
+      <app-invoice-items (emitIvoiceValues)="onValuesEmit($event)"></app-invoice-items>
     </div>
   </div>
 </main>
