@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -18,7 +19,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
-import { InvoiceService } from '../invoice.service';
+import { InvoiceService, TCalculatedInvoiceRes } from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-items',
@@ -27,16 +28,38 @@ import { InvoiceService } from '../invoice.service';
   styleUrl: './invoice-items.component.css',
 })
 export class InvoiceItemsComponent implements OnInit, OnDestroy {
-  @Output() emitIvoiceValues = new EventEmitter();
+  isEditMode: boolean = true;
   invoiceItemForm!: FormGroup;
   parentForm = new FormGroup({
     invoiceItemsArr: new FormArray([]),
   });
   productList: TProduct[] = [];
+  validatedProductsList: TCalculatedInvoiceRes['response'] = {
+    calculatedInvoiceItems: [],
+    total: {
+      totalAmount: 0,
+      totalPrice: 0,
+      totalTax: 0,
+    },
+  };
 
   private adminService = inject(AdminProductService);
+  private invoiceService = inject(InvoiceService);
+  private invoiceItemsSubs = this.invoiceService.invoiceArrObs
+    .pipe(
+      tap((data) => {
+        if (data.calculateFromDB === false) {
+          this.isEditMode = data.isEditMode;
+          this.validatedProductsList =
+            this.invoiceService.validated_products_list;
+        }
+      })
+    )
+    .subscribe();
 
-  private subscriptionsArr: (Subscription | undefined)[] = [];
+  private subscriptionsArr: (Subscription | undefined)[] = [
+    this.invoiceItemsSubs,
+  ];
   constructor() {
     const formInitGroup = this.initForm();
     this.invoiceItemArr.push(formInitGroup);
@@ -48,7 +71,9 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
       .subscribe();
     this.subscriptionsArr.push(subs);
   }
-
+  addEnableEdit() {
+    this.isEditMode = true;
+  }
   get invoiceItemArr() {
     return this.parentForm.get('invoiceItemsArr') as FormArray;
   }
@@ -114,7 +139,12 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
   }
   onCalculateTotalAmount() {
     const invoiceItems = this.filterChoosenProductIdAndQuantity();
-    this.emitIvoiceValues.emit(invoiceItems);
+    this.invoiceService.setInvoiceItemsArr({
+      items: invoiceItems,
+      isEditMode: false,
+      calculateFromDB: true,
+    });
+    // this.emitIvoiceValues.emit(invoiceItems);
   }
 
   private filterChoosenProductIdAndQuantity() {

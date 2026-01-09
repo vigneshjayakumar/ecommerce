@@ -9,9 +9,14 @@
           <th>Rate</th>
           <th>Tax rate</th>
           <th>Amount</th>
+          @if(isEditMode){
           <th class="add-list-btn" (click)="addFormEle()">+</th>
+          }@else {
+          <th class="add-list-btn" (click)="addEnableEdit()">Edit</th>
+          }
         </tr>
       </thead>
+      @if(isEditMode){
       <tbody [formGroup]="parentForm">
         <ng-container formArrayName="invoiceItemsArr">
           @for (item of invoiceItemArr.controls; track item; let i = $index) {
@@ -79,12 +84,34 @@
           <td>2000</td>
         </ng-container>
       </tbody>
+      }@else {
+      <tbody>
+        @for (item of validatedProductsList.calculatedInvoiceItems; track item;
+        let i = $index) {
+        <tr>
+          <th>{{ i +1}}</th>
+          <td>{{ item.productName }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.price }}</td>
+          <td>{{ item.taxRate }}</td>
+          <td>{{ item.amount }}</td>
+        </tr>
+        }
+        <tr></tr>
+        <td></td>
+        <td></td>
+        <td>Total</td>
+        <td>{{ validatedProductsList.total.totalPrice }}</td>
+        <td>{{ validatedProductsList.total.totalTax }}</td>
+        <td>{{ validatedProductsList.total.totalAmount }}</td>
+      </tbody>
+      }
     </table>
     <div class="btn-container">
       <div class="ghost-box"></div>
       <div class="btn-box">
         <button type="button" class="btn btn-outline-secondary">Cancel</button>
-        @if(true){
+        @if(isEditMode){
         <button
           type="button"
           class="btn btn-outline-primary"
@@ -92,7 +119,7 @@
         >
           Calculate Amount
         </button>
-        }
+        }@else {
         <button
           type="button"
           class="btn btn-outline-danger"
@@ -100,6 +127,7 @@
         >
           Generate Invoice
         </button>
+        }
       </div>
     </div>
   </div>

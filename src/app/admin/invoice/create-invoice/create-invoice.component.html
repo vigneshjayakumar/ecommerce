@@ -19,13 +19,6 @@
         </div>
       </div>
     </div>
-    @if(showInvoiceToggleBtn){
-    <input
-      type="checkbox"
-      (change)="onInvoiceTypeChange()"
-      [(ngModel)]="invoiceType"
-    />
-    }
     <form [formGroup]="customerDetailsForm">
       <div class="client-details">
         <div class="form-group">
@@ -47,7 +40,17 @@
           />
         </div>
         <div class="form-group">
-          <label for="gstin">Customer GST number*</label>
+          <label for="gstin"
+            >Customer GST number* @if(showInvoiceToggleBtn){
+            <input
+              type="checkbox"
+              (change)="onInvoiceTypeChange()"
+              [(ngModel)]="invoiceType"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="!isEditMode"
+            />
+            }</label
+          >
           <input
             class="form-control"
             type="text"
@@ -69,7 +72,7 @@
       </div>
     </form>
     <div class="invoice-items">
-      <app-invoice-items (emitIvoiceValues)="onValuesEmit($event)"></app-invoice-items>
+      <app-invoice-items></app-invoice-items>
     </div>
   </div>
 </main>
