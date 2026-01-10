@@ -1,0 +1,66 @@
+<main>
+  <div class="list-container">
+    <div class="heading">
+      <div class="title-hint">
+        <p class="title">Invoice Lists</p>
+        <p class="sub-title">List of Invoice that present in DataBase.</p>
+      </div>
+    </div>
+    <table class="table table-hover custom-table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Customer name</th>
+          <th scope="col">Invoice Number</th>
+          <th scope="col">Date</th>
+          <th scope="col">Sub total</th>
+          <th scope="col">Tax</th>
+          <th scope="col">Total Amount</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of invoiceDataList; track item.id;let i=$index) {
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.customer_name }}</td>
+          <td>{{ item.invoice_number }}</td>
+          <td>{{ item.created_at | date }}</td>
+          <td>{{ item.subtotal }}</td>
+          <td>{{ item.tax_amount }}</td>
+          <td>{{ item.total_amount }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': item.invoice_status === 'PAID',
+                'bg-danger': item.invoice_status !== 'PAID'
+              }"
+            >
+              {{ item.invoice_status }}
+            </span>
+          </td>
+          <td>
+            <div class="actions-container">
+              <img
+                class="edit-img"
+                src="assets/admin-img/edit.svg"
+                alt="edit"
+                (click)="onViewDetails(item.id)"
+              />
+              @if(item.invoice_status!=='PAID'){
+              <img
+                class="delete-img"
+                src="assets/admin-img/delete.svg"
+                alt="delete"
+                (click)="onCancelInvoice(item.id)"
+              />
+              }
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</main>

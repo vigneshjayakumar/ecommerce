@@ -1,10 +1,22 @@
 <main>
   <div class="invoice-container">
     <div class="tab-container">
-      <button class="btn btn-outline-secondary" (click)="onRoute('create-invoice')">Create Invoice</button>
+      <button
+        class="btn btn-outline-secondary"
+        (click)="onRoute('create-invoice')"
+      >
+        Create Invoice
+      </button>
+      <button
+        class="btn btn-outline-secondary"
+        (click)="onRoute('invoice-lists')"
+      >
+        Invoice List
+      </button>
     </div>
     <div class="content-box">
-      <app-create-invoice></app-create-invoice>
+      <router-outlet></router-outlet>
+      <!-- <app-create-invoice></app-create-invoice> -->
     </div>
   </div>
 </main>

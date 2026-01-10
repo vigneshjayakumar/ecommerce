@@ -82,11 +82,28 @@ export class InvoiceService {
   }
 
   generateInvoice() {
-    return this.httpClient
-      .post(`${environment.localURL}/invoice/generateInvoice`, {
+    return this.httpClient.post(
+      `${environment.localURL}/invoice/generateInvoice`,
+      {
         invoiceDetails: this.postInvoiceDetails,
-      })
-      .pipe(tap((res) => console.log('GENERATE INVOICE POST', res)));
+      }
+    );
+  }
+
+  fetchInvoiceLists() {
+    return this.httpClient
+      .get<TGetInvoiceLists>(
+        `${environment.localURL}/invoice/getInvoiceLists`,
+        { withCredentials: true }
+      )
+      .pipe(map((res) => res.response.data));
+  }
+
+  onCancelInvoice(id: number) {
+    return this.httpClient.delete(
+      `${environment.localURL}/invoice/onCancelInvoice/${id}`,
+      { withCredentials: true }
+    );
   }
 }
 
@@ -154,4 +171,26 @@ type TCalculatedBillItem = {
   taxRate: number;
   amount: number;
   productId: number;
+};
+
+export type TGetInvoiceLists = {
+  message: 'SUCCESS' | 'ERROR';
+  response: {
+    data: TInvoiceListEle[];
+  };
+};
+
+type TInvoiceListEle = {
+  id: number;
+  tenant_id: number;
+  invoice_number: string;
+  invoice_type: string;
+  customer_name: string;
+  customer_gstin: string;
+  subtotal: string;
+  tax_amount: string;
+  total_amount: string;
+  invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED';
+  created_by: number;
+  created_at: Date;
 };
