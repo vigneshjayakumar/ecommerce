@@ -80,6 +80,14 @@ export class InvoiceService {
         })
       );
   }
+
+  generateInvoice() {
+    return this.httpClient
+      .post(`${environment.localURL}/invoice/generateInvoice`, {
+        invoiceDetails: this.postInvoiceDetails,
+      })
+      .pipe(tap((res) => console.log('GENERATE INVOICE POST', res)));
+  }
 }
 
 export type TMerchantDataResponse = {

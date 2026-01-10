@@ -89,7 +89,7 @@
         @for (item of validatedProductsList.calculatedInvoiceItems; track item;
         let i = $index) {
         <tr>
-          <th>{{ i +1}}</th>
+          <th>{{ i + 1 }}</th>
           <td>{{ item.productName }}</td>
           <td>{{ item.quantity }}</td>
           <td>{{ item.price }}</td>
@@ -123,7 +123,7 @@
         <button
           type="button"
           class="btn btn-outline-danger"
-          (click)="onCalculateTotalAmount()"
+          (click)="onGenerateInvoice()"
         >
           Generate Invoice
         </button>

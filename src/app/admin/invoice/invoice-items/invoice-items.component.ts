@@ -146,7 +146,9 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
     });
     // this.emitIvoiceValues.emit(invoiceItems);
   }
-
+  onGenerateInvoice() {
+    this.invoiceService.generateInvoice().subscribe();
+  }
   private filterChoosenProductIdAndQuantity() {
     const itemsArr = this.invoiceItemArr.getRawValue();
     const productIdQtyArr: { productId: number; quantity: number }[] = [];
