@@ -44,14 +44,14 @@
             <div class="actions-container">
               <img
                 class="edit-img"
-                src="assets/admin-img/edit.svg"
+                src="assets/admin-img/view-eye.svg"
                 alt="edit"
                 (click)="onViewDetails(item.id)"
               />
               @if(item.invoice_status!=='PAID'){
               <img
                 class="delete-img"
-                src="assets/admin-img/delete.svg"
+                src="assets/admin-img/cancel-invoice.svg"
                 alt="delete"
                 (click)="onCancelInvoice(item.id)"
               />

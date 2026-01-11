@@ -105,6 +105,13 @@ export class InvoiceService {
       { withCredentials: true }
     );
   }
+
+  fetchInvoiceDetailsById(invoiceId: number) {
+    return this.httpClient.get<TViewInvoiceDetailsRes>(
+      `${environment.localURL}/invoice/getInvoiceDetailsById/${invoiceId}`,
+      { withCredentials: true }
+    );
+  }
 }
 
 export type TMerchantDataResponse = {
@@ -193,4 +200,39 @@ type TInvoiceListEle = {
   invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED';
   created_by: number;
   created_at: Date;
+};
+
+export type TViewInvoiceDetailsRes = {
+  message: 'SUCCESS' | 'ERROR';
+  response: {
+    overAll: {
+      id: number;
+      tenant_id: number;
+      invoice_number: string;
+      invoice_type: string;
+      customer_name: string;
+      customer_gstin: string;
+      subtotal: string;
+      tax_amount: string;
+      total_amount: string;
+      invoice_status: string;
+      created_by: string;
+      created_at: Date;
+    };
+    items: TViewInvoiceDetailsItemsArr[];
+  };
+};
+
+type TViewInvoiceDetailsItemsArr = {
+  id: number;
+  invoice_id: number;
+  product_id: number;
+  product_name_snapshot: string;
+  hsn_code: string;
+  quantity: number;
+  price_snapshot: string;
+  tax_rate: string;
+  tax_amount: string;
+  line_total: string;
+  tenant_id: number;
 };

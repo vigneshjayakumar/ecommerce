@@ -1,0 +1,48 @@
+.item-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .table-head {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+    }
+}
+
+
+.actions-container {
+    img {
+        margin-top: 10px;
+        height: 20px;
+        cursor: pointer;
+
+    }
+}
+
+.add-list-btn {
+    width: 20px;
+    height: 20px;
+    padding: 15px;
+    background-color: #0000ff3d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #5c5c5c33;
+    margin-bottom: 40px;
+
+    .btn-box {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 24px;
+    }
+}

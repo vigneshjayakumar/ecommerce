@@ -51,11 +51,11 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
             return this.postInvoicePayload();
           }
           this.isEditMode = data.isEditMode;
-          if (!this.isEditMode) {
-            this.customerDetailsForm.disable();
-          } else {
-            this.customerDetailsForm.enable();
-          }
+          // if (!this.isEditMode) {
+          //   this.customerDetailsForm.disable();
+          // } else {
+          //   this.customerDetailsForm.enable();
+          // }
           return EMPTY;
         })
       )
