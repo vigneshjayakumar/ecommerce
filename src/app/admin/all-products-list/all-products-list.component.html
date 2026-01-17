@@ -9,10 +9,16 @@
         </p>
       </div>
       <div class="heading-btn-box">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Search... Product name/ SKU Code"
+          [formControl]="searchInput"
+        />
         <button class="btn btn-outline-secondary">+ Bulk Products</button>
       </div>
     </div>
-    @if (productsList.length) {
+    @if (searchProductList.length) {
       <table class="table table-hover custom-table">
         <thead class="thead-light">
           <tr>
@@ -27,7 +33,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of productsList; track $index; let i = $index) {
+          @for (item of searchProductList; track $index; let i = $index) {
             <tr>
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ item.product_name }}</td>

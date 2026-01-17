@@ -1,12 +1,33 @@
 <main>
   <div class="list-container">
-    @if (invoiceDataList.length) {
-      <div class="heading">
-        <div class="title-hint">
-          <p class="title">Invoice Lists</p>
-          <p class="sub-title">List of Invoice that present in DataBase.</p>
+    <div class="heading">
+      <div class="title-hint">
+        <p class="title">Invoice Lists</p>
+        <p class="sub-title">List of Invoice that present in DataBase.</p>
+      </div>
+      <div class="heading-btn-box">
+        <div class="search-filter">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Name/ #invoice"
+            [formControl]="searchControl"
+          />
+          <select
+            name="filer"
+            class="form-control"
+            id="filer"
+            [formControl]="filterControl"
+          >
+            <option value="all">All</option>
+            <option value="paid">Paid</option>
+            <option value="draft">Draft</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
         </div>
       </div>
+    </div>
+    @if (searchFilterList.length) {
       <table class="table table-hover custom-table">
         <thead class="thead-light">
           <tr>
@@ -21,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of invoiceDataList; track item.id; let i = $index) {
+          @for (item of searchFilterList; track item.id; let i = $index) {
             <tr>
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ item.customer_name }}</td>

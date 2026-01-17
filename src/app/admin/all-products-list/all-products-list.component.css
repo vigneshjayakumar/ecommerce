@@ -71,8 +71,15 @@
   }
 }
 
+.heading-btn-box {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
 .heading-btn-box button {
-  width: fit-content;
+  width: 100%;
 }
 
 .no-data {
