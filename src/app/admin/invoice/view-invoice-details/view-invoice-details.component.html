@@ -1,79 +1,81 @@
-<main>
-  <div class="main-container">
-    <div class="customer-details">
-      <div class="customer-box">
-        <p class="title">Customer Name</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.customer_name }}</p>
+@if (invoiceDetailsObs | async) {
+  <main>
+    <div class="main-container">
+      <div class="customer-details">
+        <div class="customer-box">
+          <p class="title">Customer Name</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.customer_name }}</p>
+        </div>
+        <div class="customer-box">
+          <p class="title">Invoice Number</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.invoice_number }}</p>
+        </div>
+        <div class="customer-box">
+          <p class="title">Invoice Date</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.created_at }}</p>
+        </div>
+        <div class="customer-box">
+          <p class="title">Invoice Status</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.invoice_status }}</p>
+        </div>
+        <div class="customer-box">
+          <p class="title">Invoice Type</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.invoice_type }}</p>
+        </div>
+        <div class="customer-box">
+          <p class="title">GST Number</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.customer_gstin }}</p>
+        </div>
       </div>
-      <div class="customer-box">
-        <p class="title">Invoice Number</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.invoice_number }}</p>
+      <div class="item-container">
+        <table class="table table-hover custom-table">
+          <thead>
+            <tr>
+              #
+            </tr>
+            <tr>
+              Product Name
+            </tr>
+            <tr>
+              Quantity
+            </tr>
+            <tr>
+              Rate
+            </tr>
+            <tr>
+              Tax
+            </tr>
+            <tr>
+              Amount
+            </tr>
+          </thead>
+          @for (item of invoiceDetails.items; track item.id; let i = $index) {
+            <tbody>
+              <tr>
+                {{
+                  i + 1
+                }}
+              </tr>
+              <td>{{ item.product_name_snapshot }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price_snapshot }}</td>
+              <td>{{ item.tax_rate }}</td>
+              <td>{{ item.line_total }}</td>
+            </tbody>
+          }
+        </table>
       </div>
-      <div class="customer-box">
-        <p class="title">Invoice Date</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.created_at }}</p>
-      </div>
-      <div class="customer-box">
-        <p class="title">Invoice Status</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.invoice_status }}</p>
-      </div>
-      <div class="customer-box">
-        <p class="title">Invoice Type</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.invoice_type }}</p>
-      </div>
-      <div class="customer-box">
-        <p class="title">GST Number</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.customer_gstin }}</p>
-      </div>
-    </div>
-    <div class="item-container">
-      <table class="table table-hover custom-table">
-        <thead>
-          <tr>
-            #
-          </tr>
-          <tr>
-            Product Name
-          </tr>
-          <tr>
-            Quantity
-          </tr>
-          <tr>
-            Rate
-          </tr>
-          <tr>
-            Tax
-          </tr>
-          <tr>
-            Amount
-          </tr>
-        </thead>
-        @for (item of invoiceDetails.items; track item.id;let i=$index) {
-        <tbody>
-          <tr>
-            {{
-              i + 1
-            }}
-          </tr>
-          <td>{{ item.product_name_snapshot }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>{{ item.price_snapshot }}</td>
-          <td>{{ item.tax_rate }}</td>
-          <td>{{ item.line_total }}</td>
-        </tbody>
-        }
-      </table>
-    </div>
-    <div class="total-container">
-      <div class="customer-box">
-        <p class="title">Total Amount</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.total_amount }}</p>
-      </div>
+      <div class="total-container">
+        <div class="customer-box">
+          <p class="title">Total Amount</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.total_amount }}</p>
+        </div>
 
-      <div class="customer-box">
-        <p class="title">Tax Amount</p>
-        <p class="sub-title">{{ invoiceDetails.overAll.tax_amount }}</p>
+        <div class="customer-box">
+          <p class="title">Tax Amount</p>
+          <p class="sub-title">{{ invoiceDetails.overAll.tax_amount }}</p>
+        </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
+}

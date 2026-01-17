@@ -1,19 +1,22 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { tap } from 'rxjs/internal/operators/tap';
 
 import { AuthService } from './auth/auth.service';
+import { LoaderComponent } from './common/loader/loader.component/loader.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, LoaderComponent],
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private subs?: Subscription;
 
   isUserLoggedIn = false;
   isUserSubs = this.authService.accessTokenObs
@@ -29,8 +32,13 @@ export class AppComponent {
   }
 
   onUserLogout() {
-    this.authService
+    this.subs = this.authService
       .logOut()
       .subscribe(() => (this.isUserLoggedIn = !!this.authService.Access_token));
+  }
+
+  ngOnDestroy(): void {
+    if (this.subs) this.subs.unsubscribe();
+    if (this.isUserSubs) this.isUserSubs.unsubscribe();
   }
 }

@@ -14,41 +14,42 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        @if(isUserLoggedIn){
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            [routerLink]="'/admin/create-new'"
-            >Create New Product</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            [routerLink]="'/admin/invoice'"
-            >Invoice</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            [routerLink]="'/admin/products-list'"
-            >Products</a
-          >
-        </li>
+        @if (isUserLoggedIn) {
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              [routerLink]="'/admin/create-new'"
+              >Create New Product</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              [routerLink]="'/admin/invoice'"
+              >Invoice</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              [routerLink]="'/admin/products-list'"
+              >Products</a
+            >
+          </li>
         }
         <li class="nav-item">
-          @if(!isUserLoggedIn){
-          <a class="nav-link" (click)="onUserLogin()">Login</a>
-          }@else {
-          <a class="nav-link" (click)="onUserLogout()">Logout</a>
+          @if (!isUserLoggedIn) {
+            <a class="nav-link" (click)="onUserLogin()">Login</a>
+          } @else {
+            <a class="nav-link" (click)="onUserLogout()">Logout</a>
           }
         </li>
       </ul>
     </div>
   </div>
 </nav>
+<app-loader />
 <router-outlet />
