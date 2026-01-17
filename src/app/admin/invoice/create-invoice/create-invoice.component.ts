@@ -151,7 +151,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   private initInvoiceItemForm() {
     const group = new FormGroup({
       productName: new FormControl('', { validators: [Validators.required] }),
-      quantity: new FormControl(null, { validators: [Validators.required] }),
+      quantity: new FormControl(null, {
+        validators: [Validators.required, Validators.min(1)],
+      }),
       taxRate: new FormControl(
         { value: null, disabled: true },
         { validators: [Validators.required] },
@@ -198,6 +200,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       quantityFormField?.setValue(1, { emitEvent: false });
       quantityFormField?.setValidators([
         Validators.required,
+        Validators.min(1),
         Validators.max(productObj.stock_count),
       ]);
       form.get('amount')?.setValue(totalAmount, { emitEvent: false });
