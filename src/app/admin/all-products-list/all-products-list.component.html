@@ -12,60 +12,69 @@
         <button class="btn btn-outline-secondary">+ Bulk Products</button>
       </div>
     </div>
-    <table class="table table-hover custom-table">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Product name</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Description</th>
-          <th scope="col">Tax (%)</th>
-          <th scope="col">Product Code</th>
-          <th scope="col">is Active</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of productsList; track $index;let i=$index) {
-        <tr>
-          <th scope="row">{{ i + 1 }}</th>
-          <td>{{ item.product_name }}</td>
-          <td>{{ item.stock_count }}</td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.tax_percent }}</td>
-          <td>{{ item.hsn_code }}</td>
-          <td>
-            <span
-              class="badge"
-              [ngClass]="{
-                'bg-success': item.is_active,
-                'bg-danger': !item.is_active
-              }"
-            >
-              {{ item.is_active ? "Active" : "Not active" }}
-            </span>
-          </td>
-          <td>
-            <div class="actions-container">
-              <img
-                class="edit-img"
-                src="assets/admin-img/edit.svg"
-                alt="edit"
-                (click)="onEdit(item.id)"
-              />
-              @if(item.is_active){
-              <img
-                class="delete-img"
-                src="assets/admin-img/delete.svg"
-                alt="delete"
-                (click)="onDelete(item.id)"
-              />
-              }
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+    @if (productsList.length) {
+      <table class="table table-hover custom-table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Description</th>
+            <th scope="col">Tax (%)</th>
+            <th scope="col">Product Code</th>
+            <th scope="col">is Active</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of productsList; track $index; let i = $index) {
+            <tr>
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ item.product_name }}</td>
+              <td>{{ item.stock_count }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.tax_percent }}</td>
+              <td>{{ item.hsn_code }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': item.is_active,
+                    'bg-danger': !item.is_active,
+                  }"
+                >
+                  {{ item.is_active ? "Active" : "Not active" }}
+                </span>
+              </td>
+              <td>
+                <div class="actions-container">
+                  <img
+                    class="edit-img"
+                    src="assets/admin-img/edit.svg"
+                    alt="edit"
+                    (click)="onEdit(item.id)"
+                  />
+                  @if (item.is_active) {
+                    <img
+                      class="delete-img"
+                      src="assets/admin-img/delete.svg"
+                      alt="delete"
+                      (click)="onDelete(item.id)"
+                    />
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="no-data">
+        <p>No Data Found...</p>
+        <button class="btn btn-outline-secondary" (click)="onRoute()">
+          Add Product to Stock?
+        </button>
+      </div>
+    }
   </div>
 </main>

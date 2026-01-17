@@ -70,3 +70,12 @@
 
     }
 }
+
+.no-data {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+
+}

@@ -74,3 +74,11 @@
 .heading-btn-box button {
   width: fit-content;
 }
+
+.no-data {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}

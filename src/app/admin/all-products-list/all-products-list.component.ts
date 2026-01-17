@@ -18,7 +18,7 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
 
   constructor(
     private adminProductService: AdminProductService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -40,8 +40,12 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
     return this.adminProductService.getAllProductsList().pipe(
       tap((productList) => {
         this.productsList = productList;
-      })
+      }),
     );
+  }
+
+  onRoute() {
+    this.router.navigate(['/admin/create-new']);
   }
 
   ngOnDestroy(): void {

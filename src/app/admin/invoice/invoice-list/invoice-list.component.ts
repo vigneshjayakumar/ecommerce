@@ -41,4 +41,8 @@ export class InvoiceListComponent implements OnInit {
       .fetchInvoiceLists()
       .pipe(tap((res) => (this.invoiceDataList = res)));
   }
+
+  onRoute(path: 'create-invoice' | 'invoice-lists') {
+    this.router.navigate(['/admin/invoice/', path]);
+  }
 }
