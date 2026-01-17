@@ -18,7 +18,7 @@ export class AdminProductService {
   private apiService = inject(ApiHttpService);
 
   postNewproduct(productDetails: TPostNewProductPayload) {
-    return this.httpClient.post(
+    return this.httpClient.post<{message:string}>(
       `${environment.localURL}/admin/addProduct`,
       productDetails,
       {
@@ -30,7 +30,7 @@ export class AdminProductService {
   postEditProduct(
     productDetails: TPostNewProductPayload & { productId: number }
   ) {
-    return this.httpClient.post(
+    return this.httpClient.post<{message:string}>(
       `${environment.localURL}/admin/editProductByProductId`,
       productDetails,
       { withCredentials: true }

@@ -53,7 +53,7 @@ export class InvoiceService {
     return this.httpClient
       .get<TMerchantDataResponse>(
         `${environment.localURL}/invoice/merchantDetails`,
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .pipe(map((res) => res.response.merchantData));
   }
@@ -61,7 +61,7 @@ export class InvoiceService {
   fetchProductList() {
     return this.httpClient.get(
       `${environment.localURL}/utils/getAllProductListByTenentId`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 
@@ -70,46 +70,46 @@ export class InvoiceService {
       .post<TCalculatedInvoiceRes>(
         `${environment.localURL}/invoice/validateInvoiceDetails`,
         { invoiceDetails: this.postInvoiceDetails },
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .pipe(
         tap((res) => {
           if (res.message === 'SUCCESS') {
             this.validatedProductList = res.response;
           }
-        })
+        }),
       );
   }
 
   generateInvoice() {
-    return this.httpClient.post(
-      `${environment.localURL}/invoice/generateInvoice`,
-      {
-        invoiceDetails: this.postInvoiceDetails,
-      }
-    );
+    return this.httpClient.post<{
+      message: string;
+      response: { data: string };
+    }>(`${environment.localURL}/invoice/generateInvoice`, {
+      invoiceDetails: this.postInvoiceDetails,
+    });
   }
 
   fetchInvoiceLists() {
     return this.httpClient
       .get<TGetInvoiceLists>(
         `${environment.localURL}/invoice/getInvoiceLists`,
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .pipe(map((res) => res.response.data));
   }
 
   onCancelInvoice(id: number) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<{ message: string; response: string }>(
       `${environment.localURL}/invoice/onCancelInvoice/${id}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 
   fetchInvoiceDetailsById(invoiceId: number) {
     return this.httpClient.get<TViewInvoiceDetailsRes>(
       `${environment.localURL}/invoice/getInvoiceDetailsById/${invoiceId}`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 }

@@ -59,12 +59,16 @@
       <input type="checkbox" name="isActive" formControlName="isActive" />
     </div>
     <div class="btn-container">
-      @if(!this.editId){
-      <button class="btn btn-outline-secondary" type="button">Clear</button>
-      }@else {
-      <div class="ghost"></div>
+      @if (!this.editId) {
+        <button class="btn btn-outline-secondary" type="button">Clear</button>
+      } @else {
+        <div class="ghost"></div>
       }
-      <button class="btn btn-outline-primary" type="submit">
+      <button
+        [disabled]="!newProductForm.dirty"
+        class="btn btn-outline-primary"
+        type="submit"
+      >
         {{ buttonLable }}
       </button>
     </div>

@@ -1,16 +1,17 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subscription, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import {
   AdminProductService,
   TPostNewProductPayload,
 } from '../admin-product.service';
-import { Subscription, tap } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { TProduct } from '../all-products-list/all-products.modal';
 
 @Component({
@@ -27,6 +28,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
 
   private adminProductService = inject(AdminProductService);
   private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
 
   dataToBeEdited: TProduct | null = null;
   editId: number | null = null;
@@ -41,18 +43,17 @@ export class CreateNewEditProductComponent implements OnDestroy {
             .getProductDetailById(this.editId)
             .pipe(
               tap((res) => {
-                console.log('PRODUCT', res.response.product);
                 this.dataToBeEdited = res.response.product;
                 this.isActiveProduct = !this.dataToBeEdited.is_active;
                 this.populateForms();
-              })
+              }),
             )
             .subscribe();
           this.initForm();
         } else {
           this.initForm();
         }
-      })
+      }),
     )
     .subscribe();
 
@@ -102,7 +103,13 @@ export class CreateNewEditProductComponent implements OnDestroy {
   private postNewProduct(payload: TPostNewProductPayload) {
     this.postProductSubs = this.adminProductService
       .postNewproduct(payload)
-      .pipe(tap((res) => console.log('POSTED RESPONSE', res)))
+      .pipe(
+        tap((res) => {
+          if (res.message !== 'ERROR') {
+            this.onRouteToProductList();
+          }
+        }),
+      )
       .subscribe();
   }
 
@@ -111,8 +118,16 @@ export class CreateNewEditProductComponent implements OnDestroy {
       const data = { ...payload, productId: this.editId };
       this.postProductSubs = this.adminProductService
         .postEditProduct(data)
-        .subscribe();
+        .subscribe((res: { message: string }) => {
+          if (res.message !== 'ERROR') {
+            this.onRouteToProductList();
+          }
+        });
     }
+  }
+
+  private onRouteToProductList() {
+    this.router.navigate(['/admin/products-list']);
   }
 
   ngOnDestroy(): void {

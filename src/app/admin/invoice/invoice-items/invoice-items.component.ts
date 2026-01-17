@@ -20,6 +20,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { InvoiceService, TCalculatedInvoiceRes } from '../invoice.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-items',
@@ -45,6 +46,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
 
   private adminService = inject(AdminProductService);
   private invoiceService = inject(InvoiceService);
+  private router = inject(Router);
   private invoiceItemsSubs = this.invoiceService.invoiceArrObs
     .pipe(
       tap((data) => {
@@ -53,7 +55,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
           this.validatedProductsList =
             this.invoiceService.validated_products_list;
         }
-      })
+      }),
     )
     .subscribe();
 
@@ -93,15 +95,15 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
       quantity: new FormControl(null, { validators: [Validators.required] }),
       taxRate: new FormControl(
         { value: null, disabled: true },
-        { validators: [Validators.required] }
+        { validators: [Validators.required] },
       ),
       rate: new FormControl(
         { value: null, disabled: true },
-        { validators: [Validators.required] }
+        { validators: [Validators.required] },
       ),
       amount: new FormControl(
         { value: null, disabled: true },
-        { validators: [Validators.required] }
+        { validators: [Validators.required] },
       ),
     });
     const subs = group
@@ -111,7 +113,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
           if (data) {
             this.calculateTaxForProduct(group, data);
           }
-        })
+        }),
       )
       .subscribe();
 
@@ -120,7 +122,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
   }
   private calculateTaxForProduct(form: FormGroup, product: string) {
     const productObj = this.productList.find(
-      (ele) => ele.product_name === product
+      (ele) => ele.product_name === product,
     );
     if (productObj) {
       const amount = productObj.price;
@@ -139,22 +141,25 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
   }
   onCalculateTotalAmount() {
     const invoiceItems = this.filterChoosenProductIdAndQuantity();
-    this.invoiceService.setInvoiceItemsArr({
+    const validationPayload = {
       items: invoiceItems,
       isEditMode: false,
       calculateFromDB: true,
-    });
-    // this.emitIvoiceValues.emit(invoiceItems);
+    };
+    this.invoiceService.setInvoiceItemsArr(validationPayload);
   }
   onGenerateInvoice() {
-    this.invoiceService.generateInvoice().subscribe();
+    this.invoiceService.generateInvoice().subscribe((res) => {
+      if (res.message === 'SUCCESS')
+        this.router.navigate(['/admin/invoice/invoice-lists']);
+    });
   }
   private filterChoosenProductIdAndQuantity() {
     const itemsArr = this.invoiceItemArr.getRawValue();
     const productIdQtyArr: { productId: number; quantity: number }[] = [];
     itemsArr.forEach((ele) => {
       const found = this.productList.find(
-        (product) => product.product_name === ele.productName
+        (product) => product.product_name === ele.productName,
       );
       if (found) {
         productIdQtyArr.push({ productId: found.id, quantity: ele.quantity });

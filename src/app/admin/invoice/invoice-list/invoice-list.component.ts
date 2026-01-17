@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { InvoiceService, TGetInvoiceLists } from '../invoice.service';
-import { tap } from 'rxjs';
+import { EMPTY, switchMap, tap } from 'rxjs';
 import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -16,10 +16,7 @@ export class InvoiceListComponent implements OnInit {
 
   invoiceDataList: TGetInvoiceLists['response']['data'] = [];
   ngOnInit(): void {
-    this.invoiceService
-      .fetchInvoiceLists()
-      .pipe(tap((res) => (this.invoiceDataList = res)))
-      .subscribe();
+    this.fetchInvoiceList().subscribe();
   }
   onViewDetails(id: number) {
     this.router.navigate(['/admin/invoice/invoice-details/', id]);
@@ -28,7 +25,20 @@ export class InvoiceListComponent implements OnInit {
   onCancelInvoice(id: number) {
     this.invoiceService
       .onCancelInvoice(id)
-      .pipe(tap((res) => console.log(res)))
+      .pipe(
+        tap((res) => console.log(res)),
+        switchMap((res) => {
+          if (res.message === 'SUCCESS') {
+            return this.fetchInvoiceList();
+          }
+          return EMPTY;
+        }),
+      )
       .subscribe();
+  }
+  private fetchInvoiceList() {
+    return this.invoiceService
+      .fetchInvoiceLists()
+      .pipe(tap((res) => (this.invoiceDataList = res)));
   }
 }

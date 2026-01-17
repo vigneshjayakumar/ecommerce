@@ -51,13 +51,8 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
             return this.postInvoicePayload();
           }
           this.isEditMode = data.isEditMode;
-          // if (!this.isEditMode) {
-          //   this.customerDetailsForm.disable();
-          // } else {
-          //   this.customerDetailsForm.enable();
-          // }
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -70,7 +65,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
           if (this.merchantInfo.gstin !== '') {
             this.showInvoiceToggleBtn = true;
           }
-        })
+        }),
       )
       .subscribe();
     this.initForm();
@@ -101,8 +96,14 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
             items: this.invoiceItems,
             calculateFromDB: false,
           });
+        } else {
+          this.invoiceService.setInvoiceItemsArr({
+            isEditMode: true,
+            items: this.invoiceItems,
+            calculateFromDB: true,
+          });
         }
-      })
+      }),
     );
   }
 
