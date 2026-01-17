@@ -194,7 +194,12 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
 
       form.get('rate')?.setValue(amount, { emitEvent: false });
       form.get('taxRate')?.setValue(taxRate, { emitEvent: false });
-      form.get('quantity')?.setValue(1, { emitEvent: false });
+      const quantityFormField = form.get('quantity');
+      quantityFormField?.setValue(1, { emitEvent: false });
+      quantityFormField?.setValidators([
+        Validators.required,
+        Validators.max(productObj.stock_count),
+      ]);
       form.get('amount')?.setValue(totalAmount, { emitEvent: false });
     }
   }
