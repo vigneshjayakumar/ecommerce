@@ -211,7 +211,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   private fetchProductsList() {
     const subs = this.adminService
       .getAllProductsList()
-      .pipe(tap((res) => (this.productList = res)))
+      .pipe(
+        tap((res) => (this.productList = res.filter((ele) => ele.is_active))),
+      )
       .subscribe();
     this.subsArr.push(subs);
   }
