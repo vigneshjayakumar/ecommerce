@@ -1,8 +1,8 @@
 export type TAdminProductList = {
   message: string;
-  response:{
+  response: {
     products: TProduct[];
-  }
+  };
 };
 
 export type TProduct = {
@@ -14,5 +14,5 @@ export type TProduct = {
   tax_percent: number;
   hsn_code: string;
   image: string;
-  is_active: 0 | 1;
+  is_active: boolean;
 };

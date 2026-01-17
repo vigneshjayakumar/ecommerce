@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  localURL:'http://localhost:8000'
+  localURL: 'https://one-stop-bazzaar-be.onrender.com',
 };

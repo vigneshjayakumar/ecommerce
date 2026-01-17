@@ -43,7 +43,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
               tap((res) => {
                 console.log('PRODUCT', res.response.product);
                 this.dataToBeEdited = res.response.product;
-                this.isActiveProduct = this.dataToBeEdited.is_active === 0;
+                this.isActiveProduct = !this.dataToBeEdited.is_active;
                 this.populateForms();
               })
             )

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  localURL:'http://localhost:8000'
+  // localURL:'http://localhost:8000'
+  localURL: 'https://one-stop-bazzaar-be.onrender.com',
 };
 
 /*
