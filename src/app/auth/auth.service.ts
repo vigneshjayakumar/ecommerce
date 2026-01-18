@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private accessToken: string | null = null;
   private accessTokenListener = new BehaviorSubject<typeof this.accessToken>(
-    this.accessToken
+    this.accessToken,
   );
   public readonly accessTokenObs = this.accessTokenListener.asObservable();
 
@@ -25,8 +25,8 @@ export class AuthService {
       confirmPassword: confirmPassword,
     };
     return this.httpClient.post<TPostSignupRes>(
-      `${environment.localURL}/user/signup`,
-      payload
+      `${environment.apiBaseURL}/user/signup`,
+      payload,
     );
   }
 
@@ -36,7 +36,7 @@ export class AuthService {
       password: password,
     };
     return this.httpClient
-      .post<TPostLoginRes>(`${environment.localURL}/user/login`, payload, {
+      .post<TPostLoginRes>(`${environment.apiBaseURL}/user/login`, payload, {
         withCredentials: true,
       })
       .pipe(
@@ -45,23 +45,23 @@ export class AuthService {
           if (res.response.accessToken) {
             this.router.navigate(['/admin']);
           }
-        })
+        }),
       );
   }
 
   refreshAccessToken() {
     return this.httpClient
       .post<Omit<TPostLoginRes, 'message'>>(
-        `${environment.localURL}/user/refresh`,
+        `${environment.apiBaseURL}/user/refresh`,
         {},
         {
           withCredentials: true,
-        }
+        },
       )
       .pipe(
         tap((res) => {
           this.updateAccessToken(res.response.accessToken);
-        })
+        }),
       );
   }
 
@@ -72,9 +72,9 @@ export class AuthService {
   logOut() {
     return this.httpClient
       .post(
-        `${environment.localURL}/user/logout`,
+        `${environment.apiBaseURL}/user/logout`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       )
       .pipe(
         tap(() => {
@@ -82,15 +82,15 @@ export class AuthService {
           this.router.navigate(['/login'], {
             queryParams: { authPage: 'login' },
           });
-        })
+        }),
       );
   }
 
   postRegisterUser(userDetails: TRegisterUserDetails) {
     return this.httpClient.post(
-      `${environment.localURL}/user/registerUser`,
+      `${environment.apiBaseURL}/user/registerUser`,
       userDetails,
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 

@@ -19,7 +19,7 @@ export class AdminProductService {
 
   postNewproduct(productDetails: TPostNewProductPayload) {
     return this.httpClient.post<{message:string}>(
-      `${environment.localURL}/admin/addProduct`,
+      `${environment.apiBaseURL}/admin/addProduct`,
       productDetails,
       {
         withCredentials: true,
@@ -31,7 +31,7 @@ export class AdminProductService {
     productDetails: TPostNewProductPayload & { productId: number }
   ) {
     return this.httpClient.post<{message:string}>(
-      `${environment.localURL}/admin/editProductByProductId`,
+      `${environment.apiBaseURL}/admin/editProductByProductId`,
       productDetails,
       { withCredentials: true }
     );
@@ -39,14 +39,14 @@ export class AdminProductService {
 
   getProductDetailById(productId: number) {
     return this.httpClient.get<TProductByIdRes>(
-      `${environment.localURL}/admin/product/${productId}`,
+      `${environment.apiBaseURL}/admin/product/${productId}`,
       { withCredentials: true }
     );
   }
 
   postDeleteProductById(productId: number) {
     return this.httpClient.post(
-      `${environment.localURL}/admin/deleteProduct`,
+      `${environment.apiBaseURL}/admin/deleteProduct`,
       { productId: productId },
       { withCredentials: true }
     );
@@ -56,7 +56,7 @@ export class AdminProductService {
     return this.apiService
       .apiHttp<never, TAdminProductList, never>(
         'get',
-        environment.localURL,
+        environment.apiBaseURL,
         'admin',
         ['products']
       )
