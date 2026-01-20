@@ -70,7 +70,7 @@
                     alt="edit"
                     (click)="onViewDetails(item.id)"
                   />
-                  @if (item.invoice_status !== "PAID") {
+                  @if (item.invoice_status === "DRAFT") {
                     <img
                       class="delete-img"
                       src="assets/admin-img/cancel-invoice.svg"

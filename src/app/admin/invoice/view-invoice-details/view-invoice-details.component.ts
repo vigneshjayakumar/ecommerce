@@ -1,17 +1,21 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { EMPTY, map, Observable, switchMap, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 
-import { InvoiceService, TViewInvoiceDetailsRes } from '../invoice.service';
+import {
+  InvoiceService,
+  TMerchantInfo,
+  TViewInvoiceDetailsRes,
+} from '../invoice.service';
 
 @Component({
   selector: 'app-view-invoice-details',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, DatePipe, NgClass],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
 })
-export class ViewInvoiceDetailsComponent {
+export class ViewInvoiceDetailsComponent implements OnInit {
   private invoiceService = inject(InvoiceService);
   private activatedRoute = inject(ActivatedRoute);
 
@@ -27,4 +31,10 @@ export class ViewInvoiceDetailsComponent {
       }),
       tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
     );
+  merchantInfo!: TMerchantInfo;
+  ngOnInit(): void {
+    this.invoiceService
+      .fetchMerchentDetails()
+      .subscribe((res) => (this.merchantInfo = res));
+  }
 }

@@ -9,3 +9,21 @@
 p {
     margin: 0;
 }
+
+/* styles.css */
+:root {
+    --font-primary: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+    --bg-page: #F9FAFB;
+    --bg-card: #FFFFFF;
+    --bg-section: #F3F4F6;
+
+    --color-primary: #2563EB;
+    --color-success: #16A34A;
+    --color-danger: #DC2626;
+}
