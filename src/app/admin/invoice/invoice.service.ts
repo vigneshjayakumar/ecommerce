@@ -112,6 +112,13 @@ export class InvoiceService {
       { withCredentials: true },
     );
   }
+
+  createInvoicePdf(invoiceId: number) {
+    return this.httpClient.get(
+      `${environment.apiBaseURL}/invoice/generateInvoice/${invoiceId}`,
+      { withCredentials: true, responseType: 'blob' },
+    );
+  }
 }
 
 export type TMerchantDataResponse = {
