@@ -119,6 +119,13 @@ export class InvoiceService {
       { withCredentials: true, responseType: 'blob' },
     );
   }
+
+  shareInvoicePdfViaEmail(data: { email: string; invoiceId: number }) {
+    return this.httpClient.post(
+      `${environment.apiBaseURL}/invoice/shareInvoiceViaEmail`,
+      data,
+    );
+  }
 }
 
 export type TMerchantDataResponse = {

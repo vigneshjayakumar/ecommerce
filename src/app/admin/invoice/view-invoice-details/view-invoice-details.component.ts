@@ -8,10 +8,11 @@ import {
   TMerchantInfo,
   TViewInvoiceDetailsRes,
 } from '../invoice.service';
+import { CustomPopupModalComponent } from 'src/app/common/components/custom-popup-modal/custom-popup-modal.component';
 
 @Component({
   selector: 'app-view-invoice-details',
-  imports: [AsyncPipe, DatePipe, NgClass],
+  imports: [AsyncPipe, DatePipe, NgClass, CustomPopupModalComponent],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
 })
@@ -19,6 +20,13 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   private invoiceService = inject(InvoiceService);
   private activatedRoute = inject(ActivatedRoute);
 
+  showEmailPopUp = false;
+  emailModalData = {
+    title: 'Customer Email',
+    showCancelBtn: true,
+    showConfirmBtn: true,
+    isEmail: true,
+  };
   invoiceDetails!: TViewInvoiceDetailsRes['response'];
   invoiceDetailsObs: Observable<TViewInvoiceDetailsRes> =
     this.activatedRoute.paramMap.pipe(
@@ -37,7 +45,24 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       .fetchMerchentDetails()
       .subscribe((res) => (this.merchantInfo = res));
   }
-
+  onEmailPDF() {
+    this.showEmailPopUp = true;
+  }
+  onEmailTrigger(event: { status: boolean; email?: string }) {
+    if (!event.status) {
+      this.showEmailPopUp = false;
+    }
+    if (event.status && event?.email !== '' && event?.email) {
+      this.invoiceService
+        .shareInvoicePdfViaEmail({
+          email: event.email,
+          invoiceId: this.invoiceDetails.overAll.id,
+        })
+        .subscribe((res) => {
+          this.showEmailPopUp = false;
+        });
+    }
+  }
   onDownloadPDF() {
     this.invoiceService
       .createInvoicePdf(this.invoiceDetails.overAll.id)

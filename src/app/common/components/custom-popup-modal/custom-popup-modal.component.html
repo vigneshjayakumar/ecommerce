@@ -1,0 +1,35 @@
+<div class="overlay">
+  <div class="custom_popup__container">
+    <div class="title_box">
+      <p class="title">{{ data.title }}</p>
+    </div>
+    <div class="content_box">
+      @if (data.isEmail) {
+        <div class="email_box">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="email" />
+        </div>
+      }
+      <div class="btn-container">
+        @if (data.showCancelBtn) {
+          <button
+            type="button"
+            class="btn primary"
+            (click)="onButtonClick(false)"
+          >
+            Cancel
+          </button>
+        }
+        @if (data.showConfirmBtn) {
+          <button
+            type="button"
+            class="btn primary"
+            (click)="onButtonClick(true)"
+          >
+            Submit
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

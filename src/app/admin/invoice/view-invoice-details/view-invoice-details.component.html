@@ -32,6 +32,7 @@
           >{{ invoiceDetails.overAll.invoice_status }}</span
         >
         <span class="badge bg-info" (click)="onDownloadPDF()">Download</span>
+        <span class="badge bg-info" (click)="onEmailPDF()">email</span>
       </div>
       <div class="party-section">
         <div>
@@ -103,4 +104,10 @@
       </div>
     </div>
   </div>
+  @if (showEmailPopUp) {
+    <app-custom-popup-modal
+      [data]="emailModalData"
+      (btnTriggerEvent)="onEmailTrigger($event)"
+    ></app-custom-popup-modal>
+  }
 }
