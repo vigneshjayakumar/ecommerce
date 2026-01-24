@@ -1,0 +1,30 @@
+<main>
+  <div class="filter-container">
+    <mat-form-field class="date-range_field">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRangeForm">
+        <input matStartDate placeholder="Start date" formControlName="start" />
+        <input matEndDate placeholder="End date" formControlName="end" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <div class="payment-status__fiter">
+      <label for="payment" class="form-label">Filter by:</label>
+      <select
+        name="payment"
+        id="filter_payment"
+        class="form-control"
+        [formControl]="filterSelect"
+      >
+        <option value="ALL">All</option>
+        <option value="PAID">Paid</option>
+        <option value="DRAFT">Draft</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </div>
+  </div>
+</main>

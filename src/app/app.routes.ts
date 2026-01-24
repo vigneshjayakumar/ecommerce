@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 
 import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const appRoutes: Routes = [
+  { path: 'dashboard', component: DashboardComponent },
   {
     path: 'admin',
     loadChildren: () =>

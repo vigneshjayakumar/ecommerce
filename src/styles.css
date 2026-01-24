@@ -27,3 +27,5 @@ p {
     --color-success: #16A34A;
     --color-danger: #DC2626;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
