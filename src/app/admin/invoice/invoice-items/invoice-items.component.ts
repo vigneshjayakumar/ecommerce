@@ -21,10 +21,11 @@ import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { InvoiceService, TCalculatedInvoiceRes } from '../invoice.service';
 import { Router } from '@angular/router';
+import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 
 @Component({
   selector: 'app-invoice-items',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, INRCurrency],
   templateUrl: './invoice-items.component.html',
   styleUrl: './invoice-items.component.css',
 })

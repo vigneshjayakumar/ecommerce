@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { tap } from 'rxjs/internal/operators/tap';
-import { catchError, EMPTY, of, switchMap, throwError } from 'rxjs';
+import { catchError, delay, EMPTY, of, switchMap, throwError } from 'rxjs';
 import { DashboardApiService } from './services/dashboard-api.service';
+import { INRCurrency } from '../common/pipes/inr-currency.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,22 +17,30 @@ import { DashboardApiService } from './services/dashboard-api.service';
     MatInputModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    INRCurrency,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private dashboardApiService = inject(DashboardApiService);
 
-  dateRangeForm = new FormGroup({
-    start: new FormControl(''),
-    end: new FormControl(''),
-  });
-  filterSelect = new FormControl('All');
+  stockSummaryList: TStockSummaryRes['response'] = [];
+  invoiceSummaryList: TInvoiceSummary['response']['data'] = [];
+  invoiceSummaryOverall: TInvoiceSummary['response']['summary'] = {
+    invoiceCount: 0,
+    totalSales: 0,
+  };
 
   startDate: Date = new Date();
   endDate: Date = new Date();
-  paymentFilter: TpaymentStatus = 'ALL';
+  paymentFilter: TpaymentStatus = 'DRAFT';
+
+  dateRangeForm = new FormGroup({
+    start: new FormControl(this.startDate),
+    end: new FormControl(this.endDate),
+  });
+  filterSelect = new FormControl(this.paymentFilter);
 
   dateChangeSubs = this.dateRangeForm.controls['end'].valueChanges
     .pipe(
@@ -59,6 +68,15 @@ export class DashboardComponent {
     )
     .subscribe();
 
+  ngOnInit(): void {
+    this.dashboardApiService
+      .getStockReport()
+      .pipe(
+        tap((res) => (this.stockSummaryList = res)),
+        switchMap(() => this.fetchSalesReport()),
+      )
+      .subscribe();
+  }
   private fetchSalesReport() {
     const payload: { start: string; end: string; paymentStatus: string } = {
       start: this.startDate.toISOString(),
@@ -67,6 +85,10 @@ export class DashboardComponent {
     };
     console.log(payload);
     return this.dashboardApiService.getSalesReport(payload).pipe(
+      tap((res) => {
+        this.invoiceSummaryList = res.data;
+        this.invoiceSummaryOverall = res.summary;
+      }),
       catchError((err) => {
         console.log('ERROR', err);
         return of({});
@@ -76,3 +98,28 @@ export class DashboardComponent {
 }
 
 type TpaymentStatus = 'ALL' | 'PAID' | 'CANCELLED' | 'DRAFT';
+
+export type TStockSummaryRes = {
+  message: string;
+  response: {
+    productId: number;
+    productName: string;
+    availableQty: number;
+    lowStock: boolean;
+  }[];
+};
+
+export type TInvoiceSummary = {
+  message: string;
+  response: {
+    summary: {
+      invoiceCount: number;
+      totalSales: number;
+    };
+    data: {
+      period: string;
+      invoiceCount: number;
+      totalSales: number;
+    }[];
+  };
+};

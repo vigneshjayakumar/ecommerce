@@ -9,10 +9,17 @@ import {
   TViewInvoiceDetailsRes,
 } from '../invoice.service';
 import { CustomPopupModalComponent } from 'src/app/common/components/custom-popup-modal/custom-popup-modal.component';
+import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 
 @Component({
   selector: 'app-view-invoice-details',
-  imports: [AsyncPipe, DatePipe, NgClass, CustomPopupModalComponent],
+  imports: [
+    AsyncPipe,
+    DatePipe,
+    NgClass,
+    CustomPopupModalComponent,
+    INRCurrency,
+  ],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
 })

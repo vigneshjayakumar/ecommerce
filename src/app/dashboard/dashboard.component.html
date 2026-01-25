@@ -27,4 +27,69 @@
       </select>
     </div>
   </div>
+  <div class="table-content">
+    <div class="stock-summary">
+      <table class="table table-hover custom-table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product name</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            stock of stockSummaryList;
+            track stock.productId;
+            let i = $index
+          ) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ stock.productName }}</td>
+              <td>{{ stock.availableQty }}</td>
+              <td>{{ stock.lowStock ? "STOCK IS LOW" : "IN Stock" }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="sales-summary">
+      <div class="invoice_summary_card">
+        <div class="content">
+          <p class="title">Invoice Count</p>
+          <p class="info">{{ invoiceSummaryOverall.invoiceCount }}</p>
+        </div>
+        <div class="content">
+          <p class="title">Total Sales</p>
+          <p class="info">{{ invoiceSummaryOverall.totalSales | inrcurr }}</p>
+        </div>
+      </div>
+      <div class="invoice_summary-list">
+        <table class="table table-hover custom-table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Date/ Month</th>
+              <th scope="col">Invoice Count</th>
+              <th scope="col">Total Sales</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (
+              invoice of invoiceSummaryList;
+              track invoice.period;
+              let i = $index
+            ) {
+              <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ invoice.period }}</td>
+                <td>{{ invoice.invoiceCount }}</td>
+                <td>{{ invoice.totalSales | inrcurr }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </main>

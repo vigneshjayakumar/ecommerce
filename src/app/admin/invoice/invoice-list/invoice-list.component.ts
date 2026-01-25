@@ -11,10 +11,11 @@ import {
 import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 
 @Component({
   selector: 'app-invoice-list',
-  imports: [NgClass, DatePipe, ReactiveFormsModule],
+  imports: [NgClass, DatePipe, ReactiveFormsModule, INRCurrency],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.css',
 })

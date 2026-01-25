@@ -48,9 +48,9 @@
               <td>{{ item.customer_name }}</td>
               <td>{{ item.invoice_number }}</td>
               <td>{{ item.created_at | date }}</td>
-              <td>{{ item.subtotal }}</td>
-              <td>{{ item.tax_amount }}</td>
-              <td>{{ item.total_amount }}</td>
+              <td>{{ item.subtotal | inrcurr }}</td>
+              <td>{{ item.tax_amount | inrcurr }}</td>
+              <td>{{ item.total_amount | inrcurr }}</td>
               <td>
                 <span
                   class="badge"

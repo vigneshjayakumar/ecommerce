@@ -16,3 +16,60 @@
         }
     }
 }
+
+
+.custom-table {
+    font-size: 13.5px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.custom-table thead {
+    background-color: #f8f9fa;
+}
+
+.custom-table th {
+    font-weight: 700;
+    color: #111;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.custom-table td {
+    padding: 12px;
+    vertical-align: middle;
+    color: #212529;
+}
+
+.custom-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.table-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.invoice_summary_card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #212529;
+    border-radius: 8px;
+    margin-bottom: 12px;
+
+    .content {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+}
