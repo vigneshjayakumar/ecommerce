@@ -4,8 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class INRCurrency implements PipeTransform {
   transform(value: any) {
-    if (!isNaN(value)) {
-      const ruppeSymbol = '₹';
+    const currencySymbol = '₹';
+    if (!isNaN(value) && value) {
       const result = value.toString().split('.');
       let lastThreeDigit = result[0].substring(result[0].length - 3);
       const otherDigits = result[0].substring(0, result[0].length - 3);
@@ -17,8 +17,8 @@ export class INRCurrency implements PipeTransform {
       if (result.length > 1) {
         output += '.' + result[1];
       }
-      return ruppeSymbol + output;
+      return currencySymbol + output;
     }
-    return value;
+    return value ?? currencySymbol + '0';
   }
 }
