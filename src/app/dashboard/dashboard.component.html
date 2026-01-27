@@ -1,32 +1,31 @@
 <main>
   <div class="filter-container">
-    <mat-form-field class="date-range_field">
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRangeForm">
-        <input matStartDate placeholder="Start date" formControlName="start" />
-        <input matEndDate placeholder="End date" formControlName="end" />
-      </mat-date-range-input>
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
-    <div class="payment-status__fiter">
-      <label for="payment" class="form-label">Filter by:</label>
-      <select
-        name="payment"
-        id="filter_payment"
-        class="form-control"
-        [formControl]="filterSelect"
-      >
-        <option value="ALL">All</option>
-        <option value="PAID">Paid</option>
-        <option value="DRAFT">Draft</option>
-        <option value="CANCELLED">Cancelled</option>
-      </select>
-    </div>
-  </div>
+  <!-- Date Range -->
+  <mat-form-field appearance="outline" class="filter-item date-range-field">
+    <mat-label>Date range</mat-label>
+    <mat-date-range-input
+      [rangePicker]="picker"
+      [formGroup]="dateRangeForm"
+    >
+      <input matStartDate placeholder="Start" formControlName="start" />
+      <input matEndDate placeholder="End" formControlName="end" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <!-- Payment Status -->
+  <mat-form-field appearance="outline" class="filter-item">
+    <mat-label>Status</mat-label>
+    <mat-select [formControl]="filterSelect">
+      <mat-option value="ALL">All</mat-option>
+      <mat-option value="PAID">Paid</mat-option>
+      <mat-option value="DRAFT">Draft</mat-option>
+      <mat-option value="CANCELLED">Cancelled</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
   <div class="table-content">
     <div class="stock-summary">
       <table class="table table-hover custom-table">

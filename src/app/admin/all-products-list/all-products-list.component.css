@@ -89,3 +89,102 @@
   align-items: center;
   justify-content: center;
 }
+
+.list-container {
+  padding: 16px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.heading-btn-box {
+  display: flex;
+  gap: 8px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .heading-btn-box {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .heading-btn-box input,
+  .heading-btn-box button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Hide table header */
+  .custom-table thead {
+    display: none;
+  }
+
+  /* Convert table structure */
+  .custom-table,
+  .custom-table tbody,
+  .custom-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .custom-table tr {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .custom-table td,
+  .custom-table th {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 6px 0;
+    border: none;
+    font-size: 14px;
+  }
+
+  /* Label */
+  .custom-table td::before,
+  .custom-table th::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 2px;
+  }
+
+  /* Status badge */
+  .badge {
+    font-size: 12px;
+    align-self: flex-start;
+  }
+
+  /* Actions */
+  .actions-container {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .edit-img,
+  .delete-img {
+    width: 24px;
+    height: 24px;
+  }
+}

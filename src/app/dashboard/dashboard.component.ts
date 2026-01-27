@@ -2,12 +2,17 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  MatOption,
+  MatOptionModule,
+} from '@angular/material/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { tap } from 'rxjs/internal/operators/tap';
-import { catchError, delay, EMPTY, of, switchMap, throwError } from 'rxjs';
+import { catchError, EMPTY, of, switchMap } from 'rxjs';
 import { DashboardApiService } from './services/dashboard-api.service';
 import { INRCurrency } from '../common/pipes/inr-currency.pipe';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +21,9 @@ import { INRCurrency } from '../common/pipes/inr-currency.pipe';
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
+    MatOption,
     ReactiveFormsModule,
+    MatSelectModule,
     INRCurrency,
   ],
   templateUrl: './dashboard.component.html',

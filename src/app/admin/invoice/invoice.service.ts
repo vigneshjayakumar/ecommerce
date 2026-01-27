@@ -81,13 +81,17 @@ export class InvoiceService {
       );
   }
 
-  generateInvoice() {
+  generateInvoice(idompotencyKey: string) {
     return this.httpClient.post<{
       message: string;
       response: { data: string };
-    }>(`${environment.apiBaseURL}/invoice/generateInvoice`, {
-      invoiceDetails: this.postInvoiceDetails,
-    });
+    }>(
+      `${environment.apiBaseURL}/invoice/generateInvoice`,
+      {
+        invoiceDetails: this.postInvoiceDetails,
+      },
+      { headers: { 'Idempotency-Key': idompotencyKey } },
+    );
   }
 
   fetchInvoiceLists() {

@@ -11,12 +11,14 @@ import { Subscription } from 'rxjs';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, RouterLink, LoaderComponent],
+  imports: [RouterOutlet, LoaderComponent],
 })
 export class AppComponent implements OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private subs?: Subscription;
+
+  isMenuOpen = false;
 
   isUserLoggedIn = false;
   isUserSubs = this.authService.accessTokenObs
@@ -28,6 +30,7 @@ export class AppComponent implements OnDestroy {
   }
 
   onUserLogin() {
+    this.isMenuOpen = false;
     this.router.navigate(['/login'], { queryParams: { authPage: 'login' } });
   }
 
@@ -36,7 +39,14 @@ export class AppComponent implements OnDestroy {
       .logOut()
       .subscribe(() => (this.isUserLoggedIn = !!this.authService.Access_token));
   }
+  onMenuOpen() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
+  onRouteTo(path: string) {
+    this.isMenuOpen = false;
+    this.router.navigate([path]);
+  }
   ngOnDestroy(): void {
     if (this.subs) this.subs.unsubscribe();
     if (this.isUserSubs) this.isUserSubs.unsubscribe();

@@ -86,3 +86,134 @@
     align-items: center;
     gap: 20px;
 }
+
+
+.list-container {
+    padding: 16px;
+}
+
+/* Header */
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sub-title {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Search & filter */
+.search-filter {
+    display: flex;
+    gap: 8px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .search-filter {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-filter input,
+    .search-filter select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Hide table header */
+    .custom-table thead {
+        display: none;
+    }
+
+    /* Convert table structure */
+    .custom-table,
+    .custom-table tbody,
+    .custom-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .custom-table tr {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* .custom-table td,
+    .custom-table th {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border: none;
+        font-size: 14px;
+    } */
+
+    /* Label */
+    .custom-table td::before,
+    .custom-table th::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+    }
+
+    /* Status badge */
+    .badge {
+        font-size: 12px;
+    }
+
+    /* Actions */
+    .actions-container {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .edit-img,
+    .delete-img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.no-data {
+    text-align: center;
+    padding: 32px 16px;
+}
+
+.no-data p {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+
+    .custom-table td,
+    .custom-table th {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        padding: 6px 0;
+        border: none;
+        font-size: 14px;
+    }
+}

@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { v4 as uuidV4 } from 'uuid';
 
 import {
   InvoiceService,
@@ -31,6 +32,8 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   private adminService = inject(AdminProductService);
   private router = inject(Router);
 
+  private idompotencyKey: string | null = null;
+  isGeneratedInvoice = false;
   private subsArr: (Subscription | undefined)[] = [];
   showInvoiceToggleBtn = false;
   invoiceType = false;
@@ -219,10 +222,17 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   }
 
   onGenerateInvoice() {
-    const subs = this.invoiceService.generateInvoice().subscribe((res) => {
-      if (res.message === 'SUCCESS')
-        this.router.navigate(['/admin/invoice/invoice-lists']);
-    });
+    if (this.idompotencyKey === null) this.idompotencyKey = uuidV4();
+    this.isGeneratedInvoice = true;
+    const subs = this.invoiceService
+      .generateInvoice(this.idompotencyKey)
+      .subscribe((res) => {
+        if (res.message === 'SUCCESS') {
+          this.isGeneratedInvoice = false;
+          this.idompotencyKey = null;
+          this.router.navigate(['/admin/invoice/invoice-lists']);
+        }
+      });
     this.subsArr.push(subs);
   }
 

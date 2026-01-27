@@ -150,7 +150,7 @@ export class InvoiceItemsComponent implements OnInit, OnDestroy {
     this.invoiceService.setInvoiceItemsArr(validationPayload);
   }
   onGenerateInvoice() {
-    this.invoiceService.generateInvoice().subscribe((res) => {
+    this.invoiceService.generateInvoice('TESTING').subscribe((res) => {
       if (res.message === 'SUCCESS')
         this.router.navigate(['/admin/invoice/invoice-lists']);
     });

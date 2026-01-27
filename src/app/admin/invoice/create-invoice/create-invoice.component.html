@@ -1,6 +1,5 @@
 <main class="invoice-page">
   <div class="main-container">
-
     <!-- Merchant Header -->
     <section class="merchant-card">
       <p class="title">{{ merchantInfo.tenant_name }}</p>
@@ -22,7 +21,6 @@
 
     <!-- Customer + Invoice Form -->
     <form [formGroup]="customerDetailsForm">
-
       <!-- Customer Details -->
       <section class="card">
         <h3 class="section-title">Customer Details</h3>
@@ -35,7 +33,11 @@
 
           <div class="form-group">
             <label>Phone Number*</label>
-            <input class="form-control" type="number" formControlName="phoneNumber" />
+            <input
+              class="form-control"
+              type="number"
+              formControlName="phoneNumber"
+            />
           </div>
 
           <div class="form-group">
@@ -56,7 +58,11 @@
 
           <div class="form-group full-width">
             <label>Address*</label>
-            <textarea class="form-control" rows="1" formControlName="address"></textarea>
+            <textarea
+              class="form-control"
+              rows="1"
+              formControlName="address"
+            ></textarea>
           </div>
         </div>
       </section>
@@ -64,7 +70,16 @@
       <!-- Invoice Items -->
       <section class="card">
         <h3 class="section-title">Invoice Items</h3>
-
+        <!-- ✅ MOBILE ADD ITEM BUTTON (ONLY MOBILE) -->
+        @if (isEditMode) {
+          <button
+            type="button"
+            class="add-item-btn d-md-none"
+            (click)="addFormEle()"
+          >
+            + Add Item
+          </button>
+        }
         <div class="table-wrapper">
           <table class="custom-table">
             <thead>
@@ -87,12 +102,19 @@
             @if (isEditMode) {
               <tbody>
                 <ng-container formArrayName="invoiceItemsArr">
-                  @for (item of invoiceItemArr.controls; track item; let i = $index) {
+                  @for (
+                    item of invoiceItemArr.controls;
+                    track item;
+                    let i = $index
+                  ) {
                     <tr [formGroupName]="i">
-                      <td>{{ i + 1 }}</td>
+                      <td >{{ i + 1 }}</td>
 
                       <td>
-                        <select class="form-control" formControlName="productName">
+                        <select
+                          class="form-control"
+                          formControlName="productName"
+                        >
                           @for (product of productList; track product.id) {
                             <option [value]="product.product_name">
                               {{ product.product_name }}
@@ -101,10 +123,34 @@
                         </select>
                       </td>
 
-                      <td><input class="form-control" type="number" formControlName="quantity" /></td>
-                      <td><input class="form-control" type="number" formControlName="rate" /></td>
-                      <td><input class="form-control" type="number" formControlName="taxRate" /></td>
-                      <td><input class="form-control" type="number" formControlName="amount" /></td>
+                      <td>
+                        <input
+                          class="form-control"
+                          type="number"
+                          formControlName="quantity"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-control"
+                          type="number"
+                          formControlName="rate"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-control"
+                          type="number"
+                          formControlName="taxRate"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-control"
+                          type="number"
+                          formControlName="amount"
+                        />
+                      </td>
 
                       @if (i !== 0) {
                         <td class="action-col">
@@ -121,7 +167,11 @@
               </tbody>
             } @else {
               <tbody>
-                @for (item of validatedProductsList.calculatedInvoiceItems; track item; let i = $index) {
+                @for (
+                  item of validatedProductsList.calculatedInvoiceItems;
+                  track item;
+                  let i = $index
+                ) {
                   <tr>
                     <td>{{ i + 1 }}</td>
                     <td>{{ item.productName }}</td>
@@ -160,14 +210,13 @@
             <button
               type="button"
               class="btn danger"
-              [disabled]="!customerDetailsForm.valid"
+              [disabled]="!customerDetailsForm.valid || isGeneratedInvoice"
               (click)="onGenerateInvoice()"
             >
               Generate Invoice
             </button>
           }
         </div>
-
       </section>
     </form>
   </div>
