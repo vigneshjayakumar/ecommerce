@@ -16,7 +16,7 @@ import {
   TInvoicePostPayload,
   TMerchantInfo,
 } from '../invoice.service';
-import { Subscription } from 'rxjs';
+import { catchError, Subscription, throwError } from 'rxjs';
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { Router } from '@angular/router';
@@ -226,6 +226,12 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.isGeneratedInvoice = true;
     const subs = this.invoiceService
       .generateInvoice(this.idompotencyKey)
+      .pipe(
+        catchError((err) => {
+          this.isGeneratedInvoice = false;
+          return throwError(() => new Error(err));
+        }),
+      )
       .subscribe((res) => {
         if (res.message === 'SUCCESS') {
           this.isGeneratedInvoice = false;

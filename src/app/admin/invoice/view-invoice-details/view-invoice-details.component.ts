@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { EMPTY, map, Observable, switchMap, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
@@ -23,7 +23,7 @@ import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
 })
-export class ViewInvoiceDetailsComponent implements OnInit {
+export class ViewInvoiceDetailsComponent {
   private invoiceService = inject(InvoiceService);
   private activatedRoute = inject(ActivatedRoute);
 
@@ -35,23 +35,19 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     isEmail: true,
   };
   invoiceDetails!: TViewInvoiceDetailsRes['response'];
-  invoiceDetailsObs: Observable<TViewInvoiceDetailsRes> =
-    this.activatedRoute.paramMap.pipe(
-      map((params) => params.get('id')),
-      switchMap((id) => {
-        if (id) {
-          return this.invoiceService.fetchInvoiceDetailsById(+id);
-        }
-        return EMPTY;
-      }),
-      tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
-    );
+  invoiceDetailsObs: Observable<any> = this.activatedRoute.paramMap.pipe(
+    map((params) => params.get('id')),
+    switchMap((id) => {
+      if (id) {
+        return this.invoiceService.fetchInvoiceDetailsById(+id);
+      }
+      return EMPTY;
+    }),
+    tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
+    switchMap(() => this.fetchMerchantDetails()),
+  );
   merchantInfo!: TMerchantInfo;
-  ngOnInit(): void {
-    this.invoiceService
-      .fetchMerchentDetails()
-      .subscribe((res) => (this.merchantInfo = res));
-  }
+
   onEmailPDF() {
     this.showEmailPopUp = true;
   }
@@ -83,5 +79,11 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
         window.URL.revokeObjectURL(url);
       });
+  }
+
+  private fetchMerchantDetails() {
+    return this.invoiceService
+      .fetchMerchentDetails()
+      .pipe(tap((res) => (this.merchantInfo = res)));
   }
 }
