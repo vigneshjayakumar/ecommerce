@@ -33,6 +33,7 @@
         >
         <span class="badge bg-info" (click)="onDownloadPDF()">Download</span>
         <span class="badge bg-info" (click)="onEmailPDF()">email</span>
+        <span class="badge bg-info" (click)="onPDFLink()">send link</span>
       </div>
       <div class="party-section">
         <div>
@@ -110,4 +111,12 @@
       (btnTriggerEvent)="onEmailTrigger($event)"
     ></app-custom-popup-modal>
   }
+  @if (showSharePanelPopup) {
+    <app-custom-popup-modal
+      [data]="sharePDFLinkConfig"
+      (btnTriggerEvent)="onShareTrigger($event)"
+    ></app-custom-popup-modal>
+  }
 }
+
+<a [href]="waURL" target="_blank" [hidden]="true" id="waAnchor"></a>

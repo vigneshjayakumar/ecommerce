@@ -130,6 +130,13 @@ export class InvoiceService {
       data,
     );
   }
+
+  generateLink(invoiceId: number) {
+    return this.httpClient.get<{
+      message: 'SUCCESS' | 'ERROR';
+      response: string;
+    }>(`${environment.apiBaseURL}/invoice/generatePDFLink/${invoiceId}`);
+  }
 }
 
 export type TMerchantDataResponse = {

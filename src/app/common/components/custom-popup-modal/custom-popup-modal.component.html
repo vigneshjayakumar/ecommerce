@@ -10,6 +10,21 @@
           <input type="email" class="form-control" [(ngModel)]="email" />
         </div>
       }
+      @if (data.isShare) {
+        <div class="email_box">
+          <label for="email">Phone Number</label>
+          <input type="email" class="form-control" [(ngModel)]="phoneNumber" />
+        </div>
+        <div class="share-btn-box">
+          <button (click)="onShareType('copy')">Copy link</button>
+          <button
+            (click)="onShareType('watsapp')"
+            [disabled]="phoneNumber.length < 10 || phoneNumber.length > 10"
+          >
+            Wats App
+          </button>
+        </div>
+      }
       <div class="btn-container">
         @if (data.showCancelBtn) {
           <button
