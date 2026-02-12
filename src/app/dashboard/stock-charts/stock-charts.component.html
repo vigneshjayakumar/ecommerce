@@ -1,0 +1,8 @@
+<div class="chart-container">
+    @if(!noData){
+    <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType">
+    </canvas>
+    }@else {
+    No Data at selected date range
+    }
+</div>

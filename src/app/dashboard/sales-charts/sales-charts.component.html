@@ -1,0 +1,19 @@
+<div class="chart-container">
+    @if(!noData){
+    <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType">
+    </canvas>
+    }@else {
+    No Data at selected date range
+    }
+</div>
+<div class="kpi-row">
+    <div class="kpi-card">
+        <h3>Total Sales</h3>
+        <p>{{ invoiceSummaryOverall?.totalSales | inrcurr }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h3>Total Invoices</h3>
+        <p>{{ invoiceSummaryOverall?.invoiceCount }}</p>
+    </div>
+</div>

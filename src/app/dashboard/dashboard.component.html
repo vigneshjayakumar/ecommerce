@@ -1,31 +1,32 @@
 <main>
   <div class="filter-container">
-  <!-- Date Range -->
-  <mat-form-field appearance="outline" class="filter-item date-range-field">
-    <mat-label>Date range</mat-label>
-    <mat-date-range-input
-      [rangePicker]="picker"
-      [formGroup]="dateRangeForm"
-    >
-      <input matStartDate placeholder="Start" formControlName="start" />
-      <input matEndDate placeholder="End" formControlName="end" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>
+    <!-- Date Range -->
+    <mat-form-field appearance="outline" class="filter-item date-range-field">
+      <mat-label>Date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRangeForm">
+        <input matStartDate placeholder="Start" formControlName="start" />
+        <input matEndDate placeholder="End" formControlName="end" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
 
-  <!-- Payment Status -->
-  <mat-form-field appearance="outline" class="filter-item">
-    <mat-label>Status</mat-label>
-    <mat-select [formControl]="filterSelect">
-      <mat-option value="ALL">All</mat-option>
-      <mat-option value="PAID">Paid</mat-option>
-      <mat-option value="DRAFT">Draft</mat-option>
-      <mat-option value="CANCELLED">Cancelled</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-
+    <!-- Payment Status -->
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="filterSelect">
+        <mat-option value="ALL">All</mat-option>
+        <mat-option value="PAID">Paid</mat-option>
+        <mat-option value="DRAFT">Draft</mat-option>
+        <mat-option value="CANCELLED">Cancelled</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!-- <div class="chart-box">
+  </div> -->
+  <app-sales-charts [invoiceSummaryList]="invoiceSummaryList"
+    [invoiceSummaryOverall]="invoiceSummaryOverall"></app-sales-charts>
+  <app-stock-charts [stockData]="stockSummaryList"></app-stock-charts>
   <div class="table-content">
     <div class="stock-summary">
       <table class="table table-hover custom-table">
@@ -38,16 +39,16 @@
         </thead>
         <tbody>
           @for (
-            stock of stockSummaryList;
-            track stock.productId;
-            let i = $index
+          stock of stockSummaryList;
+          track stock.productId;
+          let i = $index
           ) {
-            <tr>
-              <td>{{ i + 1 }}</td>
-              <td>{{ stock.productName }}</td>
-              <td>{{ stock.availableQty }}</td>
-              <td>{{ stock.lowStock ? "STOCK IS LOW" : "IN Stock" }}</td>
-            </tr>
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ stock.productName }}</td>
+            <td>{{ stock.availableQty }}</td>
+            <td>{{ stock.lowStock ? "STOCK IS LOW" : "IN Stock" }}</td>
+          </tr>
           }
         </tbody>
       </table>
@@ -63,6 +64,7 @@
           <p class="info">{{ invoiceSummaryOverall.totalSales | inrcurr }}</p>
         </div>
       </div>
+
       <div class="invoice_summary-list">
         <table class="table table-hover custom-table">
           <thead class="thead-light">
@@ -75,16 +77,16 @@
           </thead>
           <tbody>
             @for (
-              invoice of invoiceSummaryList;
-              track invoice.period;
-              let i = $index
+            invoice of invoiceSummaryList;
+            track invoice.period;
+            let i = $index
             ) {
-              <tr>
-                <td>{{ i + 1 }}</td>
-                <td>{{ invoice.period }}</td>
-                <td>{{ invoice.invoiceCount }}</td>
-                <td>{{ invoice.totalSales | inrcurr }}</td>
-              </tr>
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ invoice.period }}</td>
+              <td>{{ invoice.invoiceCount }}</td>
+              <td>{{ invoice.totalSales | inrcurr }}</td>
+            </tr>
             }
           </tbody>
         </table>

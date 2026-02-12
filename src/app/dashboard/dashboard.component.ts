@@ -2,17 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatNativeDateModule,
-  MatOption,
-  MatOptionModule,
-} from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { tap } from 'rxjs/internal/operators/tap';
 import { catchError, EMPTY, of, switchMap } from 'rxjs';
 import { DashboardApiService } from './services/dashboard-api.service';
 import { INRCurrency } from '../common/pipes/inr-currency.pipe';
 import { MatSelectModule } from '@angular/material/select';
+import { SalesChartsComponent } from './sales-charts/sales-charts.component';
+import { StockChartsComponent } from './stock-charts/stock-charts.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatSelectModule,
     INRCurrency,
+    SalesChartsComponent, StockChartsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -39,7 +38,9 @@ export class DashboardComponent implements OnInit {
     totalSales: 0,
   };
 
-  startDate: Date = new Date();
+  today = new Date();
+
+  startDate: Date = new Date(this.today);
   endDate: Date = new Date();
   paymentFilter: TpaymentStatus = 'DRAFT';
 
@@ -76,6 +77,7 @@ export class DashboardComponent implements OnInit {
     .subscribe();
 
   ngOnInit(): void {
+    this.startDate.setDate(this.today.getDate() - 30);
     this.dashboardApiService
       .getStockReport()
       .pipe(
