@@ -1,0 +1,32 @@
+<button (click)="onAllocate()">Allocate</button>
+<table>
+    <thead>
+        <tr>
+            <th>Products</th>
+            <th>Available count</th>
+            @for(branch of branchesList;track branch.id){
+            <td>{{branch.branch_name}}({{branch.branch_code}})</td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for(products of mapProductBranchArr;track products.productId){
+        <tr>
+            <td>
+                {{products.productName}}
+            </td>
+            <td>
+                {{products.availCount}}
+            </td>
+            @for (bran of products.branches; track $index) {
+            <td>
+                <input type="number" (change)="onCountChange(bran.branchId,products.productId)"
+                    [(ngModel)]="bran.count">
+            </td>
+            }
+            <td>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
