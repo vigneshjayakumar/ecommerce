@@ -27,7 +27,7 @@ export class BranchWiseService {
         productName: string;
         availCount: number, branches: { count: number, branchId: number, name: string }[]
     }) {
-        return this.httpClient.post(`${environment.apiBaseURL}/branch/allocate-ledger-snapshot`, payload, { withCredentials: true })
+        return this.httpClient.post<{ message: 'ERROR' | 'SUCCESS', response: { isInserted: number, snapshot: number } }>(`${environment.apiBaseURL}/branch/allocate-ledger-snapshot`, payload, { withCredentials: true })
     }
 
 }

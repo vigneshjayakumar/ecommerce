@@ -1,0 +1,30 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+
+    .title {
+        font-family: var(--font-primary);
+        font-size: 16px;
+        font-weight: var(--fw-bold);
+    }
+
+    .sub-title {
+        font-family: var(--font-primary);
+        font-size: 16px;
+        font-weight: var(--fw-regular);
+    }
+}
+
+.src-drpdown {
+    display: flex;
+    flex-direction: row;
+    gap: 16px
+}

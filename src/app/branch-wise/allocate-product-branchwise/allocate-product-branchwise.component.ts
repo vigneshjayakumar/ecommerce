@@ -26,12 +26,7 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
       if (!s) return EMPTY
       return this.branchWiseService.getUnallocatedProductsList()
     }
-    )).pipe(tap(res => {
-      this.branchesList = res.branches;
-      this.unallocatedProductList = res.productsList;
-      console.log(res, this.unallocatedProductList)
-      this.mapProductsList();
-    })).subscribe(res => console.log('Un Allocated Products', this.unallocatedProductList));
+    )).pipe(tap(res => this.stitchResponse(res))).subscribe();
 
     this.subsArr.push(subs);
   }
@@ -57,10 +52,16 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
   onAllocate() {
     const presentStock = this.mapProductBranchArr.filter(ele => ele.branches.reduce((a, b) => ({ ...a, count: a.count + b.count }), { count: 0, name: '', branchId: '' }).count > 0);
     if (!presentStock.length) return
-    this.branchWiseService.postAllocateStockLedgerSnapshot(presentStock as any).subscribe(res => console.log('ALLOCATING STOCK LEDGER', res));
+    this.branchWiseService.postAllocateStockLedgerSnapshot(presentStock as any).pipe(switchMap(res => {
+      if (res.message === 'SUCCESS') {
+        this.mapProductBranchArr = [];
+        return this.branchWiseService.getUnallocatedProductsList().pipe(tap(res => this.stitchResponse(res)));
+      }
+      return EMPTY
+    })).subscribe(res => console.log('ALLOCATING STOCK LEDGER', res));
   }
 
-  onCountChange(branchId: number, productId: number) {
+  onCountChange(productId: number) {
     const masterCount = this.unallocatedProductList.find(ele => ele.id === productId)?.stock_count;
     const foundProduct = this.mapProductBranchArr.find(ele => ele.productId === productId);
 
@@ -70,6 +71,12 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
 
     if (foundProduct && countChanged && masterCount)
       foundProduct.availCount = masterCount - countChanged.count
+  }
+
+  private stitchResponse(res: TUnAllocatedProductRes['response']) {
+    this.branchesList = res.branches;
+    this.unallocatedProductList = res.productsList;
+    this.mapProductsList();
   }
 
   ngOnDestroy(): void {

@@ -20,7 +20,7 @@
             </td>
             @for (bran of products.branches; track $index) {
             <td>
-                <input type="number" (change)="onCountChange(bran.branchId,products.productId)"
+                <input type="number" (change)="onCountChange(products.productId)"
                     [(ngModel)]="bran.count">
             </td>
             }
