@@ -1,0 +1,57 @@
+<main>
+    <div class="container">
+        <div class="title-container">
+            <p class="title">
+                Purchase Products
+            </p>
+            <p class="sub-title">
+                add stocks to inventory [Note. Default current branch is selected
+                <b>{{defaultBranchObj.branch_name}} </b>]
+            </p>
+        </div>
+        <div class="content-box">
+            <form [formGroup]="purchasesForm">
+                <div class="input-container">
+                    <label for="branch">Branch</label>
+                    <select name="branch" id="branch" formControlName="branchId">
+                        @for (branch of branchList; track branch.id) {
+                        <option [value]="branch.id">{{branch.branch_name}}</option>
+                        }
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label for="supplier">Supplier Name</label>
+                    <input type="text" [disabled]="true">
+                </div>
+                <div class="input-container">
+                    <label for="supplier">Remarks</label>
+                    <input type="text" formControlName="remarks">
+                </div>
+                <button (click)="addItem()">Add Item</button>
+                <button (click)="onSubmitPurchases()" [disabled]="isSubmitted"> Submit</button>
+                <div formArrayName="items">
+                    @for(item of purchasesItemArr.controls;track $index;let i = $index){
+                    <div [formGroupName]="i">
+                        <div class="input-container">
+                            <label for="supplier">Product Name</label>
+                            <select name="product" id="product" formControlName="productId">
+                                @for (product of allProductsList; track product.id) {
+                                <option [value]="product.id">{{product.product_name}}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label for="qty">Quantity</label>
+                            <input type="number" formControlName="qty">
+                        </div>
+                        <div class="input-container">
+                            <label for="unitCost">Unit Cost</label>
+                            <input type="number" formControlName="unitCost">
+                        </div>
+                    </div>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</main>

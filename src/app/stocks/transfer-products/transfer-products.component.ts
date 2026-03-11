@@ -7,7 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { v4 as uuidV4 } from 'uuid';
 
 import { TProductByBranchIdRes, TransferService } from './transfer.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-transfer-products',
@@ -68,7 +68,6 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
   onProductQtyChange(data: TProductByBranchIdRes['response'][0]) {
     this.productsByBranch = this.productsByBranch.map(ele => (ele.id === data.id ? { ...ele, current_qty: (+ele.current_qty - (ele.shiftCount ?? 0)).toString() } : ele));
     this.productsByBranch = this.productsByBranch.map(ele => (ele.id === data.id ? { ...ele, destProductQty: (+(ele.destProductQty ?? 0) + (ele.shiftCount ?? 0)) } : ele));
-    console.log(this.productsByBranch)
   }
 
   onSumbitTransfer() {
