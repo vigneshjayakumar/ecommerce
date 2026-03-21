@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,10 +27,10 @@ export class InvoiceService {
     items: TInvoicePostPayload['items'];
     calculateFromDB: boolean;
   } = {
-    isEditMode: true,
-    items: [],
-    calculateFromDB: false,
-  };
+      isEditMode: true,
+      items: [],
+      calculateFromDB: false,
+    };
   private invoiceItemsArrListener = new BehaviorSubject<
     typeof this.invoiceItemsArr
   >(this.invoiceItemsArr);
@@ -84,7 +85,13 @@ export class InvoiceService {
   generateInvoice(idompotencyKey: string) {
     return this.httpClient.post<{
       message: string;
-      response: { data: string };
+      response: {
+        data: {
+          "id": string,
+          "invoice_number": string,
+          "created_at": string
+        }[]
+      };
     }>(
       `${environment.apiBaseURL}/invoice/generateInvoice`,
       {
@@ -108,6 +115,10 @@ export class InvoiceService {
       `${environment.apiBaseURL}/invoice/onCancelInvoice/${id}`,
       { withCredentials: true },
     );
+  }
+
+  markAsPaid(id: number, payLoad: { paymentType: TPaymentOptions, amount: number, refId?: string }) {
+    return this.httpClient.patch(`${environment.apiBaseURL}/invoice/payInvoice/${id}`, payLoad, { withCredentials: true })
   }
 
   fetchInvoiceDetailsById(invoiceId: number) {
@@ -137,6 +148,10 @@ export class InvoiceService {
       response: string;
     }>(`${environment.apiBaseURL}/invoice/generatePDFLink/${invoiceId}`);
   }
+
+  confirmInvoiceById(invoiceId: number) {
+    return this.httpClient.patch(`${environment.apiBaseURL}/invoice/confirmInvoice/${invoiceId}`, {}, { withCredentials: true })
+  }
 }
 
 export type TMerchantDataResponse = {
@@ -160,6 +175,7 @@ export type TMerchantInfo = {
 export type TInvoicePostPayload = {
   invoiceType: 'GST' | 'NON-GST';
   invoiceDate: string;
+  branchId: number,
   customer: {
     name: string;
     gstin: string | null;
@@ -179,6 +195,7 @@ const INIT_POST_INVOICE_PAYLOAD: TInvoicePostPayload = {
     name: '',
     phoneNumber: '',
   },
+  branchId: 0,
   invoiceDate: new Date().toDateString(),
   invoiceType: 'NON-GST',
   items: [],
@@ -212,7 +229,7 @@ export type TGetInvoiceLists = {
   };
 };
 
-type TInvoiceListEle = {
+export type TInvoiceListEle = {
   id: number;
   tenant_id: number;
   invoice_number: string;
@@ -222,7 +239,7 @@ type TInvoiceListEle = {
   subtotal: string;
   tax_amount: string;
   total_amount: string;
-  invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED';
+  invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED' | 'CONFIRMED';
   created_by: number;
   created_at: Date;
 };

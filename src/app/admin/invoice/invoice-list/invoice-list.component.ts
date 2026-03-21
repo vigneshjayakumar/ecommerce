@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { InvoiceService, TGetInvoiceLists } from '../invoice.service';
+import { InvoiceService, TGetInvoiceLists, TInvoiceListEle } from '../invoice.service';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -12,16 +12,21 @@ import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
+import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
 
 @Component({
   selector: 'app-invoice-list',
-  imports: [NgClass, DatePipe, ReactiveFormsModule, INRCurrency],
+  imports: [NgClass, DatePipe, ReactiveFormsModule, INRCurrency, PaymentConfirmationPopupComponent],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.css',
 })
 export class InvoiceListComponent implements OnInit, OnDestroy {
   private invoiceService = inject(InvoiceService);
   private router = inject(Router);
+
+  showPaymentPopUp = false;
+  popupData = { title: 'Payment Confirmation', showCancelBtn: true, showConfirmBtn: true, amount: 0 };
+  invoiceId!: number;
 
   searchControl = new FormControl();
   filterControl = new FormControl();
@@ -88,6 +93,21 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe();
+  }
+
+  markAsPaid(element: TInvoiceListEle) {
+    console.log(element.total_amount);
+    this.popupData.amount = +element.total_amount
+    this.showPaymentPopUp = true;
+    this.invoiceId = element.id;
+  }
+
+  onMarkAsPayTrigger(event: { paymentType: TPaymentOptions, amount: number, refId?: string } | false) {
+    if (event) {
+      const payload = { paymentType: event.paymentType, amount: event.amount, refId: event.refId };
+      this.invoiceService.markAsPaid(this.invoiceId, payload).subscribe()
+    }
+    this.showPaymentPopUp = false;
   }
   private fetchInvoiceList() {
     return this.invoiceService.fetchInvoiceLists().pipe(

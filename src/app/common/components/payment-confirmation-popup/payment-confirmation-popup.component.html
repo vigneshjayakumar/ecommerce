@@ -1,0 +1,43 @@
+<div class="overlay">
+    <div class="custom_popup__container">
+        <div class="title_box">
+            <p class="title">{{ data.title }}</p>
+        </div>
+        <div class="content_box">
+            <div class="email_box">
+                <label for="email">Payment Type</label>
+                <select name="paymentType" id="paymentType" [(ngModel)]="paymentType">
+                    @for(type of paymentOptions;track $index){
+                    <option [value]="type">{{type}}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="email_box">
+                <label for="email">Reference Number</label>
+                <input type="email" class="form-control" [disabled]="paymentType==='CASH'"
+                    [(ngModel)]="paymentRefNumber" />
+            </div>
+
+            <div class="email_box">
+                <label for="email">Amount</label>
+                <input type="email" class="form-control" [disabled]="!isPartial" [(ngModel)]="amount" />
+                <input type="checkbox" [(ngModel)]="isPartial">
+                {{isPartial?'Partital Payment':'Full Payment'}}
+            </div>
+
+            <div class="btn-container">
+                @if (data.showCancelBtn) {
+                <button type="button" class="btn primary" (click)="onButtonClick(false)">
+                    Cancel
+                </button>
+                }
+                @if (data.showConfirmBtn) {
+                <button type="button" class="btn primary" (click)="onButtonClick(true)">
+                    Submit
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

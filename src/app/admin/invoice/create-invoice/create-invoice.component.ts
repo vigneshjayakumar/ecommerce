@@ -16,10 +16,11 @@ import {
   TInvoicePostPayload,
   TMerchantInfo,
 } from '../invoice.service';
-import { catchError, Subscription, throwError } from 'rxjs';
+import { catchError, Subscription, switchMap, throwError } from 'rxjs';
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { Router } from '@angular/router';
+import { TProductByBranchIdRes, TransferService } from 'src/app/stocks/transfer-products/transfer.service';
 
 @Component({
   selector: 'app-create-invoice',
@@ -30,10 +31,13 @@ import { Router } from '@angular/router';
 export class CreateInvoiceComponent implements OnInit, OnDestroy {
   private invoiceService = inject(InvoiceService);
   private adminService = inject(AdminProductService);
+  private transferService = inject(TransferService);
   private router = inject(Router);
 
   private idompotencyKey: string | null = null;
   isGeneratedInvoice = false;
+  isInvoiceAwaitingConfirm = false;
+  generatedInvoiceId: number = 0;
   private subsArr: (Subscription | undefined)[] = [];
   showInvoiceToggleBtn = false;
   invoiceType = false;
@@ -47,14 +51,19 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     id: 0,
     email_id: '',
   };
-
+  branchList: { id: string, branch_name: string }[] = [];
+  branchSelect = new FormControl('');
   customerDetailsForm!: FormGroup;
   isEditMode = true;
 
+  branchId = 0;
+  branchChangeSubs = this.branchSelect.valueChanges.pipe(tap(branchId => { if (branchId) { this.fetchProductListBranchWise(+branchId) } })).subscribe();
+
   ngOnInit(): void {
-    const subs = this.merchantDetails().subscribe();
+    const subs = this.merchantDetails().pipe(switchMap(() => this.getBranchList())).subscribe(() => this.fetchProductListBranchWise(+this.branchList[0].id));
     this.initForm();
     this.fetchProductsList();
+
     this.subsArr.push(subs);
   }
   private onVerifyInvoice(items: { productId: number; quantity: number }[]) {
@@ -69,6 +78,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       invoiceType: this.invoiceType === true ? 'GST' : 'NON-GST',
       invoiceDate: currentDate.toISOString().substring(0, 10),
       customer: customerDetails,
+      branchId: this.branchId,
       items: items,
     };
     if (!payload.items.length) console.log('Items must be present');
@@ -91,6 +101,13 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       }),
     );
   }
+
+  private getBranchList() {
+    return this.transferService.getBranchLists().pipe(tap(res => {
+      this.branchList = res;
+    }))
+  }
+
   private postInvoicePayload() {
     return this.invoiceService.validateInvoiceDetails().pipe(
       tap((res) => {
@@ -185,16 +202,17 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   }
 
   private calculateTaxForProduct(form: FormGroup, product: string) {
-    const productObj = this.productList.find(
+    const lookupproduct = this.productList.find(ele => ele.product_name === product);
+    const productObj = this.branchWiseProductList.find(
       (ele) => ele.product_name === product,
     );
-    if (productObj) {
-      const amount = productObj.price;
+    if (productObj && lookupproduct) {
+      const amount = lookupproduct.price;
 
-      let taxRate = amount * (Number(productObj.tax_percent) / 100);
+      let taxRate = amount * (Number(lookupproduct.tax_percent) / 100);
       taxRate = Math.round((taxRate + Number.EPSILON) * 100) / 100;
 
-      let totalAmount = +productObj.price + Number(taxRate);
+      let totalAmount = +amount + Number(taxRate);
       totalAmount = Math.round((totalAmount + Number.EPSILON) * 100) / 100;
 
       form.get('rate')?.setValue(amount, { emitEvent: false });
@@ -204,21 +222,29 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       quantityFormField?.setValidators([
         Validators.required,
         Validators.min(1),
-        Validators.max(productObj.stock_count),
+        Validators.max(+productObj.current_qty),
       ]);
       form.get('amount')?.setValue(totalAmount, { emitEvent: false });
     }
   }
 
   productList: TProduct[] = [];
+  branchWiseProductList: TProductByBranchIdRes['response'] = [];
   private fetchProductsList() {
-    const subs = this.adminService
-      .getAllProductsList()
+    const subs = this.adminService.getAllProductsList()
       .pipe(
         tap((res) => (this.productList = res.filter((ele) => ele.is_active))),
       )
       .subscribe();
     this.subsArr.push(subs);
+  }
+
+  private fetchProductListBranchWise(branchId: number) {
+    this.branchId = branchId;
+    const subs = this.transferService.getProductListByBranchId(branchId)
+      .pipe(tap(res => this.branchWiseProductList = res))
+      .subscribe();
+    this.subsArr.push(subs)
   }
 
   onGenerateInvoice() {
@@ -235,11 +261,20 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res.message === 'SUCCESS') {
           this.isGeneratedInvoice = false;
+          this.isInvoiceAwaitingConfirm = true;
           this.idompotencyKey = null;
-          this.router.navigate(['/admin/invoice/invoice-lists']);
+          this.generatedInvoiceId = +res.response.data[0].id;
+          console.log('INVOICE GENERATED', res)
         }
       });
     this.subsArr.push(subs);
+  }
+
+  onConfirmInvoice() {
+    this.invoiceService.confirmInvoiceById(this.generatedInvoiceId).subscribe((res) => {
+      console.log('CONFIRMED', res)
+      this.router.navigate(['/admin/invoice/invoice-lists']);
+    });
   }
 
   addFormEle() {

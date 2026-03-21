@@ -13,6 +13,14 @@
         </div>
 
         <div class="gstin">
+          <div class="branch-drpdwn">
+            <label for="branch">Select Branch</label>
+            <select name="branch" id="branch" [formControl]="branchSelect">
+              @for (branch of branchList; track branch.id) {
+              <option [value]="branch.id">{{branch.branch_name}}</option>
+              }
+            </select>
+          </div>
           <p class="sub-title">{{ merchantInfo.gstin }}</p>
           <p class="sub-title">{{ merchantInfo.email_id }}</p>
         </div>
@@ -33,24 +41,15 @@
 
           <div class="form-group">
             <label>Phone Number*</label>
-            <input
-              class="form-control"
-              type="number"
-              formControlName="phoneNumber"
-            />
+            <input class="form-control" type="number" formControlName="phoneNumber" />
           </div>
 
           <div class="form-group">
             <label>
               Customer GST Number
               @if (showInvoiceToggleBtn) {
-                <input
-                  type="checkbox"
-                  (change)="onInvoiceTypeChange()"
-                  [(ngModel)]="invoiceType"
-                  [ngModelOptions]="{ standalone: true }"
-                  [disabled]="!isEditMode"
-                />
+              <input type="checkbox" (change)="onInvoiceTypeChange()" [(ngModel)]="invoiceType"
+                [ngModelOptions]="{ standalone: true }" [disabled]="!isEditMode" />
               }
             </label>
             <input class="form-control" type="text" formControlName="gstin" />
@@ -58,11 +57,7 @@
 
           <div class="form-group full-width">
             <label>Address*</label>
-            <textarea
-              class="form-control"
-              rows="1"
-              formControlName="address"
-            ></textarea>
+            <textarea class="form-control" rows="1" formControlName="address"></textarea>
           </div>
         </div>
       </section>
@@ -72,13 +67,9 @@
         <h3 class="section-title">Invoice Items</h3>
         <!-- ✅ MOBILE ADD ITEM BUTTON (ONLY MOBILE) -->
         @if (isEditMode) {
-          <button
-            type="button"
-            class="add-item-btn d-md-none"
-            (click)="addFormEle()"
-          >
-            + Add Item
-          </button>
+        <button type="button" class="add-item-btn d-md-none" (click)="addFormEle()">
+          + Add Item
+        </button>
         }
         <div class="table-wrapper">
           <table class="custom-table">
@@ -92,103 +83,80 @@
                 <th class="text-right">Amount</th>
 
                 @if (isEditMode) {
-                  <th class="action-col" (click)="addFormEle()">＋</th>
+                <th class="action-col" (click)="addFormEle()">＋</th>
                 } @else {
-                  <th class="action-col" (click)="addEnableEdit()">Edit</th>
+                <th class="action-col" (click)="addEnableEdit()">Edit</th>
                 }
               </tr>
             </thead>
 
             @if (isEditMode) {
-              <tbody>
-                <ng-container formArrayName="invoiceItemsArr">
-                  @for (
-                    item of invoiceItemArr.controls;
-                    track item;
-                    let i = $index
-                  ) {
-                    <tr [formGroupName]="i">
-                      <td >{{ i + 1 }}</td>
-
-                      <td>
-                        <select
-                          class="form-control"
-                          formControlName="productName"
-                        >
-                          @for (product of productList; track product.id) {
-                            <option [value]="product.product_name">
-                              {{ product.product_name }}
-                            </option>
-                          }
-                        </select>
-                      </td>
-
-                      <td>
-                        <input
-                          class="form-control"
-                          type="number"
-                          formControlName="quantity"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          class="form-control"
-                          type="number"
-                          formControlName="rate"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          class="form-control"
-                          type="number"
-                          formControlName="taxRate"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          class="form-control"
-                          type="number"
-                          formControlName="amount"
-                        />
-                      </td>
-
-                      @if (i !== 0) {
-                        <td class="action-col">
-                          <img
-                            class="delete-img"
-                            src="assets/admin-img/delete.svg"
-                            (click)="onDeleteFormEle(i)"
-                          />
-                        </td>
-                      }
-                    </tr>
-                  }
-                </ng-container>
-              </tbody>
-            } @else {
-              <tbody>
+            <tbody>
+              <ng-container formArrayName="invoiceItemsArr">
                 @for (
-                  item of validatedProductsList.calculatedInvoiceItems;
-                  track item;
-                  let i = $index
+                item of invoiceItemArr.controls;
+                track item;
+                let i = $index
                 ) {
-                  <tr>
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ item.productName }}</td>
-                    <td class="text-right">{{ item.quantity }}</td>
-                    <td class="text-right">{{ item.price }}</td>
-                    <td class="text-right">{{ item.taxRate }}</td>
-                    <td class="text-right">{{ item.amount }}</td>
-                  </tr>
-                }
+                <tr [formGroupName]="i">
+                  <td>{{ i + 1 }}</td>
 
-                <tr class="total-row">
-                  <td colspan="3"></td>
-                  <td>{{ validatedProductsList.total.totalPrice }}</td>
-                  <td>{{ validatedProductsList.total.totalTax }}</td>
-                  <td>{{ validatedProductsList.total.totalAmount }}</td>
+                  <td>
+                    <select class="form-control" formControlName="productName">
+                      @for (product of branchWiseProductList; track product.id) {
+                      <option [value]="product.product_name">
+                        {{ product.product_name }}
+                      </option>
+                      }
+                    </select>
+                  </td>
+
+                  <td>
+                    <input class="form-control" type="number" formControlName="quantity" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" formControlName="rate" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" formControlName="taxRate" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" formControlName="amount" />
+                  </td>
+
+                  @if (i !== 0) {
+                  <td class="action-col">
+                    <img class="delete-img" src="assets/admin-img/delete.svg" (click)="onDeleteFormEle(i)" />
+                  </td>
+                  }
                 </tr>
-              </tbody>
+                }
+              </ng-container>
+            </tbody>
+            } @else {
+            <tbody>
+              @for (
+              item of validatedProductsList.calculatedInvoiceItems;
+              track item;
+              let i = $index
+              ) {
+              <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.productName }}</td>
+                <td class="text-right">{{ item.quantity }}</td>
+                <td class="text-right">{{ item.price }}</td>
+                <td class="text-right">{{ item.taxRate }}</td>
+                <td class="text-right">{{ item.amount }}</td>
+              </tr>
+              }
+
+              <tr class="total-row">
+                <td colspan="3"></td>
+                <td>{{ validatedProductsList.total.totalPrice }}</td>
+                <td>{{ validatedProductsList.total.totalTax }}</td>
+                <td>{{ validatedProductsList.total.totalAmount }}</td>
+              </tr>
+            </tbody>
             }
           </table>
         </div>
@@ -198,23 +166,21 @@
           <button type="button" class="btn secondary">Cancel</button>
 
           @if (isEditMode) {
-            <button
-              type="button"
-              class="btn secondary"
-              [disabled]="!customerDetailsForm.valid"
-              (click)="onCalculateTotalAmount()"
-            >
-              Calculate Amount
-            </button>
+          <button type="button" class="btn secondary" [disabled]="!customerDetailsForm.valid"
+            (click)="onCalculateTotalAmount()">
+            Calculate Amount
+          </button>
           } @else {
-            <button
-              type="button"
-              class="btn danger"
-              [disabled]="!customerDetailsForm.valid || isGeneratedInvoice"
-              (click)="onGenerateInvoice()"
-            >
-              Generate Invoice
-            </button>
+          <button type="button" class="btn danger" [disabled]="!customerDetailsForm.valid || isGeneratedInvoice"
+            (click)="onGenerateInvoice()">
+            Generate Invoice
+          </button>
+          }
+          @if(isInvoiceAwaitingConfirm){
+          <button type="button" class="btn danger" [disabled]="!customerDetailsForm.valid || isGeneratedInvoice"
+            (click)="onConfirmInvoice()">
+            Confirm Invoice
+          </button>
           }
         </div>
       </section>

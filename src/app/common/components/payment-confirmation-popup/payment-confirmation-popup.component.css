@@ -1,0 +1,47 @@
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #7c7a7a93;
+}
+
+.custom_popup__container {
+    position: relative;
+    padding: 12px;
+    background: #fff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+}
+
+.title_box {
+    padding-bottom: 12px;
+    border-bottom: 1px solid gray;
+}
+
+.content_box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.email_box {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+}
