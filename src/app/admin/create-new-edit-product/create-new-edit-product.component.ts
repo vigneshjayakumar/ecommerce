@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription, tap } from 'rxjs';
+import { Subscription, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
@@ -13,6 +13,7 @@ import {
   TPostNewProductPayload,
 } from '../admin-product.service';
 import { TProduct } from '../all-products-list/all-products.modal';
+import { TUOM, UtilsService } from 'src/app/common/services/utils.service';
 
 @Component({
   selector: 'app-create-new-edit-product',
@@ -25,9 +26,11 @@ export class CreateNewEditProductComponent implements OnDestroy {
   postProductSubs!: Subscription;
   buttonLable = 'Create';
   isActiveProduct = true;
+  uoms: TUOM = [];
 
   private adminProductService = inject(AdminProductService);
   private activatedRoute = inject(ActivatedRoute);
+  private utilsService = inject(UtilsService);
   private router = inject(Router);
 
   dataToBeEdited: TProduct | null = null;
@@ -53,7 +56,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
         } else {
           this.initForm();
         }
-      }),
+      }), switchMap(() => this.getUOMConstants())
     )
     .subscribe();
 
@@ -63,8 +66,10 @@ export class CreateNewEditProductComponent implements OnDestroy {
       description: this.dataToBeEdited?.description,
       price: this.dataToBeEdited?.price,
       stockCount: this.dataToBeEdited?.stock_count,
+      uom: this.dataToBeEdited?.uom,
       taxPercentage: this.dataToBeEdited?.tax_percent,
-      skuCode: this.dataToBeEdited?.hsn_code,
+      skuCode: this.dataToBeEdited?.sku,
+      hsnCode: this.dataToBeEdited?.hsn_code,
       isActive: this.dataToBeEdited?.is_active,
     });
     this.newProductForm.controls['skuCode'].disable();
@@ -76,10 +81,12 @@ export class CreateNewEditProductComponent implements OnDestroy {
       price: new FormControl(null, { validators: [Validators.required] }),
       description: new FormControl('', { validators: [Validators.required] }),
       stockCount: new FormControl(null, { validators: [Validators.required] }),
+      uom: new FormControl(),
       taxPercentage: new FormControl(null, {
         validators: [Validators.required],
       }),
       skuCode: new FormControl('', { validators: [Validators.required] }),
+      hsnCode: new FormControl(''),
       isActive: new FormControl(false, { validators: [Validators.required] }),
     });
   }
@@ -91,7 +98,9 @@ export class CreateNewEditProductComponent implements OnDestroy {
       price: this.newProductForm.controls['price'].value,
       stockCount: this.newProductForm.controls['stockCount'].value,
       taxPercent: this.newProductForm.controls['taxPercentage'].value,
-      hsnCode: this.newProductForm.controls['skuCode'].value,
+      sku: this.newProductForm.controls['skuCode'].value,
+      uom: this.newProductForm.controls['uom'].value,
+      hsnCode: this.newProductForm.controls['hsnCode'].value,
       isActive: this.newProductForm.controls['isActive'].value ? 1 : 0,
     };
     if (this.editId) {
@@ -128,6 +137,10 @@ export class CreateNewEditProductComponent implements OnDestroy {
 
   private onRouteToProductList() {
     this.router.navigate(['/admin/products-list']);
+  }
+
+  private getUOMConstants() {
+    return this.utilsService.getUOMConstants().pipe(tap(res => this.uoms = res))
   }
 
   ngOnDestroy(): void {

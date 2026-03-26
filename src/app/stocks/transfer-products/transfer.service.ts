@@ -41,6 +41,9 @@ export type TProductByBranchIdRes = {
         "current_qty": string,
         "last_updated_at": string,
         "stock_value": string,
+        uom: string,
+        price: string,
+        tax_percent: string,
         product_name: string,
         destProductQty?: number,
         shiftCount?: number

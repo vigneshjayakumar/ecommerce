@@ -131,11 +131,11 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     const itemsArr = this.invoiceItemArr.getRawValue();
     const productIdQtyArr: { productId: number; quantity: number }[] = [];
     itemsArr.forEach((ele) => {
-      const found = this.productList.find(
-        (product) => product.product_name === ele.productName,
+      const found = this.branchWiseProductList.find(
+        (product) => +product.product_id === +ele.productName,
       );
       if (found) {
-        productIdQtyArr.push({ productId: found.id, quantity: ele.quantity });
+        productIdQtyArr.push({ productId: +found.product_id, quantity: ele.quantity });
       }
     });
     return productIdQtyArr;
@@ -174,15 +174,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       quantity: new FormControl(null, {
         validators: [Validators.required, Validators.min(1)],
       }),
-      taxRate: new FormControl(
-        { value: null, disabled: true },
-        { validators: [Validators.required] },
-      ),
-      rate: new FormControl(
-        { value: null, disabled: true },
-        { validators: [Validators.required] },
-      ),
-      amount: new FormControl(
+      uom: new FormControl(
         { value: null, disabled: true },
         { validators: [Validators.required] },
       ),
@@ -190,9 +182,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     const subs = group
       .get('productName')
       ?.valueChanges.pipe(
-        tap((data) => {
-          if (data) {
-            this.calculateTaxForProduct(group, data);
+        tap((productId) => {
+          if (productId) {
+            this.calculateTaxForProduct(group, productId);
           }
         }),
       )
@@ -201,22 +193,20 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     return group;
   }
 
-  private calculateTaxForProduct(form: FormGroup, product: string) {
-    const lookupproduct = this.productList.find(ele => ele.product_name === product);
+  private calculateTaxForProduct(form: FormGroup, productId: string) {
     const productObj = this.branchWiseProductList.find(
-      (ele) => ele.product_name === product,
+      (ele) => +ele.id === +productId,
     );
-    if (productObj && lookupproduct) {
-      const amount = lookupproduct.price;
+    if (productObj) {
+      const amount = +productObj.price;
 
-      let taxRate = amount * (Number(lookupproduct.tax_percent) / 100);
+      let taxRate = amount * (Number(productObj.tax_percent) / 100);
       taxRate = Math.round((taxRate + Number.EPSILON) * 100) / 100;
 
       let totalAmount = +amount + Number(taxRate);
       totalAmount = Math.round((totalAmount + Number.EPSILON) * 100) / 100;
 
-      form.get('rate')?.setValue(amount, { emitEvent: false });
-      form.get('taxRate')?.setValue(taxRate, { emitEvent: false });
+      form.get('uom')?.setValue(productObj.uom, { emitEvent: false });
       const quantityFormField = form.get('quantity');
       quantityFormField?.setValue(1, { emitEvent: false });
       quantityFormField?.setValidators([
@@ -224,7 +214,6 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
         Validators.min(1),
         Validators.max(+productObj.current_qty),
       ]);
-      form.get('amount')?.setValue(totalAmount, { emitEvent: false });
     }
   }
 
@@ -264,7 +253,6 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
           this.isInvoiceAwaitingConfirm = true;
           this.idompotencyKey = null;
           this.generatedInvoiceId = +res.response.data[0].id;
-          console.log('INVOICE GENERATED', res)
         }
       });
     this.subsArr.push(subs);
@@ -272,7 +260,6 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
 
   onConfirmInvoice() {
     this.invoiceService.confirmInvoiceById(this.generatedInvoiceId).subscribe((res) => {
-      console.log('CONFIRMED', res)
       this.router.navigate(['/admin/invoice/invoice-lists']);
     });
   }

@@ -13,6 +13,8 @@ export type TProduct = {
   description: string;
   tax_percent: number;
   hsn_code: string;
+  uom: string,
+  sku: string;
   image: string;
   is_active: boolean;
 };

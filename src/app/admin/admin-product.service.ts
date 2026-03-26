@@ -18,7 +18,7 @@ export class AdminProductService {
   private apiService = inject(ApiHttpService);
 
   postNewproduct(productDetails: TPostNewProductPayload) {
-    return this.httpClient.post<{message:string}>(
+    return this.httpClient.post<{ message: string }>(
       `${environment.apiBaseURL}/admin/addProduct`,
       productDetails,
       {
@@ -30,7 +30,7 @@ export class AdminProductService {
   postEditProduct(
     productDetails: TPostNewProductPayload & { productId: number }
   ) {
-    return this.httpClient.post<{message:string}>(
+    return this.httpClient.post<{ message: string }>(
       `${environment.apiBaseURL}/admin/editProductByProductId`,
       productDetails,
       { withCredentials: true }
@@ -69,6 +69,8 @@ export type TPostNewProductPayload = {
   stockCount: number;
   description: string;
   hsnCode: string;
+  sku: string;
+  uom: string,
   taxPercent: number;
   price: number;
   isActive: 0 | 1;

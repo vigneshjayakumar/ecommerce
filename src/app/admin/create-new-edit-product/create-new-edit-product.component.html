@@ -2,57 +2,39 @@
   <form [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="productName">Product Name*</label>
-      <input
-        class="form-control"
-        type="text"
-        name="productName"
-        formControlName="productName"
-      />
+      <input class="form-control" type="text" name="productName" formControlName="productName" />
     </div>
     <div class="form-group">
       <label for="desc">Description*</label>
-      <input
-        class="form-control"
-        type="text"
-        name="desc"
-        formControlName="description"
-      />
+      <input class="form-control" type="text" name="desc" formControlName="description" />
     </div>
     <div class="form-group">
       <label for="price">Price*</label>
-      <input
-        class="form-control"
-        type="number"
-        name="price"
-        formControlName="price"
-      />
+      <input class="form-control" type="number" name="price" formControlName="price" />
     </div>
     <div class="form-group">
       <label for="stockCount">Stock count*</label>
-      <input
-        class="form-control"
-        type="number"
-        name="stockCount"
-        formControlName="stockCount"
-      />
+      <input class="form-control" type="number" name="stockCount" formControlName="stockCount" />
+    </div>
+    <div class="form-group">
+      <label for="uom">Unit of Mesurements*</label>
+      <select class="form-control" name="uom" id="uom" formControlName="uom">
+        @for(uom of uoms;track $index){
+        <option [value]="uom.value">{{uom.label}}({{uom.value}})</option>
+        }
+      </select>
     </div>
     <div class="form-group">
       <label for="taxPercentage">Tax Percentage*</label>
-      <input
-        class="form-control"
-        type="number"
-        name="taxPercentage"
-        formControlName="taxPercentage"
-      />
+      <input class="form-control" type="number" name="taxPercentage" formControlName="taxPercentage" />
     </div>
     <div class="form-group">
       <label for="skuCode">SKU Code*</label>
-      <input
-        class="form-control"
-        type="text"
-        name="skuCode"
-        formControlName="skuCode"
-      />
+      <input class="form-control" type="text" name="skuCode" formControlName="skuCode" />
+    </div>
+    <div class="form-group">
+      <label for="hsnCode">HSN Code</label>
+      <input class="form-control" type="text" name="hsnCode" formControlName="hsnCode" />
     </div>
     <div class="form-group-checkbox">
       <label for="isActive">In Stock?</label>
@@ -60,15 +42,11 @@
     </div>
     <div class="btn-container">
       @if (!this.editId) {
-        <button class="btn btn-outline-secondary" type="button">Clear</button>
+      <button class="btn btn-outline-secondary" type="button">Clear</button>
       } @else {
-        <div class="ghost"></div>
+      <div class="ghost"></div>
       }
-      <button
-        [disabled]="!newProductForm.dirty"
-        class="btn btn-outline-primary"
-        type="submit"
-      >
+      <button [disabled]="!newProductForm.dirty" class="btn btn-outline-primary" type="submit">
         {{ buttonLable }}
       </button>
     </div>

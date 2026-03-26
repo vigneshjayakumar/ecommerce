@@ -78,9 +78,13 @@
                 <th>#</th>
                 <th>Product</th>
                 <th class="text-right">Qty</th>
-                <th class="text-right">Rate</th>
+                @if(isEditMode){
+                <th class="text-right">Unit of Measurement</th>
+                }
+                @if(!isEditMode){
                 <th class="text-right">Tax %</th>
                 <th class="text-right">Amount</th>
+                }
 
                 @if (isEditMode) {
                 <th class="action-col" (click)="addFormEle()">＋</th>
@@ -104,7 +108,7 @@
                   <td>
                     <select class="form-control" formControlName="productName">
                       @for (product of branchWiseProductList; track product.id) {
-                      <option [value]="product.product_name">
+                      <option [value]="product.product_id">
                         {{ product.product_name }}
                       </option>
                       }
@@ -115,13 +119,7 @@
                     <input class="form-control" type="number" formControlName="quantity" />
                   </td>
                   <td>
-                    <input class="form-control" type="number" formControlName="rate" />
-                  </td>
-                  <td>
-                    <input class="form-control" type="number" formControlName="taxRate" />
-                  </td>
-                  <td>
-                    <input class="form-control" type="number" formControlName="amount" />
+                    <input class="form-control" type="text" formControlName="uom" />
                   </td>
 
                   @if (i !== 0) {
