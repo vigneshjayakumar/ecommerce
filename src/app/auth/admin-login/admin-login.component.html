@@ -1,60 +1,36 @@
 <div class="login-container">
+  <div class="otp-btn_container">
+    <div class="ghost-box"></div>
+    <button class="btn btn-primary" (click)="onLoginWithOTP()">Login or Sign-up using OTP</button>
+  </div>
+  @if(!isOTPLogin){
   <form [formGroup]="userLoginForm" (ngSubmit)="onSubmitLogin()">
     @if(isNewUser && isSignupScreen){
     <div class="form-group">
       <label for="userName">Name*</label>
-      <input
-        class="form-control"
-        type="text"
-        name="userName"
-        formControlName="userName"
-      />
+      <input class="form-control" type="text" name="userName" formControlName="userName" />
     </div>
     <div class="form-group">
       <label for="phNumber">Phone number*</label>
-      <input
-        class="form-control"
-        type="number"
-        name="phNumber"
-        formControlName="phoneNumber"
-      />
+      <input class="form-control" type="number" name="phNumber" formControlName="phoneNumber" />
     </div>
     }
     <div class="form-group">
       <label for="email">E-mail*</label>
-      <input
-        class="form-control"
-        type="email"
-        name="email"
-        formControlName="email"
-      />
+      <input class="form-control" type="email" name="email" formControlName="email" />
     </div>
     <div class="form-group">
       <label for="pwd">Password*</label>
-      <input
-        class="form-control"
-        type="password"
-        name="pwd"
-        formControlName="password"
-      />
+      <input class="form-control" type="password" name="pwd" formControlName="password" />
     </div>
     @if(isSignupScreen){
     <div class="form-group">
       <label for="confirmPassword">Confirm Password *</label>
-      <input
-        type="password"
-        name="confirmPassword"
-        class="form-control"
-        formControlName="confirmPassword"
-      />
+      <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" />
     </div>
     }
     <div class="btn-container">
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        (click)="onClearLogin()"
-      >
+      <button class="btn btn-outline-secondary" type="button" (click)="onClearLogin()">
         Clear
       </button>
       <button class="btn btn-primary" type="submit">
@@ -65,4 +41,27 @@
       </button>
     </div>
   </form>
+  }@else {
+  <div class="form-group">
+    <label for="phNumber">Phone number*</label>
+    <div class="phone-field">
+      +91<input class="form-control" type="number" name="phNumber" [disabled]="isOTPSent" [(ngModel)]="phoneNumber" />
+    </div>
+  </div>
+  @if(isOTPSent){
+  <div class="form-group">
+    <label for="phNumber">Enter OTP*</label>
+    <input class="form-control" type="number" name="otp" [(ngModel)]="otpCode" />
+  </div>
+  }
+  <div class="btn-container">
+    @if(!isOTPSent){
+    <button class="btn btn-primary" (click)="onSendOTP()">Send OTP</button>
+    }@else {
+    <button class="btn btn-primary" (click)="onVerifyOTP()">Verify</button>
+    <button class="btn btn-secondary" (click)="isOTPSent=false">Edit Phone Number</button>
+    }
+  </div>
+  }
+
 </div>

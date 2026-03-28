@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -11,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './admin-login.component.html',
   styleUrl: './admin-login.component.css',
 })
@@ -19,6 +20,12 @@ export class AdminLoginComponent implements OnInit {
   userLoginForm!: FormGroup;
   isSignupScreen = true;
   isNewUser = false;
+
+  //otp properties.
+  isOTPLogin = true;
+  phoneNumber: string = '';
+  otpCode = '';
+  isOTPSent = false;
 
   private authService = inject(AuthService);
   private activatedRoute = inject(ActivatedRoute);
@@ -115,5 +122,21 @@ export class AdminLoginComponent implements OnInit {
       authPage: this.isSignupScreen ? 'login' : 'signup',
     };
     this.router.navigate(['/login'], { queryParams: query });
+  }
+
+  onLoginWithOTP() {
+    this.isOTPLogin = !this.isOTPLogin;
+  }
+  onSendOTP() {
+    const phoneNumber = "+91" + this.phoneNumber.toString().trim();
+    this.authService.postOTP(phoneNumber).pipe(tap(res => {
+      if (res.message === 'SUCCESS') this.isOTPSent = true;
+      console.log(res)
+    })).subscribe();
+  }
+
+  onVerifyOTP() {
+    const phoneNumber = "+91" + this.phoneNumber.toString().trim();
+    this.authService.verifyOTP(phoneNumber, this.otpCode).pipe(tap(res => console.log('OTP SUCCESS', res))).subscribe();
   }
 }

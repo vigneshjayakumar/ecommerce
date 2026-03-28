@@ -94,6 +94,22 @@ export class AuthService {
     );
   }
 
+  postOTP(phoneNumber: string) {
+    return this.httpClient.post<{ message: 'SUCCESS' | 'ERROR', response: string }>
+      (`${environment.apiBaseURL}/user/send-otp`, { phoneNumber }, { withCredentials: true })
+  }
+
+  verifyOTP(phoneNumber: string, otp: string) {
+    return this.httpClient.post<TVerifyOTPRes>
+    (`${environment.apiBaseURL}/user/verify-otp`, { phoneNumber, otp }, { withCredentials: true })
+      .pipe(tap(res => {
+      if (res.message === 'SUCCESS' && res.response.accessToken) {
+        this.updateAccessToken(res.response.accessToken);
+        this.router.navigate(['/admin'])
+      }
+    }))
+  }
+
   private updateAccessToken(status: string | null) {
     this.accessToken = status;
     this.accessTokenListener.next(this.accessToken);
@@ -125,3 +141,11 @@ type TRegisterUserDetails = TSignUpPayload & {
   userName: string;
   phoneNumber: string;
 };
+
+type TVerifyOTPRes = {
+  "message": "SUCCESS" | "ERROR",
+  "response": {
+    "data": "OTP Login successful",
+    "accessToken": string
+  }
+}
