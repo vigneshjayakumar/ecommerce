@@ -89,15 +89,8 @@ export class ViewInvoiceDetailsComponent {
   onDownloadPDF() {
     this.invoiceService
       .createInvoicePdf(this.invoiceDetails.overAll.id)
-      .subscribe((blob) => {
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'invoice.pdf';
-        a.click();
-
-        window.URL.revokeObjectURL(url);
+      .subscribe((res) => {
+        window.open(res.response, '_self');
       });
   }
   onPDFLink() {
@@ -106,7 +99,6 @@ export class ViewInvoiceDetailsComponent {
       .subscribe((res) => {
         this.pdfLinkStr = res.response;
         this.showSharePanelPopup = true;
-        console.log('LINK GENRATED', res);
       });
   }
   private fetchMerchantDetails() {

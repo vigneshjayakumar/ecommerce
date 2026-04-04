@@ -129,9 +129,9 @@ export class InvoiceService {
   }
 
   createInvoicePdf(invoiceId: number) {
-    return this.httpClient.get(
+    return this.httpClient.get<{ message: 'COMPLETED' | 'ERROR', response: string }>(
       `${environment.apiBaseURL}/invoice/generateInvoice/${invoiceId}`,
-      { withCredentials: true, responseType: 'blob' },
+      { withCredentials: true },
     );
   }
 
