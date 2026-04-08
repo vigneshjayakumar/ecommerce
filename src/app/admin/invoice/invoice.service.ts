@@ -152,6 +152,10 @@ export class InvoiceService {
   confirmInvoiceById(invoiceId: number) {
     return this.httpClient.patch(`${environment.apiBaseURL}/invoice/confirmInvoice/${invoiceId}`, {}, { withCredentials: true })
   }
+
+  onPostSalesReturn(payload: { invoiceId: string, items: { invoiceItemId: number, quantity: number }[] }) {
+    return this.httpClient.post(`${environment.apiBaseURL}/invoice/sales-return`, payload, { withCredentials: true })
+  }
 }
 
 export type TMerchantDataResponse = {

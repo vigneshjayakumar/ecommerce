@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { EMPTY, map, Observable, switchMap, tap } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -28,6 +28,7 @@ export class ViewInvoiceDetailsComponent {
   private invoiceService = inject(InvoiceService);
   private activatedRoute = inject(ActivatedRoute);
   private clipboard = inject(Clipboard);
+  private router = inject(Router);
 
   showSharePanelPopup = false;
   pdfLinkStr: null | string = null;
@@ -49,10 +50,12 @@ export class ViewInvoiceDetailsComponent {
     isShare: true,
   };
   invoiceDetails!: TViewInvoiceDetailsRes['response'];
+  invoiceId: string | null = null;
   invoiceDetailsObs: Observable<any> = this.activatedRoute.paramMap.pipe(
     map((params) => params.get('id')),
     switchMap((id) => {
       if (id) {
+        this.invoiceId = id;
         return this.invoiceService.fetchInvoiceDetailsById(+id);
       }
       return EMPTY;
@@ -128,5 +131,9 @@ export class ViewInvoiceDetailsComponent {
         waAnchorTag.click();
       }
     }
+  }
+
+  onRouteTo(path: 'exchange') {
+    this.router.navigate(['/admin/invoice/', path, this.invoiceId]);
   }
 }
