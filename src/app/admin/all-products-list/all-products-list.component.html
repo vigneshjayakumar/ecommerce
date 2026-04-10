@@ -1,68 +1,26 @@
 <main>
-  <div class="list-container">
-    <div class="heading">
-      <div class="title-hint">
-        <p class="title">Products Lists</p>
-        <p class="sub-title">
-          List of Products that present in DataBase [Note: Only Active products
-          will be shown to users].
-        </p>
-      </div>
-      <div class="heading-btn-box">
-        <input class="form-control" type="text" placeholder="Search... Product name/ SKU Code"
-          [formControl]="searchInput" />
-        <button class="btn btn-outline-secondary">+ Bulk Products</button>
+  <div class="main-container">
+    <div class="page-header">
+      <p class="title">Products</p>
+      <div class="action-container">
+        <div class="input-wrapper">
+          <span class="input-icon">
+            <img src="/assets/icons/input-search.svg" alt="search" srcset="">
+          </span>
+          <input class="bm-input" type="text" placeholder="Search" [formControl]="searchInput">
+        </div>
+        <div class="bm-btn bm-btn-secondary">+ Bulk Products</div>
+        <div class="bm-btn bm-btn-primary" (click)="onRoute('/admin/create-new')">+ New Product</div>
       </div>
     </div>
     @if (searchProductList.length) {
-    <table class="table table-hover custom-table">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Product name</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Description</th>
-          <th scope="col">Tax (%)</th>
-          <th scope="col">HSN Code</th>
-          <th scope="col">SKU Code</th>
-          <th scope="col">is Active</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of searchProductList; track $index; let i = $index) {
-        <tr>
-          <th scope="row">{{ i + 1 }}</th>
-          <td>{{ item.product_name }}</td>
-          <td>{{ item.stock_count }}({{item.uom}})</td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.tax_percent }}</td>
-          <td>{{ item.hsn_code }}</td>
-          <td>{{ item.sku }}</td>
-          <td>
-            <span class="badge" [ngClass]="{
-                    'bg-success': item.is_active,
-                    'bg-danger': !item.is_active,
-                  }">
-              {{ item.is_active ? "Active" : "Not active" }}
-            </span>
-          </td>
-          <td>
-            <div class="actions-container">
-              <img class="edit-img" src="assets/admin-img/edit.svg" alt="edit" (click)="onEdit(item.id)" />
-              @if (item.is_active) {
-              <img class="delete-img" src="assets/admin-img/delete.svg" alt="delete" (click)="onDelete(item.id)" />
-              }
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="true" [showAction]="true"
+      (actionEmit)="onTableAction($event)"></app-table>
+    <app-bm-pagination [currentPage]="1" [totalPages]="6"></app-bm-pagination>
     } @else {
     <div class="no-data">
       <p>No Data Found...</p>
-      <button class="btn btn-outline-secondary" (click)="onRoute()">
+      <button class="btn btn-outline-secondary" (click)="onRoute('/admin/create-new')">
         Add Product to Stock?
       </button>
     </div>

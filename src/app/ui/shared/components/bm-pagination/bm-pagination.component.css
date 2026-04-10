@@ -1,0 +1,35 @@
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: var(--space-md);
+    height: 36px;
+}
+
+.page-number-btn {
+    display: flex;
+    flex-direction: row;
+
+    .goto {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-right: 8px;
+        width: 128px;
+        gap: 8px;
+
+        .bm-input {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .pg-num {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        margin: 0 4px;
+    }
+}

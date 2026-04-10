@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import './styles/token.css';
+@import './styles/base.css';
+
+@import './styles/button.css';
+@import './styles/input.css';
+@import './styles/component.css';
+@import './styles/table.css';
+
 /* You can add global styles to this file, and also import other style files */
 * {
     margin: 0;
@@ -23,14 +32,14 @@ p {
     --bg-card: #FFFFFF;
     --bg-section: #F3F4F6;
 
-    --color-primary: #2563EB;
     --color-success: #16A34A;
     --color-danger: #DC2626;
 
     --navbar-height: 70px;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 

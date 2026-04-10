@@ -1,0 +1,16 @@
+.app-layout {
+    display: flex;
+    height: 100vh;
+}
+
+.app-sidebar {
+    width: 240px;
+    background: #0f172a;
+    color: white;
+}
+
+.app-header {
+    height: 60px;
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+}

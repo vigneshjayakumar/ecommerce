@@ -1,0 +1,42 @@
+<table class="table">
+    <thead>
+        <tr>
+            @if(showCheckbox){
+            <th class="table-checkbox text-left">
+                <input type="checkbox">
+            </th>
+            }
+            @for(col of columns;track $index){
+            <th class="text-left">
+                {{col.label}}
+            </th>
+            }
+            @if(showAction){
+            <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (row of rows; track $index;let i = $index;let first = $first) {
+        <tr class="table-row">
+            @if (showCheckbox) {
+            <td class="text-left table-checkbox">
+                <input type="checkbox">
+            </td>
+            }
+            @for(data of row[i];track $index){
+            <td class="text-left" []>
+                {{data}}
+            </td>
+            }
+            @if(showAction){
+            <td class="action-items ">
+                <img class="edit-img" src="assets/admin-img/edit.svg" alt="edit" (click)="onEmitAction('edit',i)" />
+                <img class="delete-img" src="assets/admin-img/delete.svg" alt="delete"
+                    (click)="onEmitAction('delete',i)" />
+            </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

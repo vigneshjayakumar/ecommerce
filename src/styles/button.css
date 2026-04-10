@@ -1,0 +1,74 @@
+.bm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 13px 20px;
+
+    font-size: var(--font-sm);
+    font-weight: var(--font-weight-semibold);
+    font-family: 'Manrope', sans-serif;
+
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 48px;
+    border-radius: 12px;
+}
+
+/** Default */
+.bm-btn-primary {
+    background: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+}
+
+.bm-btn-secondary {
+    background: var(--color-btn-secondary-bg);
+    color: var(--color-btn-secondary-text);
+}
+
+
+.bm-btn-disabled {
+    background-color: var(--color-btn-disabled-bg);
+    color: var(--color-btn-disabled-text);
+}
+
+/* Small pagination Btn**/
+.bm-btn-tertiary-small {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    height: 36px;
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--color-text);
+    min-height: 36px;
+    min-width: 36px;
+}
+
+.bm-btn-active {
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+}
+
+/* Psudo events*/
+.bm-btn-primary:hover {
+    background: var(--color-btn-primary-hover);
+}
+
+.bm-btn-primary:active {
+    background-color: var(--color-btn-primary-active);
+}
+
+.bm-btn-secondary:hover,
+.bm-btn-tertiary-small:hover {
+    background-color: var(--color-btn-secondary-hover);
+}
+
+.bm-btn-secondary:active {
+    background-color: var(--color-btn-secondary-active);
+}
+
+.bm-btn-tertiary-small:active {
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+}

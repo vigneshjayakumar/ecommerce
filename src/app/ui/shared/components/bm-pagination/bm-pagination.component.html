@@ -1,0 +1,60 @@
+<div class="pagination">
+    <!-- Count per page -->
+    <div class="count-per-page">
+        <select name="countPerPage" id="countPerPage">
+            @for (count of countPerPageOptions; track $index) {
+            <option [value]="count.value">{{count.lable}}</option>
+            }
+        </select>
+    </div>
+
+    <!-- page -->
+    <div class="page-number-btn">
+        <div class="goto">
+            <p>Go to</p>
+            <input type="text" class="bm-input">
+            <p>Page</p>
+        </div>
+        <!-- Prev -->
+        <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-disabled':currentPage===1}"
+            [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            Prev
+        </button>
+
+        <div class="pg-num">
+            @if(totalPages>6){
+            <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-active': currentPage===1}"
+                (click)="goToPage(1)">
+                {{ '1' }}
+            </button>
+            <button class="bm-btn bm-btn-tertiary-small">
+                {{ '...' }}
+            </button>
+            }
+            <!-- Pages -->
+            @for (page of pages; track $index) {
+            <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-active':page === currentPage}"
+                [class.btn-secondary]="page !== currentPage" (click)="goToPage(page)">
+                {{ page }}
+            </button>
+            }
+            @if(totalPages>6){
+            <button class="bm-btn bm-btn-tertiary-small">
+                {{ '...' }}
+            </button>
+            <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-active': currentPage===1}"
+                (click)="goToPage(totalPages)">
+                {{ totalPages }}
+            </button>
+            }
+        </div>
+
+        <!-- Next -->
+        <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-disabled':currentPage===totalPages}"
+            [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+            Next
+        </button>
+    </div>
+
+
+</div>
