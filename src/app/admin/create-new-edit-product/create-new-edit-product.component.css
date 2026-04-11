@@ -1,25 +1,49 @@
-.login-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.login-container form {
+.main-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+}
+
+.header {
+    height: 27px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xmd);
+
+    .title {
+        font-family: 'Manrope', sans-serif;
+        font-size: var(--font-xlg);
+        font-weight: var(--font-weight-bold);
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+
+    .bm-col {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
 }
 
 .btn-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 16px;
-}
+    width: 712px;
 
-.form-group-checkbox {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    .btn-box {
+        display: flex;
+        flex-direction: row;
+        gap: var(--space-lg);
+    }
 }

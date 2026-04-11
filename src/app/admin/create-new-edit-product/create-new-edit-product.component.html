@@ -1,54 +1,135 @@
-<div class="login-container">
-  <form [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="productName">Product Name*</label>
-      <input class="form-control" type="text" name="productName" formControlName="productName" />
+<main>
+  @if(!isViewMode){
+  <form class="main-container" [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
+    <div class="bm-card">
+      <div class="header">
+        <p class="title">{{editId?'Edit Product':'Add Product'}}</p>
+      </div>
+      <div class="content">
+        <div class="bm-col">
+          <div class="bm-label-input">
+            <label for="productName">Product Name*</label>
+            <input class="bm-input" type="text" name="productName" formControlName="productName" />
+          </div>
+          <div class="bm-label-input">
+            <label for="productName">Price*</label>
+            <input class="bm-input" type="text" name="price" formControlName="price" />
+          </div>
+          <div class="bm-label-input">
+            <label for="uom">Unit of Mesurements*</label>
+            <select class="bm-input" name="uom" id="uom" formControlName="uom">
+              @for(uom of uoms;track $index){
+              <option [value]="uom.value">{{uom.label}}({{uom.value}})</option>
+              }
+            </select>
+          </div>
+          <div class="bm-label-input">
+            <label for="hsnCode">HSN Code</label>
+            <input class="bm-input" type="text" name="hsnCode" formControlName="hsnCode" />
+          </div>
+        </div>
+        <div class="bm-col">
+          <div class="bm-label-input">
+            <label for="productName">Description*</label>
+            <input class="bm-input" type="text" name="desc" formControlName="description" />
+          </div>
+          <div class="bm-label-input">
+            <label for="productName">Stock count*</label>
+            <input class="bm-input" type="text" name="stockCount" formControlName="stockCount" />
+          </div>
+          <div class="bm-label-input">
+            <label for="taxPercentage">Tax % *</label>
+            <input class="bm-input" type="number" name="taxPercentage" formControlName="taxPercentage" />
+          </div>
+          <div class="bm-label-input">
+            <label for="skuCode">SKU Code*</label>
+            <input class="bm-input" type="text" name="skuCode" formControlName="skuCode" />
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="desc">Description*</label>
-      <input class="form-control" type="text" name="desc" formControlName="description" />
-    </div>
-    <div class="form-group">
-      <label for="price">Price*</label>
-      <input class="form-control" type="number" name="price" formControlName="price" />
-    </div>
-    <div class="form-group">
-      <label for="stockCount">Stock count*</label>
-      <input class="form-control" type="number" name="stockCount" formControlName="stockCount" />
-    </div>
-    <div class="form-group">
-      <label for="uom">Unit of Mesurements*</label>
-      <select class="form-control" name="uom" id="uom" formControlName="uom">
-        @for(uom of uoms;track $index){
-        <option [value]="uom.value">{{uom.label}}({{uom.value}})</option>
-        }
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="taxPercentage">Tax Percentage*</label>
-      <input class="form-control" type="number" name="taxPercentage" formControlName="taxPercentage" />
-    </div>
-    <div class="form-group">
-      <label for="skuCode">SKU Code*</label>
-      <input class="form-control" type="text" name="skuCode" formControlName="skuCode" />
-    </div>
-    <div class="form-group">
-      <label for="hsnCode">HSN Code</label>
-      <input class="form-control" type="text" name="hsnCode" formControlName="hsnCode" />
-    </div>
-    <div class="form-group-checkbox">
-      <label for="isActive">In Stock?</label>
-      <input type="checkbox" name="isActive" formControlName="isActive" />
+    <div class="bm-card">
+      <div class="header">
+        <p class="title">Product Status</p>
+        <label for="product_status" class="toggle">
+          <input type="checkbox" name="product_status" id="product_status" class="checkbox" formControlName="isActive">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
     <div class="btn-container">
-      @if (!this.editId) {
-      <button class="btn btn-outline-secondary" type="button">Clear</button>
-      } @else {
-      <div class="ghost"></div>
-      }
-      <button [disabled]="!newProductForm.dirty" class="btn btn-outline-primary" type="submit">
-        {{ buttonLable }}
-      </button>
+      <div class="ghost-btn">
+      </div>
+      <div class="btn-box">
+        @if (!this.editId) {
+        <button class="bm-btn bm-btn-secondary" type="button">Clear</button>
+        }
+        <button [disabled]="!newProductForm.dirty" class="bm-btn bm-btn-primary"
+          [class.bm-btn-disabled]="!newProductForm.dirty" type="submit">
+          {{ buttonLable }}
+        </button>
+      </div>
     </div>
   </form>
-</div>
+  }@else {
+  <div class="main-container" (ngSubmit)="onSubmit()">
+    <div class="bm-card">
+      <div class="header">
+        <p class="title">{{'Product Details'}}</p>
+        <button class="bm-btn-with-edit-icon" (click)="isViewMode=false">
+          <img src="assets/icons/edit-black.svg" alt="">
+          Edit
+        </button>
+      </div>
+      <div class="content">
+        <div class="bm-col">
+          <div class="bm-label-input">
+            <label for="productName">Product Name*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.product_name}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="productName">Price*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.price}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="uom">Unit of Mesurements*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.uom}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="hsnCode">HSN Code</label>
+            <p class="bm-readonly">{{dataToBeEdited?.hsn_code}}</p>
+          </div>
+        </div>
+        <div class="bm-col">
+          <div class="bm-label-input">
+            <label for="productName">Description*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.description}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="productName">Stock count*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.stock_count}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="taxPercentage">Tax % *</label>
+            <p class="bm-readonly">{{dataToBeEdited?.tax_percent}}</p>
+          </div>
+          <div class="bm-label-input">
+            <label for="skuCode">SKU Code*</label>
+            <p class="bm-readonly">{{dataToBeEdited?.sku}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bm-card">
+      <div class="header">
+        <p class="title">Product Status</p>
+        <label for="product_status" class="toggle">
+          <input type="checkbox" [disabled]="true" name="product_status" id="product_status" class="checkbox"
+            [(ngModel)]="isActiveProduct">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  }
+</main>

@@ -38,6 +38,9 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
       case 'delete':
         this.onDelete(id);
         break;
+      case 'view':
+        this.onView(id);
+        break;
     }
   }
   // 
@@ -80,6 +83,10 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
 
   onEdit(productId: number) {
     this.router.navigate(['/admin/edit/', productId]);
+  }
+
+  onView(productId: number) {
+    this.router.navigate(['/admin/view/', productId, true])
   }
   onDelete(productId: number) {
     this.adminProductService

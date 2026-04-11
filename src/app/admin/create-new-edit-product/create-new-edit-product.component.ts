@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -17,7 +18,7 @@ import { TUOM, UtilsService } from 'src/app/common/services/utils.service';
 
 @Component({
   selector: 'app-create-new-edit-product',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './create-new-edit-product.component.html',
   styleUrl: './create-new-edit-product.component.css',
 })
@@ -26,6 +27,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
   postProductSubs!: Subscription;
   buttonLable = 'Create';
   isActiveProduct = true;
+  isViewMode = false;
   uoms: TUOM = [];
 
   private adminProductService = inject(AdminProductService);
@@ -40,14 +42,15 @@ export class CreateNewEditProductComponent implements OnDestroy {
       tap((params) => {
         const id = params.get('id');
         if (id) {
+          this.isViewMode = params.get('isViewMode') === 'true' ? true : false;
           this.editId = +id;
-          this.buttonLable = 'Edit';
+          this.buttonLable = 'Save';
           this.adminProductService
             .getProductDetailById(this.editId)
             .pipe(
               tap((res) => {
                 this.dataToBeEdited = res.response.product;
-                this.isActiveProduct = !this.dataToBeEdited.is_active;
+                this.isActiveProduct = !!this.dataToBeEdited.is_active;
                 this.populateForms();
               }),
             )

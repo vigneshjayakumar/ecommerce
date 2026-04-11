@@ -20,6 +20,9 @@ export const adminRoutes: Routes = [
       {
         path: 'edit/:id',
         component: CreateNewEditProductComponent,
+      }, {
+        path: 'view/:id/:isViewMode',
+        component: CreateNewEditProductComponent,
       },
       {
         path: 'invoice',

@@ -31,6 +31,7 @@
             }
             @if(showAction){
             <td class="action-items ">
+                <img src="assets/icons/view-blue.svg" alt="" class="edit-img" (click)="onEmitAction('view',i)">
                 <img class="edit-img" src="assets/admin-img/edit.svg" alt="edit" (click)="onEmitAction('edit',i)" />
                 <img class="delete-img" src="assets/admin-img/delete.svg" alt="delete"
                     (click)="onEmitAction('delete',i)" />

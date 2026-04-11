@@ -2,6 +2,7 @@
 @import './styles/token.css';
 @import './styles/base.css';
 
+@import './styles/toggle.css';
 @import './styles/button.css';
 @import './styles/input.css';
 @import './styles/component.css';

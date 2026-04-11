@@ -1,7 +1,7 @@
 <div class="pagination">
     <!-- Count per page -->
     <div class="count-per-page">
-        <select name="countPerPage" id="countPerPage">
+        <select name="countPerPage" id="countPerPage" class="bm-input">
             @for (count of countPerPageOptions; track $index) {
             <option [value]="count.value">{{count.lable}}</option>
             }
