@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { TAdminProductList, TProduct } from './all-products.modal';
 import { AdminProductService } from '../admin-product.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TableComponent } from 'src/app/ui/shared/components/table/table.component';
+import { TableComponent, TActionBtnConfig, TActionButtonTriggers } from 'src/app/ui/shared/components/table/table.component';
 import { BmPaginationComponent } from 'src/app/ui/shared/components/bm-pagination/bm-pagination.component';
 
 @Component({
@@ -16,6 +16,7 @@ import { BmPaginationComponent } from 'src/app/ui/shared/components/bm-paginatio
 })
 export class AllProductsListComponent implements OnInit, OnDestroy {
   // Refactoring for new UI.
+  actionBtnConfig: Partial<TActionBtnConfig> = { viewBtn: true, editBtn: true, deleteBtn: true }
   productsTableColumn: { key: string, label: string, align?: 'left' | 'center' | 'right' }[] = [
     { key: 'sno', label: 'S.No', align: 'left' },
     { key: 'product_name', label: 'Product Name' },
@@ -27,18 +28,18 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
     { key: 'isActive', label: 'Is Active', align: 'right' }
   ];
 
-  productTableRows: { [key: number]: string[] }[] = [];
+  productTableRows: { [key: number]: { col: string, value: string }[] }[] = [];
 
-  onTableAction(event: { action: string, id: number }) {
+  onTableAction(event: { action: TActionButtonTriggers, id: number }) {
     const id = this.searchProductList[event.id].id;
     switch (event.action) {
-      case 'edit':
+      case 'editBtn':
         this.onEdit(id);
         break;
-      case 'delete':
+      case 'deleteBtn':
         this.onDelete(id);
         break;
-      case 'view':
+      case 'viewBtn':
         this.onView(id);
         break;
     }
@@ -111,23 +112,27 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
 
   private mapDataIntoTableRows = (schProductList: TProduct[]) => {
     this.productTableRows = [];
-    console.log(schProductList, this.productsList)
     schProductList.forEach((ele, i) => {
       const tempEle = {
         [i]: [
-          (i + 1).toString(),
-          ele.product_name,
-          `${ele.stock_count} (${ele.uom})`,
-          ele.price.toString(),
-          ele.tax_percent.toString(),
-          ele.hsn_code,
-          ele.sku,
-          ele.is_active ? 'Active' : 'Inactive'
+          { col: 'sno', value: (i + 1).toString() },
+          { col: 'product_name', value: ele.product_name },
+          { col: 'qty', value: `${ele.stock_count} (${ele.uom})` },
+          { col: 'sell_price', value: ele.price.toString() },
+          { col: 'tax', value: ele.tax_percent.toString() },
+          { col: 'hsn', value: ele.hsn_code },
+          { col: 'sku', value: ele.sku },
+          { col: 'isActive', value: ele.is_active ? 'Active' : 'Inactive', class: this.activeClass(ele.is_active) }
         ]
       }
       this.productTableRows.push(tempEle)
     })
+  }
 
+  private activeClass(status: boolean) {
+    let styleClass = 'bm-chip-success';
+    if (!status) styleClass = 'bm-chip-danger'
+    return styleClass
   }
 
   ngOnDestroy(): void {

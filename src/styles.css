@@ -8,35 +8,14 @@
 @import './styles/component.css';
 @import './styles/table.css';
 
-/* You can add global styles to this file, and also import other style files */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Optional, but highly recommended for consistent box model behavior */
 }
 
 p {
     margin: 0;
-}
-
-/* styles.css */
-:root {
-    --font-primary: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
-
-    --fw-regular: 400;
-    --fw-medium: 500;
-    --fw-semibold: 600;
-    --fw-bold: 700;
-
-    --bg-page: #F9FAFB;
-    --bg-card: #FFFFFF;
-    --bg-section: #F3F4F6;
-
-    --color-success: #16A34A;
-    --color-danger: #DC2626;
-
-    --navbar-height: 70px;
 }
 
 html,
@@ -46,6 +25,6 @@ body {
 
 body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: 'Manrope', sans-serif;
     padding-top: var(--navbar-height);
 }

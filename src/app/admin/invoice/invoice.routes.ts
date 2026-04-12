@@ -29,12 +29,12 @@ export const InvoiceRoutes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'create-invoice',
+        redirectTo: 'invoice-lists',
         pathMatch: 'full',
       },
       {
         path: '**',
-        redirectTo: 'create-invoice',
+        redirectTo: 'invoice-lists',
       },
     ],
   },

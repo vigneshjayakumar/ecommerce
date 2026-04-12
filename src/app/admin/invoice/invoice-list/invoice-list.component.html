@@ -1,69 +1,32 @@
 <main>
-  <div class="list-container">
-    <div class="heading">
-      <div class="title-hint">
-        <p class="title">Invoice Lists</p>
-        <p class="sub-title">List of Invoice that present in DataBase.</p>
-      </div>
-      <div class="heading-btn-box">
-        <div class="search-filter">
-          <input type="text" class="form-control" placeholder="Search Name/ #invoice" [formControl]="searchControl" />
-          <select name="filer" class="form-control" id="filer" [formControl]="filterControl">
+  <div class="main-container">
+    <div class="page-header">
+      <p class="title">Billing</p>
+      <div class="action-container">
+        <div class="input-wrapper">
+          <span class="input-icon">
+            <img src="/assets/icons/input-search.svg" alt="search" srcset="">
+          </span>
+          <input class="bm-input" type="text" placeholder="Search by Name/ #invoice" [formControl]="searchControl">
+        </div>
+        <div class="input-wrapper">
+          <select name="filter" id="filter" class="bm-input" [formControl]="filterControl">
             <option value="all">All</option>
             <option value="paid">Paid</option>
             <option value="draft">Draft</option>
             <option value="cancelled">Cancelled</option>
           </select>
         </div>
+        <div class="bm-btn bm-btn-primary" (click)="onRoute('create-invoice')">New Billing</div>
       </div>
     </div>
-    @if (searchFilterList.length) {
-    <table class="table table-hover custom-table">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Customer name</th>
-          <th scope="col">Invoice Number</th>
-          <th scope="col">Date</th>
-          <th scope="col">Sub total</th>
-          <th scope="col">Tax</th>
-          <th scope="col">Total Amount</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of searchFilterList; track item.id; let i = $index) {
-        <tr>
-          <th scope="row">{{ i + 1 }}</th>
-          <td>{{ item.customer_name }}</td>
-          <td>{{ item.invoice_number }}</td>
-          <td>{{ item.created_at | date }}</td>
-          <td>{{ item.subtotal | inrcurr }}</td>
-          <td>{{ item.tax_amount | inrcurr }}</td>
-          <td>{{ item.total_amount | inrcurr }}</td>
-          <td>
-            <span class="badge" [ngClass]="{
-                    'bg-success': item.invoice_status === 'PAID',
-                    'bg-danger': item.invoice_status !== 'PAID',
-                  }">
-              {{ item.invoice_status }}
-            </span>
-          </td>
-          <td>
-            <div class="actions-container">
-              <img class="edit-img" src="assets/admin-img/view-eye.svg" alt="edit" (click)="onViewDetails(item.id)" />
-              @if (item.invoice_status === "CONFIRMED") {
-              <img class="delete-img" src="assets/admin-img/cancel-invoice.svg" alt="delete"
-                (click)="onCancelInvoice(item.id)" />
-              <img class="delete-img" src="assets/admin-img/paid-trigger.svg" (click)="markAsPaid(item)" alt="paid">
-              }
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-    } @else {
+    @if(searchFilterList.length){
+
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="true" [showAction]="true"
+      (actionEmit)="onTableAction($event)" [actionBtnConfig]="btnConfig"></app-table>
+    <app-bm-pagination [currentPage]="1" [totalPages]="6"></app-bm-pagination>
+    }
+    @else {
     <div class="no-data">
       <p>No Invoice List found</p>
       <button class="btn btn-outline-secondary" (click)="onRoute('create-invoice')">

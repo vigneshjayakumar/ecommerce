@@ -1,3 +1,5 @@
+@import './chip.css';
+
 table {
     width: 100%;
     background: var(--color-surface);

@@ -20,6 +20,8 @@
     --color-content-info: #2563EB;
     --color-content-warning: #F97316;
     --color-content-netural: #555555;
+
+    --navbar-height: 70px;
 }
 
 :root {

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-invoice',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.css',
 })

@@ -1,0 +1,35 @@
+.bm-chip-success {
+    background-color: var(--color-success) !important;
+    color: var(--color-content-success) !important;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+.bm-chip-danger {
+    background-color: var(--color-danger) !important;
+    color: var(--color-content-danger) !important;
+    padding: 4px 6px;
+    border-radius: 6px;
+
+}
+
+.bm-chip-info {
+    background-color: var(--color-info) !important;
+    color: var(--color-content-info) !important;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+.bm-chip-warning {
+    background-color: var(--color-warning) !important;
+    color: var(--color-content-warning) !important;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+.bm-chip-netural {
+    background-color: var(--color-netural) !important;
+    color: var(--color-content-netural) !important;
+    padding: 4px 6px;
+    border-radius: 6px;
+}

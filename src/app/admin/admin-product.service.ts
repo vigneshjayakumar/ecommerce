@@ -52,15 +52,19 @@ export class AdminProductService {
     );
   }
 
-  getAllProductsList(): Observable<TAdminProductList['response']['products']> {
-    return this.apiService
-      .apiHttp<never, TAdminProductList, never>(
-        'get',
-        environment.apiBaseURL,
-        'admin',
-        ['products']
-      )
-      .pipe(map((res) => res.response.products));
+  // getAllProductsList(): Observable<TAdminProductList['response']['products']> {
+  //   return this.apiService
+  //     .apiHttp<never, TAdminProductList, never>(
+  //       'get',
+  //       environment.apiBaseURL,
+  //       'admin',
+  //       ['products']
+  //     )
+  //     .pipe(map((res) => res.response.products));
+  // }
+
+  getAllProductsList() {
+    return this.httpClient.get<TAdminProductList>(`${environment.apiBaseURL}/admin/products`, { withCredentials: true }).pipe(map((res) => res.response.products));
   }
 }
 

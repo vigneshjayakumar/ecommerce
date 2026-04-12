@@ -25,16 +25,32 @@
             </td>
             }
             @for(data of row[i];track $index){
-            <td class="text-left" []>
-                {{data}}
+            <td class="text-left">
+                <span [ngClass]="data.class">
+                    {{data.formatter?data.formatter(data.value):data.value}}
+                </span>
             </td>
             }
             @if(showAction){
             <td class="action-items ">
-                <img src="assets/icons/view-blue.svg" alt="" class="edit-img" (click)="onEmitAction('view',i)">
-                <img class="edit-img" src="assets/admin-img/edit.svg" alt="edit" (click)="onEmitAction('edit',i)" />
+                @if(actionBtnConfig.viewBtn){
+                <img src="assets/icons/view-blue.svg" alt="" class="edit-img" (click)="onEmitAction('viewBtn',i)">
+                }
+                @if(actionBtnConfig.editBtn){
+                <img class="edit-img" src="assets/admin-img/edit.svg" alt="edit" (click)="onEmitAction('editBtn',i)" />
+                }
+                @if(actionBtnConfig.deleteBtn){
                 <img class="delete-img" src="assets/admin-img/delete.svg" alt="delete"
-                    (click)="onEmitAction('delete',i)" />
+                    (click)="onEmitAction('deleteBtn',i)" />
+                }
+                @if(actionBtnConfig.pdfDownload){
+                <img class="delete-img" src="assets/icons/pdf-download.svg" alt="delete"
+                    (click)="onEmitAction('pdfDownload',i)" />
+                }
+                @if(actionBtnConfig.payNowBtn){
+                <img class="delete-img" src="assets/icons/pay-now.svg" alt="delete"
+                    (click)="onEmitAction('payNowBtn',i)" />
+                }
             </td>
             }
         </tr>
