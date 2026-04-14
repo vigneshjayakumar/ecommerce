@@ -1,303 +1,119 @@
-.invoice-page {
-  background: var(--bg-page);
-  padding: 24px;
-  font-family: var(--font-primary);
-}
-
 .main-container {
-  max-width: 1100px;
-  margin: auto;
-}
-
-/* Cards */
-.card,
-.merchant-card {
-  background: var(--bg-card);
-  box-shadow: var(--shadow-card);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-/* Merchant */
-.title {
-  font-size: 20px;
-  font-weight: var(--fw-bold);
-}
-
-.details {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+
+.page-header {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  margin-top: 12px;
+  align-items: center;
+  height: 48px;
+
+  .title {
+    font-family: 'Manrope', sans-serif;
+    font-size: var(--font-xlg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+  }
 }
 
-.sub-title {
-  font-size: 13px;
-  color: var(--color-muted);
-}
-
-/* Section */
-.section-title {
-  font-size: 16px;
-  font-weight: var(--fw-semibold);
-  margin-bottom: 16px;
-}
-
-/* Customer form */
-.client-details {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.full-width {
-  grid-column: span 3;
-}
-
-/* Table */
-.table-wrapper {
-  overflow-x: auto;
-}
-
-.custom-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.custom-table th,
-.custom-table td {
-  padding: 12px;
-  border-bottom: 1px solid var(--color-border);
-  font-size: 14px;
-}
-
-.custom-table th {
-  background: var(--bg-table-header);
-  font-weight: var(--fw-semibold);
-  /* text-align: left; */
-}
-
-.text-right {
-  text-align: right;
-}
-
-.action-col {
-  text-align: center;
-  cursor: pointer;
-  font-weight: bold;
-  color: var(--color-primary);
-}
-
-.delete-img {
-  width: 16px;
-  cursor: pointer;
-}
-
-/* Total */
-.total-row td {
-  font-weight: var(--fw-bold);
-}
-
-/* Buttons */
-.btn-container {
+.tenant-details {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.btn {
-  padding: 8px 18px;
-  border-radius: 6px;
-  font-weight: var(--fw-medium);
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-
-.btn.primary {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.btn.secondary {
-  background: #fff;
-  border-color: var(--color-border);
-}
-
-.btn.danger {
-  background: var(--color-danger);
-  color: #fff;
-}
-
-.invoice-page {
-  background: #f7f8fa;
-}
-
-.main-container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 16px;
-}
-
-.merchant-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.merchant-card .title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.merchant-card .details {
-  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  gap: 16px;
+
+  .title {
+    font-size: var(--font-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+  }
+
+  .sub-title {
+    font-size: var(--font-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-content-netural)
+  }
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .merchant-card .details {
+.invoice-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+
+  .bm-col {
+    display: flex;
     flex-direction: column;
+    gap: var(--space-lg);
+
+    .toggle_gst {
+      display: flex;
+      flex-direction: row;
+      gap: var(--space-md)
+    }
   }
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+table td {
+  border-bottom: none;
 }
 
-.section-title {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 12px;
+.product_name_col {
+  width: 338px !important;
 }
 
-.client-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
+.total-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 
-.full-width {
-  grid-column: span 2;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .client-details {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width {
-    grid-column: span 1;
-  }
-}
-
-.table-wrapper {
-  overflow-x: auto;
-}
-
-/* Hide table header on mobile */
-@media (max-width: 768px) {
-  .custom-table thead {
-    display: none;
-  }
-
-  .custom-table,
-  .custom-table tbody,
-  .custom-table tr,
-  .custom-table td {
-    display: block;
-    width: 100%;
-  }
-
-  .custom-table tr {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 12px;
+  .sub-title,
+  .total_amount {
+    width: 223px;
+    height: 22px;
     margin-bottom: 12px;
-  }
+    padding: 0 12px;
+    text-align: left;
 
-  .custom-table td {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-table-header-text);
+  }
+
+  .total_amount {
+    height: 43px;
     font-size: 14px;
-  }
-
-  .custom-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #6b7280;
-  }
-
-  .action-col {
-    text-align: right;
-  }
-}
-
-.total-row {
-  font-weight: 700;
-  background: #eef2ff;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .total-row {
-    padding: 12px;
-    border-radius: 10px;
+    background-color: #E6F0F1;
+    padding: 8px 12px;
+    border-radius: 6px;
   }
 }
 
 .btn-container {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 24px;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .btn-container {
-    flex-direction: column;
-  }
-
-  .btn-container .btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-  }
+.delete_tr-container {
+  padding-top: 10px;
 }
 
-.delete-img {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .delete-img {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-
-.add-item-btn {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  background: #322ad69d;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-}
+/* 2.0 styles ending */

@@ -46,6 +46,17 @@
 .bm-btn-disabled {
     background-color: var(--color-btn-disabled-bg);
     color: var(--color-btn-disabled-text);
+    cursor: none;
+}
+
+.bm-btn-delete-red {
+    height: 28px;
+    background-color: var(--color-surface);
+    padding: 3px 6px;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 /* Small pagination Btn**/

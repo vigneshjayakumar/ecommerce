@@ -21,10 +21,12 @@ import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { Router } from '@angular/router';
 import { TProductByBranchIdRes, TransferService } from 'src/app/stocks/transfer-products/transfer.service';
+import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-create-invoice',
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, INRCurrency, NgClass],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.css',
 })
