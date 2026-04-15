@@ -14,7 +14,7 @@ export class TableComponent implements OnChanges {
   }[] = [];
   @Input({ required: true }) showCheckbox: boolean = false;
   @Input({ required: true }) showAction = true;
-  @Input({ required: true }) actionBtnConfig: Partial<TActionBtnConfig> = {
+  @Input() actionBtnConfig: Partial<TActionBtnConfig> = {
     viewBtn: false,
     deleteBtn: false,
     editBtn: false,

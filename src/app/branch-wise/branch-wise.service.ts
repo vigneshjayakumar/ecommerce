@@ -11,6 +11,12 @@ import { map, Observable } from "rxjs";
 export class BranchWiseService {
     constructor(private httpClient: HttpClient) { }
 
+    getBranchList() {
+        return this.httpClient.get<{ message: 'SUCCESS' | 'ERROR', response: TTenantBranchDetails[] }>(
+            `${environment.apiBaseURL}/branch/branch-list`, { withCredentials: true }
+        ).pipe(map(res => res.response))
+    }
+
     postCreateBranch(payload: TCreateBranch) {
         return this.httpClient.post(`${environment.apiBaseURL}/branch/create-branch`, payload, { withCredentials: true })
     }

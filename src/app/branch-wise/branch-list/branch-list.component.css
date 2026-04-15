@@ -1,0 +1,29 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    margin: var(--space-lg);
+    border-radius: var(--space-xmd);
+    background-color: var(--color-surface);
+}
+
+.page-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+
+    .title {
+        font-family: 'Manrope', sans-serif;
+        font-size: var(--font-xlg);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .action-container {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+    }
+}

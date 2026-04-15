@@ -1,0 +1,14 @@
+@if(branchListObs|async){
+<main class="main-container">
+    <div class="page-header">
+        <p class="title">Branch</p>
+        <div class="action-container">
+            <button class="bm-btn bm-btn-secondary">Add Staff</button>
+            <button class="bm-btn bm-btn-primary" (click)="onRouteToCreateBranch()">Add Branch</button>
+        </div>
+    </div>
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false" [showAction]="false"
+        (actionEmit)="onTableAction($event)"></app-table>
+    <app-bm-pagination [currentPage]="1" [totalPages]="6"></app-bm-pagination>
+</main>
+}

@@ -1,60 +1,86 @@
-<div class="main-container">
-    <form class="form-container" [formGroup]="createBranchForm" (ngSubmit)="onSubmit()">
-        <div class="field">
-            <label for="name">Branch Name</label>
-            <input type="text" id="name" formControlName="name" />
-        </div>
-        <div class="field">
-            <label for="code">Branch code</label>
-            <input type="text" id="code" formControlName="branchCode" />
-        </div>
-        <div class="field">
-            <label for="name">Branch type</label>
-            <select id="name" formControlName="branchType">
-                @for(type of branchTypeList;track $index){
-                <option [value]="type">{{type}}</option>
-                }
-            </select>
-        </div>
-        <div class="field">
-            <label for="address">Address</label>
-            <input type="text" id="address" formControlName="address" />
-        </div>
-        <div class="field">
-            <label for="city">City</label>
-            <input type="text" id="city" formControlName="city" />
-        </div>
-        <div class="field">
-            <label for="state">State</label>
-            <input type="text" id="state" formControlName="state" />
-        </div>
-        <div class="field">
-            <label for="pincode">Pincode</label>
-            <input type="number" id="pincode" formControlName="pincode" />
-        </div>
-        <div class="field">
-            <label for="phoneNumber">Phone number</label>
-            <input type="number" id="phoneNumber" formControlName="phoneNumber" />
-        </div>
-        <div class="field">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" formControlName="email" />
-        </div>
-        <div class="field">
-            <label for="isActive">Is Active</label>
-            <input type="checkbox" id="isActive" formControlName="isActive" />
-        </div>
-        <div class="field">
-            <label for="isDefault">Is Default Branch (Primary branch)</label>
-            <input type="checkbox" id="isDefault" formControlName="isDefault" />
-        </div>
-        <div class="field">
-            <label for="gst">GST Number</label>
-            <input type="text" id="gst" formControlName="gstNumber" />
+<main>
+    <form class="main-container" [formGroup]="createBranchForm" (ngSubmit)="onSubmit()">
+        <div class="bm-card">
+            <div class="card-header">
+                <p class="title">Add Branch</p>
+            </div>
+            <div class="content">
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="name">Branch Name</label>
+                        <input class="bm-input" type="text" id="name" formControlName="name" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="name">Branch type</label>
+                        <select class="bm-input" id="name" formControlName="branchType">
+                            @for(type of branchTypeList;track $index){
+                            <option [value]="type">{{type}}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="city">City</label>
+                        <input class="bm-input" type="text" id="city" formControlName="city" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="pincode">Pincode</label>
+                        <input class="bm-input" type="number" id="pincode" formControlName="pincode" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="email">E-mail</label>
+                        <input class="bm-input" type="email" id="email" formControlName="email" />
+                    </div>
+                    <div class="bm-label-input">
+
+                    </div>
+                </div>
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="code">Branch code</label>
+                        <input class="bm-input" class="bm-input" type="text" id="code" formControlName="branchCode" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="address">Address</label>
+                        <input class="bm-input" type="text" id="address" formControlName="address" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="state">State</label>
+                        <input class="bm-input" type="text" id="state" formControlName="state" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="phoneNumber">Phone number</label>
+                        <input class="bm-input" type="number" id="phoneNumber" formControlName="phoneNumber" />
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="gst">GST Number</label>
+                        <input class="bm-input" type="text" id="gst" formControlName="gstNumber" />
+                    </div>
+                    <div class="bm-label-input toggle-container">
+                        <span>
+                            <label for="isActive">Is Active</label>
+                            <label for="isActive" class="toggle">
+                                <input class="checkbox" type="checkbox" id="isActive" formControlName="isActive" />
+                                <span class="slider"></span>
+                            </label>
+                        </span>
+                        <span>
+                            <label for="isDefault">Is Primary branch?</label>
+                            <label for="isDefault" class="toggle">
+                                <input class="checkbox" type="checkbox" id="isDefault" formControlName="isDefault" />
+                                <span class="slider"></span>
+                            </label>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
         </div>
         <div class="btn-container">
-            <button type="button" class="btn btn-outline-secondary" (click)="onClear()">Clear</button>
-            <button type="submit" class="btn btn-outline-primary"> Create Branch </button>
+            <div class="ghost-btn"></div>
+            <div class="btn-box">
+                <button type="button" class="bm-btn bm-btn-secondary" (click)="onClear()">Clear</button>
+                <button type="submit" class="bm-btn bm-btn-primary"> Create Branch </button>
+            </div>
         </div>
     </form>
-</div>
+</main>
