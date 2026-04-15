@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { EMPTY, map, Observable, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, TitleCasePipe } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 import {
@@ -9,8 +9,8 @@ import {
   TMerchantInfo,
   TViewInvoiceDetailsRes,
 } from '../invoice.service';
-import { CustomPopupModalComponent } from 'src/app/common/components/custom-popup-modal/custom-popup-modal.component';
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-invoice-details',
@@ -18,8 +18,8 @@ import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
     AsyncPipe,
     DatePipe,
     NgClass,
-    CustomPopupModalComponent,
-    INRCurrency,
+    INRCurrency, TitleCasePipe,
+    FormsModule
   ],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
@@ -33,6 +33,11 @@ export class ViewInvoiceDetailsComponent {
   showSharePanelPopup = false;
   pdfLinkStr: null | string = null;
   waURL = '';
+
+  showWatsAppDialog = false;
+  sharePhoneNumber: string = '';
+  shareEmailId: string = '';
+  showWatsAppShare = false;
 
   showEmailPopUp = false;
   emailModalData = {
@@ -69,26 +74,18 @@ export class ViewInvoiceDetailsComponent {
     this.showEmailPopUp = true;
   }
   onEmailTrigger(
-    event:
-      | { status: boolean; email?: string }
-      | { type: 'copy' | 'watsapp'; phoneNumber?: string },
   ) {
-    if ('status' in event) {
-      if (!event.status) {
+    this.invoiceService
+      .shareInvoicePdfViaEmail({
+        email: this.shareEmailId,
+        invoiceId: this.invoiceDetails.overAll.id,
+      })
+      .subscribe((res) => {
         this.showEmailPopUp = false;
-      }
-      if (event.status && event?.email !== '' && event?.email) {
-        this.invoiceService
-          .shareInvoicePdfViaEmail({
-            email: event.email,
-            invoiceId: this.invoiceDetails.overAll.id,
-          })
-          .subscribe((res) => {
-            this.showEmailPopUp = false;
-          });
-      }
-    }
+      });
   }
+
+
   onDownloadPDF() {
     this.invoiceService
       .createInvoicePdf(this.invoiceDetails.overAll.id)
@@ -96,18 +93,33 @@ export class ViewInvoiceDetailsComponent {
         window.open(res.response, '_self');
       });
   }
+
   onPDFLink() {
     this.invoiceService
       .generateLink(this.invoiceDetails.overAll.id)
       .subscribe((res) => {
         this.pdfLinkStr = res.response;
-        this.showSharePanelPopup = true;
+        this.showWatsAppShare = true;
       });
   }
+
   private fetchMerchantDetails() {
     return this.invoiceService
       .fetchMerchentDetails()
       .pipe(tap((res) => (this.merchantInfo = res)));
+  }
+
+  onSendToWatsApp() {
+    this.waURL = `https://wa.me/${this.sharePhoneNumber}?text=${this.pdfLinkStr}`;
+    const waAnchorTag = document.getElementById(
+      'waAnchor',
+    ) as HTMLAnchorElement;
+    waAnchorTag.click();
+
+  }
+
+  onCopyClipboard() {
+    this.clipboard.copy(this.pdfLinkStr ?? '');
   }
 
   onShareTrigger(
@@ -123,7 +135,6 @@ export class ViewInvoiceDetailsComponent {
       if (event.type === 'copy') {
         this.clipboard.copy(this.pdfLinkStr ?? '');
       } else {
-        console.log('SHARE', event.phoneNumber);
         this.waURL = `https://wa.me/${event.phoneNumber}?text=${this.pdfLinkStr}`;
         const waAnchorTag = document.getElementById(
           'waAnchor',
@@ -133,7 +144,12 @@ export class ViewInvoiceDetailsComponent {
     }
   }
 
-  onRouteTo(path: 'exchange') {
-    this.router.navigate(['/admin/invoice/', path, this.invoiceId]);
+  onRouteTo(path: 'exchange' | 'create-invoice' | 'invoice-lists', invoiceId: string | null = null) {
+    if (invoiceId) {
+      this.router.navigate(['/admin/invoice/', path, this.invoiceId]);
+    } else {
+      this.router.navigate(['/admin/invoice/', path]);
+
+    }
   }
 }

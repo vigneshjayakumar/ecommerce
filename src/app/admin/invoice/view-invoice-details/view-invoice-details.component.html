@@ -1,63 +1,101 @@
 @if (invoiceDetailsObs | async) {
-  <div class="invoice-page">
-    <div class="invoice-card">
-      <div class="invoice-header">
-        <div>
-          <h1 class="invoice-title">
-            Invoice
-            <span class="invoice-number">{{
-              invoiceDetails.overAll.invoice_number
-            }}</span>
-          </h1>
-          <p class="muted-text">
-            Date: {{ invoiceDetails.overAll.created_at | date: "dd MMM YYYY" }}
-          </p>
-          <p class="muted-text">
-            Invoice Type :
+<main class="main-container">
+  <div class="recent-invoice-container bm-card bm-card-xs">
+    <div class="new-billing">
+      <label for="billing_btn" class="bm-label-small">Billings</label>
+      <button class="bm-btn bm-btn-primary" (click)="onRouteTo('create-invoice')">+ Add Billing</button>
+    </div>
+  </div>
+  <div class="invoice-content-container">
+    <div class="bm-card bm-card-small">
+      <div class="page-header">
+        <span class="header">
+          <img src="assets/icons/back-arrow-black.svg" alt="back" (click)="onRouteTo('invoice-lists')">
+          <p class="title">Invoice Details</p>
+        </span>
+      </div>
+      <div class="customer-details">
+        <div class="bill-from_box">
+          <label for="bill_from" class="bm-label-small">Bill From:</label>
+          <div class="content">
+            <p>
+              {{ merchantInfo.tenant_name }}
+            </p>
+            <p>{{ merchantInfo.gstin }}</p>
+            <p>
+              {{ merchantInfo.address }}, {{ merchantInfo.pincode }}
+            </p>
+            <p>
+              {{ merchantInfo.state }}, {{ merchantInfo.country }}
+            </p>
+          </div>
+        </div>
+        <div class="bill-to_box">
+          <label for="bill_to" class="bm-label-small">Bill To:</label>
+          <div class="content">
+            <p>{{ invoiceDetails.overAll.customer_name }}</p>
+            <p>{{ invoiceDetails.overAll.customer_gstin }}</p>
+            <p>--</p>
+            <p>--</p>
+          </div>
+        </div>
+      </div>
+      <div class="customer-details">
+        <div class="issued-at_box">
+          <label for="issued_at" class="bm-label-small">Issued On:</label>
+          <div class="content">
+            {{ invoiceDetails.overAll.created_at | date: "dd MMM YYYY" }}
+          </div>
+        </div>
+        <div class="payment-type_box">
+          <label for="paymentType" class="bm-label-small">Payment Type</label>
+          <div class="content">
+            <p>Cash</p>
+          </div>
+        </div>
+      </div>
+      <div class="customer-details">
+        <div class="status_box">
+          <label for="status" class="bm-label-small">Status:</label>
+          <div class="content">
+            <span [ngClass]="{
+              'bm-chip-success':invoiceDetails.overAll.invoice_status === 'PAID', 
+              'bm-chip-danger':invoiceDetails.overAll.invoice_status === 'CANCELLED',
+              'bm-chip-warning':invoiceDetails.overAll.invoice_status === 'CONFIRMED',
+              'bm-chip-netural':invoiceDetails.overAll.invoice_status === 'DRAFT',
+              }">
+              {{ invoiceDetails.overAll.invoice_status|titlecase }}
+
+            </span>
+          </div>
+        </div>
+        <div class="status_box">
+          <label for="invoice_type" class="bm-label-small">Invoice Type:</label>
+          <p>
             {{
-              invoiceDetails.overAll.invoice_type === "NON_GST"
-                ? "Non GST"
-                : "GST"
+            invoiceDetails.overAll.invoice_type === "NON_GST"
+            ? "Non GST"
+            : "GST"
             }}
           </p>
         </div>
-
-        <span
-          class="badge"
-          [ngClass]="{
-            'bg-success': invoiceDetails.overAll.invoice_status === 'PAID',
-            'bg-danger': invoiceDetails.overAll.invoice_status === 'CANCELLED',
-            'bg-warning': invoiceDetails.overAll.invoice_status === 'DRAFT',
-          }"
-          >{{ invoiceDetails.overAll.invoice_status }}</span
-        >
-        <span class="badge bg-info" (click)="onDownloadPDF()">Download</span>
-        <span class="badge bg-info" (click)="onEmailPDF()">email</span>
-        <span class="badge bg-info" (click)="onPDFLink()">send link</span>
-        <span class="badge bg-info" (click)="onRouteTo('exchange')">Return / Exchange</span>
       </div>
-      <div class="party-section">
-        <div>
-          <h3 class="section-title">From</h3>
-          <p class="text-bold">{{ merchantInfo.tenant_name }}</p>
-          <p class="muted-text">{{ merchantInfo.gstin }}</p>
-          <p class="muted-text">
-            {{ merchantInfo.address }}, {{ merchantInfo.pincode }}
-          </p>
-          <p class="muted-text">
-            {{ merchantInfo.state }}, {{ merchantInfo.country }}
-          </p>
-        </div>
-        <div>
-          <h3 class="section-title">To</h3>
-          <p class="text-bold">{{ invoiceDetails.overAll.customer_name }}</p>
-          <p class="muted-text">{{ invoiceDetails.overAll.customer_gstin }}</p>
-          <p class="muted-text">--</p>
-        </div>
-      </div>
+    </div>
 
-      <div class="item-table__wrapper">
-        <table class="items-table">
+    <div class="bm-card bm-card-small">
+      <div class="page-header">
+        <span class="header">
+          <p class="title">Invoice #
+            <span class="invoice-num">
+              {{
+              invoiceDetails.overAll.invoice_number
+              }}
+            </span>
+          </p>
+        </span>
+      </div>
+      <div class="invoice-items">
+        <table class="table">
           <thead>
             <tr>
               <th>Product</th>
@@ -69,55 +107,77 @@
           </thead>
           <tbody>
             @for (item of invoiceDetails.items; track item.id; let i = $index) {
-              <tr>
-                <td>{{ item.product_name_snapshot }}</td>
-                <td class="text-right">{{ item.quantity }}</td>
-                <td class="text-right">{{ item.price_snapshot | inrcurr }}</td>
-                <td class="text-right">{{ item.tax_rate | inrcurr }}</td>
-                <td class="text-right">{{ item.line_total | inrcurr }}</td>
-              </tr>
+            <tr>
+              <td>{{ item.product_name_snapshot }}</td>
+              <td class="text-right">{{ item.quantity }}</td>
+              <td class="text-right">{{ item.price_snapshot | inrcurr }}</td>
+              <td class="text-right">{{ item.tax_rate | inrcurr }}</td>
+              <td class="text-right">{{ item.line_total | inrcurr }}</td>
+            </tr>
             }
           </tbody>
         </table>
       </div>
-
-      <div class="summary_wrapper">
-        <div class="summary-card">
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span>{{ invoiceDetails.overAll.subtotal | inrcurr }}</span>
+      <div class="total-details">
+        <div class="amount">
+          <div class="sub-title">Sub Total
+            <p>{{ invoiceDetails.overAll.subtotal|inrcurr}}</p>
           </div>
-          <div class="summary-row">
-            <span>Tax amount</span>
-            <span>{{ invoiceDetails.overAll.tax_amount | inrcurr }}</span>
+          <div class="sub-title">Discount
+            <p>
+              0
+            </p>
           </div>
-          <div class="summary-row total">
-            <span>Total</span>
-            <span>{{ invoiceDetails.overAll.total_amount | inrcurr }}</span>
+          <div class="sub-title">Total tax <p>
+              {{ invoiceDetails.overAll.tax_amount|inrcurr}}
+            </p>
+          </div>
+          <div class="total_amount">Total Amount
+            <p>{{ invoiceDetails.overAll.total_amount|inrcurr}}</p>
           </div>
         </div>
       </div>
-
-      <div class="invoice-footer">
-        <p class="muted-text">
-          <!-- payment-method:N/A <br /> -->
-          Thank you for your business 🙏
-        </p>
-      </div>
     </div>
   </div>
-  @if (showEmailPopUp) {
-    <app-custom-popup-modal
-      [data]="emailModalData"
-      (btnTriggerEvent)="onEmailTrigger($event)"
-    ></app-custom-popup-modal>
-  }
-  @if (showSharePanelPopup) {
-    <app-custom-popup-modal
-      [data]="sharePDFLinkConfig"
-      (btnTriggerEvent)="onShareTrigger($event)"
-    ></app-custom-popup-modal>
-  }
+  <div class="action-container">
+    <div class="bm-card bm-card-xs">
+      <div class="new-billing">
+        <label for="billing_btn" class="bm-label-small">Invoice Actions</label>
+      </div>
+      <div class="share-btn-box">
+        <button class="bm-btn bm-share-ghost-btn bm-download-btn" (click)="onDownloadPDF()">
+          <img src="assets/icons/download-blue.svg" alt="download">
+          Download pdf</button>
+        <button class="bm-btn bm-share-ghost-btn bm-share-print-btn">
+          <img src="assets/icons/print.svg" alt="download">
+          Print Invoice</button>
+        <button class="bm-btn bm-share-ghost-btn bm-share-watsapp" (click)="onPDFLink()">
+          <img src="assets/icons/whatsapp-icon.svg" alt="download">
+          Share via whatsapp</button>
+        <button class="bm-btn bm-share-ghost-btn bm-share-email" (click)="onEmailPDF()">
+          <img src="assets/icons/email-cover.svg" alt="download">
+          Share via email</button>
+        <button class="bm-btn bm-share-ghost-btn bm-share-email" (click)="onRouteTo('exchange',invoiceId)">
+          <img src="assets/icons/email-cover.svg" alt="download">
+          Return / Exchange</button>
+      </div>
+    </div>
+    @if(showWatsAppShare){
+    <div class="share-contact-details bm-card bm-card-xs">
+      <input type="number" [(ngModel)]="sharePhoneNumber" class="bm-input">
+      <button class="bm-btn bm-btn-primary" [disabled]="sharePhoneNumber.length<10"
+        [ngClass]="{'bm-btn-disabled':sharePhoneNumber.length<10}" (click)="onSendToWatsApp()">Send whatsApp</button>
+    </div>
+    }
+    @if(showEmailPopUp){
+    <div class="share-contact-details bm-card bm-card-xs">
+      <input type="text" [(ngModel)]="shareEmailId" class="bm-input">
+      <button class="bm-btn bm-btn-primary" [disabled]="shareEmailId.length<8"
+        [ngClass]="{'bm-btn-disabled':shareEmailId.length<8}" (click)="onEmailTrigger()">Send Email</button>
+    </div>
+    }
+  </div>
+</main>
 }
 
 <a [href]="waURL" target="_blank" [hidden]="true" id="waAnchor"></a>

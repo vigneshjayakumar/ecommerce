@@ -3,7 +3,7 @@
     padding: var(--space-xmd) var(--space-md);
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    height: 48px;
+    height: 40px;
 }
 
 .bm-label-input {

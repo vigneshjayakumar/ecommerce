@@ -98,3 +98,36 @@
     background-color: var(--color-btn-primary-bg);
     color: var(--color-btn-primary-text);
 }
+
+.bm-share-ghost-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 6px;
+
+    padding: 10px;
+    border-radius: 6px;
+
+    background: var(--color-surface);
+    height: 36px;
+
+    font-size: var(--font-xsm);
+    font-weight: var(--font-weight-bold);
+}
+
+
+.bm-download-btn:hover {
+    background-color: #DBEAFE;
+}
+
+.bm-share-print-btn:hover {
+    background-color: #E3E3E3;
+}
+
+.bm-share-watsapp:hover {
+    background-color: #25D36633;
+}
+
+.bm-share-email:hover {
+    background-color: #FB940433;
+}
