@@ -1,0 +1,47 @@
+<nav class="nav-container">
+    <div class="nav-title">
+        <a class="logo" (click)="onRouteTo('/dashboard')">
+            BM
+        </a>
+        <div class="merchant-details">
+            <div class="name">Vishnu Hardwars</div>
+            <div class="location">Chennai Velachery</div>
+        </div>
+    </div>
+    <div class="nav-sub-title" [class.show]="isMenuOpen" id="navbarSupportedContent">
+        <div class="nav-lists">
+            @if (isUserLoggedIn) {
+            <button class="nav-btn" (click)="onRouteTo('/dashboard')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Dashboard</button>
+            <button class="nav-btn" (click)="onRouteTo('/admin/invoice')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Invoice</button>
+            <button class="nav-btn" (click)="onRouteTo('/admin/products-list')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Products</button>
+            <button class="nav-btn" (click)="onRouteTo('/branch/list')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Branch</button>
+            <!-- <button class="nav-btn" (click)="onRouteTo('/branch/allocate-product')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                ALlocate product</button>
+            <button class="nav-btn" (click)="onRouteTo('/stocks/transfer')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Transfer Product</button>
+            <button class="nav-btn" (click)="onRouteTo('/stocks/purchases')">
+                <img src="assets/icons/Dashboard-header.svg" alt="header">
+                Purchase Product</button> -->
+            }
+        </div>
+    </div>
+    @if (!isUserLoggedIn) {
+    <button class="bm-btn bm-btn-primary" (click)="onUserLogin()">
+        Login
+    </button>
+    } @else {
+    <button class="bm-btn bm-btn-tertiary-small" (click)="onUserLogout()">
+        Logout
+    </button>
+    }
+</nav>
