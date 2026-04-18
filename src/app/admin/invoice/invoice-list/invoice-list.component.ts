@@ -119,7 +119,7 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
   }
 
 
-  private mapDataIntoTableRows = (schProductList: TGetInvoiceLists['response']['data']) => {
+  private mapDataIntoTableRows = (schProductList: TInvoiceListEle[]) => {
     this.productTableRows = [];
     schProductList.forEach((ele, i) => {
       const tempEle = {

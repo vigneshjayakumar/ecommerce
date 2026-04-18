@@ -8,13 +8,13 @@
             <div class="location">Chennai Velachery</div>
         </div>
     </div>
-    <div class="nav-sub-title" [class.show]="isMenuOpen" id="navbarSupportedContent">
+    <div class="nav-sub-title" id="navbarSupportedContent">
         <div class="nav-lists">
             @if (isUserLoggedIn) {
             <button class="nav-btn" (click)="onRouteTo('/dashboard')">
                 <img src="assets/icons/Dashboard-header.svg" alt="header">
                 Dashboard</button>
-            <button class="nav-btn" (click)="onRouteTo('/admin/invoice')">
+            <button class="nav-btn" (click)="onRouteTo('/admin/invoice/invoice-lists')">
                 <img src="assets/icons/Dashboard-header.svg" alt="header">
                 Invoice</button>
             <button class="nav-btn" (click)="onRouteTo('/admin/products-list')">

@@ -1,95 +1,96 @@
-<main>
-  <div class="filter-container">
-    <!-- Date Range -->
-    <mat-form-field appearance="outline" class="filter-item date-range-field">
-      <mat-label>Date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRangeForm">
-        <input matStartDate placeholder="Start" formControlName="start" />
-        <input matEndDate placeholder="End" formControlName="end" />
-      </mat-date-range-input>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
-
-    <!-- Payment Status -->
-    <mat-form-field appearance="outline" class="filter-item">
-      <mat-label>Status</mat-label>
-      <mat-select [formControl]="filterSelect">
-        <mat-option value="ALL">All</mat-option>
-        <mat-option value="PAID">Paid</mat-option>
-        <mat-option value="DRAFT">Draft</mat-option>
-        <mat-option value="CANCELLED">Cancelled</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <!-- <div class="chart-box">
-  </div> -->
-  <app-sales-charts [invoiceSummaryList]="invoiceSummaryList"
-    [invoiceSummaryOverall]="invoiceSummaryOverall"></app-sales-charts>
-  <app-stock-charts [stockData]="stockSummaryList"></app-stock-charts>
-  <div class="table-content">
-    <div class="stock-summary">
-      <table class="table table-hover custom-table">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Product name</th>
-            <th scope="col">Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (
-          stock of stockSummaryList;
-          track stock.productId;
-          let i = $index
-          ) {
-          <tr>
-            <td>{{ i + 1 }}</td>
-            <td>{{ stock.productName }}</td>
-            <td>{{ stock.availableQty }}</td>
-            <td>{{ stock.lowStock ? "STOCK IS LOW" : "IN Stock" }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
+<main class="main-container">
+  <div class="page-header">
+    <p class="title">Billing</p>
+    <div class="action-container">
+      <select name="branch" id="branch" class="bm-input">
+        @for (branch of branchList; track branch.id) {
+        <option [value]="branch.id">{{branch.name}}</option>
+        }
+      </select>
+      <select name="branch" id="branch" class="bm-input">
+        @for (days of ['7','30','60']; track $index) {
+        <option [value]="days">{{days +' days'}}</option>
+        }
+      </select>
+      <div class="bm-btn bm-btn-secondary" (click)="onRouteTo('/admin/create-new')">New Product</div>
+      <div class="bm-btn bm-btn-primary" (click)="onRouteTo('/admin/invoice/create-invoice')">New Billing</div>
     </div>
-    <div class="sales-summary">
-      <div class="invoice_summary_card">
-        <div class="content">
-          <p class="title">Invoice Count</p>
-          <p class="info">{{ invoiceSummaryOverall.invoiceCount }}</p>
+  </div>
+  <div class="insights-cards">
+    @for(card of insightsCardsList;track $index){
+    <div class="insight-card">
+      <div class="card-title">
+        <img [src]="card.icon" alt="">
+        {{card.label}}
+      </div>
+      <div class="data">
+        <p>
+          {{card.data}}
+        </p>
+        @if(card.trends){
+        <div class="trends trending-up">
+          <img [src]="card.trends.icon" alt="">
+          {{card.trends.trendsValue}}
         </div>
-        <div class="content">
-          <p class="title">Total Sales</p>
-          <p class="info">{{ invoiceSummaryOverall.totalSales | inrcurr }}</p>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  <div class="stats-container">
+    <div class="card revenue-container">
+      <div class="header">
+        <p class="title">Revenue</p>
+        <div>
+          <select name="branch" id="branch" class="bm-input">
+            @for (days of ['7','30','60']; track $index) {
+            <option [value]="days">{{days +' days'}}</option>
+            }
+          </select>
         </div>
       </div>
-
-      <div class="invoice_summary-list">
-        <table class="table table-hover custom-table">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Date/ Month</th>
-              <th scope="col">Invoice Count</th>
-              <th scope="col">Total Sales</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (
-            invoice of invoiceSummaryList;
-            track invoice.period;
-            let i = $index
-            ) {
-            <tr>
-              <td>{{ i + 1 }}</td>
-              <td>{{ invoice.period }}</td>
-              <td>{{ invoice.invoiceCount }}</td>
-              <td>{{ invoice.totalSales | inrcurr }}</td>
-            </tr>
+    </div>
+    <div class="card invoice-container">
+      <div class="header">
+        <span class="invoice-head">
+          <p class="title">Invoice</p>
+          <img src="assets/icons/expand-window.svg" alt="" (click)="onRouteTo('/invoice/invoice-lists')">
+        </span>
+        <div>
+          <select name="branch" id="branch" class="bm-input">
+            @for (days of ['7','30','60']; track $index) {
+            <option [value]="days">{{days +' days'}}</option>
             }
-          </tbody>
-        </table>
+          </select>
+        </div>
+      </div>
+      <div class="content">
+        <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"
+          [showAction]="false"></app-table>
+      </div>
+    </div>
+    <div class="card top-seller">
+      <div class="header">
+        <p class="title">Top Seller</p>
+        <div>
+          <select name="branch" id="branch" class="bm-input">
+            @for (days of ['7','30','60']; track $index) {
+            <option [value]="days">{{days +' days'}}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card stock-overview">
+      <div class="header">
+        <p class="title">Stock Overview</p>
+        <div>
+          <select name="branch" id="branch" class="bm-input">
+            @for (days of ['7','30','60']; track $index) {
+            <option [value]="days">{{days +' days'}}</option>
+            }
+          </select>
+        </div>
       </div>
     </div>
   </div>
