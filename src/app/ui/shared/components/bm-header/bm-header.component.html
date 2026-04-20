@@ -3,10 +3,12 @@
         <a class="logo" (click)="onRouteTo('/dashboard')">
             BM
         </a>
+        @if (isUserLoggedIn) {
         <div class="merchant-details">
-            <div class="name">Vishnu Hardwars</div>
-            <div class="location">Chennai Velachery</div>
+            <div class="name">{{merchantDetails.name}}</div>
+            <div class="location">{{merchantDetails.pincode}}- {{merchantDetails.state}}</div>
         </div>
+        }
     </div>
     <div class="nav-sub-title" id="navbarSupportedContent">
         <div class="nav-lists">
