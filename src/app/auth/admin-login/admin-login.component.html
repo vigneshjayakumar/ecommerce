@@ -1,67 +1,73 @@
 <div class="login-container">
-  <div class="otp-btn_container">
-    <div class="ghost-box"></div>
-    <button class="btn btn-primary" (click)="onLoginWithOTP()">Login or Sign-up using OTP</button>
-  </div>
-  @if(!isOTPLogin){
-  <form [formGroup]="userLoginForm" (ngSubmit)="onSubmitLogin()">
-    @if(isNewUser && isSignupScreen){
-    <div class="form-group">
-      <label for="userName">Name*</label>
-      <input class="form-control" type="text" name="userName" formControlName="userName" />
-    </div>
-    <div class="form-group">
+  <div class="bm-card">
+    @if(!isOTPLogin){
+    <form [formGroup]="userLoginForm" (ngSubmit)="onSubmitLogin()" ß>
+      @if(isNewUser && isSignupScreen){
+      <div class="bm-label-input">
+        <label for="userName">Name*</label>
+        <input class="bm-input" type="text" name="userName" formControlName="userName" />
+      </div>
+      <div class="bm-label-input">
+        <label for="phNumber">Phone number*</label>
+        <input class="bm-input" type="number" name="phNumber" formControlName="phoneNumber" />
+      </div>
+      }
+      <div class="bm-label-input">
+        <label for="email">E-mail*</label>
+        <input class="bm-input" type="email" name="email" formControlName="email" />
+      </div>
+      <div class="bm-label-input">
+        <label for="pwd">Password*</label>
+        <input class="bm-input" type="password" name="pwd" formControlName="password" />
+      </div>
+      @if(isSignupScreen){
+      <div class="bm-label-input">
+        <label for="confirmPassword">Confirm Password *</label>
+        <input type="password" name="confirmPassword" class="bm-input" formControlName="confirmPassword" />
+      </div>
+      }
+      <div class="btn-container">
+        <button class="bm-btn bm-btn-secondary" type="button" (click)="onClearLogin()">
+          Clear
+        </button>
+        <button class="bm-btn bm-btn-primary" type="submit">
+          {{ isSignupScreen ? "Sign-Up" : "Login" }}
+        </button>
+      </div>
+    </form>
+    }@else {
+    <div class="bm-label-input">
       <label for="phNumber">Phone number*</label>
-      <input class="form-control" type="number" name="phNumber" formControlName="phoneNumber" />
+      <div class="phone-field">
+        <label class="ph_code">+91</label><input class="bm-input" type="number" name="phNumber" [disabled]="isOTPSent"
+          [(ngModel)]="phoneNumber" />
+      </div>
     </div>
-    }
-    <div class="form-group">
-      <label for="email">E-mail*</label>
-      <input class="form-control" type="email" name="email" formControlName="email" />
-    </div>
-    <div class="form-group">
-      <label for="pwd">Password*</label>
-      <input class="form-control" type="password" name="pwd" formControlName="password" />
-    </div>
-    @if(isSignupScreen){
-    <div class="form-group">
-      <label for="confirmPassword">Confirm Password *</label>
-      <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" />
+    @if(isOTPSent){
+    <div class="bm-label-input">
+      <label for="phNumber">Enter OTP*</label>
+      <input class="bm-input" type="number" name="otp" [(ngModel)]="otpCode" />
     </div>
     }
     <div class="btn-container">
-      <button class="btn btn-outline-secondary" type="button" (click)="onClearLogin()">
-        Clear
-      </button>
-      <button class="btn btn-primary" type="submit">
-        {{ isSignupScreen ? "Sign-Up" : "Login" }}
-      </button>
-      <button class="btn btn-primary" type="button" (click)="checkRefresh()">
-        Switch to {{ !isSignupScreen ? " Sign-Up " : " Login " }} page
-      </button>
+      @if(!isOTPSent){
+      <button class="bm-btn bm-btn-primary" (click)="onSendOTP()">Send OTP</button>
+      }@else {
+      <button class="bm-btn bm-btn-primary" (click)="onVerifyOTP()">Verify</button>
+      <button class="bm-btn bm-btn-with-edit-icon" (click)="isOTPSent=false">Edit Phone Number</button>
+      }
     </div>
-  </form>
-  }@else {
-  <div class="form-group">
-    <label for="phNumber">Phone number*</label>
-    <div class="phone-field">
-      +91<input class="form-control" type="number" name="phNumber" [disabled]="isOTPSent" [(ngModel)]="phoneNumber" />
-    </div>
-  </div>
-  @if(isOTPSent){
-  <div class="form-group">
-    <label for="phNumber">Enter OTP*</label>
-    <input class="form-control" type="number" name="otp" [(ngModel)]="otpCode" />
-  </div>
-  }
-  <div class="btn-container">
-    @if(!isOTPSent){
-    <button class="btn btn-primary" (click)="onSendOTP()">Send OTP</button>
-    }@else {
-    <button class="btn btn-primary" (click)="onVerifyOTP()">Verify</button>
-    <button class="btn btn-secondary" (click)="isOTPSent=false">Edit Phone Number</button>
     }
+    <div class="alternate-login">
+      @if(!isSignupScreen){
+      <label for="alter">Didn't have account? <span class="anchor" (click)="checkRefresh()">Sign Up</span></label>
+      }@else {
+      <label for="alter">Already have an account? <span class="anchor" (click)="checkRefresh()">Login</span></label>
+      }
+      @if(!isOTPLogin){
+      <label>OR</label>
+      <label for="alter"><span class="anchor" (click)="onLoginWithOTP()">Using OTP</span></label>
+      }
+    </div>
   </div>
-  }
-
 </div>

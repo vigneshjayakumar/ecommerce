@@ -22,7 +22,7 @@ export class AdminLoginComponent implements OnInit {
   isNewUser = false;
 
   //otp properties.
-  isOTPLogin = true;
+  isOTPLogin = false;
   phoneNumber: string = '';
   otpCode = '';
   isOTPSent = false;
@@ -118,6 +118,7 @@ export class AdminLoginComponent implements OnInit {
   }
 
   checkRefresh() {
+    this.isOTPLogin = false;
     const query = {
       authPage: this.isSignupScreen ? 'login' : 'signup',
     };
