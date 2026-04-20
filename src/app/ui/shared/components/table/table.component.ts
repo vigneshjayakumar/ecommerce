@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, Pipe } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-table',
@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, Pipe } from 
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
-export class TableComponent implements OnChanges {
+export class TableComponent {
   @Input({ required: true }) columns: { key: string, label: string, align?: 'left' | 'center' | 'right' }[] = [];
   @Input({ required: true }) rows: {
     [key: number]: { col: string, value: string, class?: string, formatter?: (value: string) => string }[]
@@ -24,27 +24,9 @@ export class TableComponent implements OnChanges {
 
   @Output() actionEmit = new EventEmitter<{ action: TActionButtonTriggers, id: number }>();
 
-  ngOnChanges(): void {
-    // this.transformDataWithPipe()
-    console.log(this.rows);
-  }
-
   onEmitAction(action: TActionButtonTriggers, id: number) {
     this.actionEmit.emit({ action, id })
   }
-
-  // private transformDataWithPipe() {
-  //   this.rows.forEach((rows, i) => {
-  //     rows[i] = rows[i].map(row => {
-  //       const value = row.value;
-  //       if (row.pipe instanceof DatePipe) {
-  //         console.log('DATE')
-  //         row.value = row.pipe.transform(row.value, 'short') ?? ''
-  //       }
-  //       return { ...row, value }
-  //     })
-  //   })
-  // }
 }
 
 export type TActionButtonTriggers = 'viewBtn' | 'deleteBtn' | 'cancelBtn' | 'editBtn' | 'pdfDownload' | 'payNowBtn';
