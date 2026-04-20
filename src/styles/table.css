@@ -9,6 +9,8 @@ table {
 
 table thead {
     background-color: var(--color-bg);
+    position: sticky;
+    top: 76px;
 }
 
 table th {

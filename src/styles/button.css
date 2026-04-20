@@ -71,6 +71,25 @@
     min-width: 36px;
 }
 
+.bm-btn-small {
+    height: 24px;
+    border-radius: 6px;
+    padding: 4px 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.bm-btn-orange {
+    background-color: #FF7F00;
+    color: #FFFFFF;
+}
+
+.bm-btn-red {
+    background-color: #DA4343;
+    color: #FFFFFF;
+}
+
 .bm-btn-active {
     background-color: var(--color-btn-primary-bg);
     color: var(--color-btn-primary-text);

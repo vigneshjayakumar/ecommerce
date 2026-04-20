@@ -156,6 +156,10 @@ export class InvoiceService {
   onPostSalesReturn(payload: { invoiceId: string, items: { invoiceItemId: number, quantity: number }[] }) {
     return this.httpClient.post(`${environment.apiBaseURL}/invoice/sales-return`, payload, { withCredentials: true })
   }
+
+  getOverallSalesReport() {
+    return this.httpClient.get(`${environment.apiBaseURL}/insights/cummilativeSalesReport`, { withCredentials: true })
+  }
 }
 
 export type TMerchantDataResponse = {

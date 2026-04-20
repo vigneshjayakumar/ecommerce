@@ -9,11 +9,15 @@ import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthInterceptor } from './app/auth/http-interceptor.service';
+import { provideEchartsCore } from 'ngx-echarts';
+import { echarts } from './app/common/config/echarts.config';
 
 if (environment.production) {
   enableProdMode();
 }
 
 bootstrapApplication(AppComponent, {
-  providers: [provideRouter(appRoutes), provideHttpClient(withInterceptors([AuthInterceptor]))],
+  providers: [provideRouter(appRoutes), provideHttpClient(withInterceptors([AuthInterceptor])), provideEchartsCore({
+    echarts: () => Promise.resolve(echarts)
+  })],
 }).catch((err) => console.log(err));

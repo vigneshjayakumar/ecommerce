@@ -1,0 +1,17 @@
+<div class="bm-select">
+    <div class="bm-select-trigger" (click)="isOpen = !isOpen">
+        <span class="bm-select-value">{{ selectedLabel }}</span>
+        <svg class="bm-select-icon" width="16" height="16" viewBox="0 0 24 24">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
+        </svg>
+    </div>
+    @if(isOpen){
+    <div class="bm-select-dropdown">
+        @for(option of options;track $index){
+        <div class="bm-select-option" (click)="select(option)">
+            {{ option.label }}
+        </div>
+        }
+    </div>
+    }
+</div>
