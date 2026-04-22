@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-bm-select',
@@ -8,16 +8,21 @@ import { Component, Input } from '@angular/core';
 })
 export class BmSelectComponent {
   @Input({ required: true }) options: { label: string; value: any }[] = [];
-  @Input() value: any;
+  // @Input({ required: true }) value: string = '';
+  @Input() value: string = '';
+
+  @Output() valueChange = new EventEmitter;
   isOpen = false;
 
   select(option: any) {
-    this.value = option.value;
+    this.valueChange.emit(option.value)
+    // this.value = option.value;
     this.isOpen = false;
   }
 
+
   get selectedLabel(): string {
-  const found = this.options.find(o => o.value === this.value);
-  return found ? found.label : 'Select';
-}
+    const found = this.options.find(o => o.value === this.value);
+    return found ? found.label : 'Select';
+  }
 }

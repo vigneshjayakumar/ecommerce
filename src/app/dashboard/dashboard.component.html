@@ -3,9 +3,11 @@
     <p class="title">Billing</p>
     <div class="action-container">
       <div class="branch-drp_down">
-        <app-bm-select [options]="branchList" [(ngModel)]="selectDuration"></app-bm-select>
+        <app-bm-select [options]="branchList" [value]="selectBranchId"
+          (valueChange)="onSelectChange($event,'branch')"></app-bm-select>
       </div>
-      <app-bm-select [options]="chartDurationSelect" [(ngModel)]="selectDuration"></app-bm-select>
+      <app-bm-select [options]="chartDurationSelect" [value]="selectDuration"
+        (valueChange)="onSelectChange($event,'overallDuration')"></app-bm-select>
       <div class="bm-btn bm-btn-secondary" (click)="onRouteTo('/admin/create-new')">New Product</div>
       <div class="bm-btn bm-btn-primary" (click)="onRouteTo('/admin/invoice/create-invoice')">New Billing</div>
     </div>
@@ -36,7 +38,8 @@
       <div class="header">
         <p class="title">Revenue</p>
         <div>
-          <app-bm-select [options]="chartDurationSelect" [(ngModel)]="selectDuration"></app-bm-select>
+          <app-bm-select [options]="chartDurationSelect" [value]="selectedRevenuDuration"
+            (valueChange)="onSelectChange($event,'Revenue')"></app-bm-select>
         </div>
       </div>
       <div class="content">
@@ -49,9 +52,9 @@
           <p class="title">Invoice</p>
           <img src="assets/icons/expand-window.svg" alt="" (click)="onRouteTo('/invoice/invoice-lists')">
         </span>
-        <div class="bm-select-medium">
+        <!-- <div class="bm-select-medium">
           <app-bm-select [options]="chartDurationSelect" [(ngModel)]="selectDuration"></app-bm-select>
-        </div>
+        </div> -->
       </div>
       <div class="content">
         <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"
@@ -62,7 +65,8 @@
       <div class="header">
         <p class="title">Top Seller</p>
         <div>
-          <app-bm-select [options]="chartDurationSelect" [(ngModel)]="selectDuration"></app-bm-select>
+          <app-bm-select [options]="chartDurationSelect" [value]="selectedTopSellerDuration"
+            (valueChange)="onSelectChange($event,'top-seller')"></app-bm-select>
         </div>
       </div>
       <div class="content">
