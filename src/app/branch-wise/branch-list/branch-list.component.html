@@ -3,12 +3,15 @@
     <div class="page-header">
         <p class="title">Branch</p>
         <div class="action-container">
-            <button class="bm-btn bm-btn-secondary">Add Staff</button>
+            <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/transfer')">Transfer Products</button>
+            <button class="bm-btn bm-btn-secondary">Allocate Products</button>
+            <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/purchases')">Purchase</button>
             <button class="bm-btn bm-btn-primary" (click)="onRouteToCreateBranch()">Add Branch</button>
         </div>
     </div>
-    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false" [showAction]="false"
-        (actionEmit)="onTableAction($event)"></app-table>
-    <app-bm-pagination [currentPage]="1" [totalPages]="6"></app-bm-pagination>
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"
+        [showAction]="false"></app-table>
+    <app-bm-pagination [currentPage]="1" [totalPages]="totalPages" [pageCount]="limit"
+        (pageChange)="onPageChange($event)" (pageLimitChange)="onPageLimitChange($event)"></app-bm-pagination>
 </main>
 }

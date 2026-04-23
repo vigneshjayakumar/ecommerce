@@ -118,6 +118,29 @@ export class ViewInvoiceDetailsComponent {
 
   }
 
+  onConfirmInvoice() {
+    if (!this.invoiceId) return;
+    this.invoiceService.confirmInvoiceById(+this.invoiceId)
+      .pipe(
+        switchMap(() =>
+          this.invoiceService.fetchInvoiceDetailsById(+this.invoiceId!)),
+        tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
+        switchMap(() => this.fetchMerchantDetails()),
+      ).subscribe();
+  }
+
+  onCancelInvoice() {
+    if (!this.invoiceId) return;
+    this.invoiceService
+      .onCancelInvoice(+this.invoiceId)
+      .pipe(
+        switchMap(() =>
+          this.invoiceService.fetchInvoiceDetailsById(+this.invoiceId!)),
+        tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
+        switchMap(() => this.fetchMerchantDetails()),
+      ).subscribe();
+  }
+  
   onCopyClipboard() {
     this.clipboard.copy(this.pdfLinkStr ?? '');
   }

@@ -11,6 +11,6 @@ export const appRoutes: Routes = [
   { path: 'stocks', loadChildren: () => import('./stocks/stocks.routes').then(m => m.stockRoutes) },
   { path: 'login', component: AdminLoginComponent },
 
-  { path: '', redirectTo: 'admin', pathMatch: 'full' },
-  { path: '**', redirectTo: 'admin' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: 'dashboard' },
 ];

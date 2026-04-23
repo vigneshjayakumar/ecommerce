@@ -45,6 +45,10 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
     }
   }
   // 
+  limit = '10';
+  selectedPage = '0';
+  totalPages: number = 1;
+
   subsList: Subscription[] = [];
   productsList: TAdminProductList['response']['products'] = [];
   searchProductList: TAdminProductList['response']['products'] = [];
@@ -97,10 +101,11 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
   }
 
   private getAllProductsList() {
-    return this.adminProductService.getAllProductsList().pipe(
+    return this.adminProductService.getAllProductsList(this.limit, this.selectedPage).pipe(
       tap((productList) => {
         this.productsList = productList;
         this.searchProductList = this.productsList;
+        this.totalPages = Math.ceil(+productList[0].total_pages / +this.limit);
         this.mapDataIntoTableRows(this.searchProductList);
       }),
     );
@@ -133,6 +138,16 @@ export class AllProductsListComponent implements OnInit, OnDestroy {
     let styleClass = 'bm-chip-success';
     if (!status) styleClass = 'bm-chip-danger'
     return styleClass
+  }
+
+  onPageLimitChange(event: string) {
+    this.limit = event;
+    this.getAllProductsList().subscribe();
+  }
+
+  onPageChange(event: number) {
+    this.selectedPage = ((+event - 1) * +this.limit).toString();
+    this.getAllProductsList().subscribe();
   }
 
   ngOnDestroy(): void {

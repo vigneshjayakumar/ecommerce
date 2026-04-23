@@ -12,11 +12,8 @@
                     </div>
                     <div class="bm-label-input">
                         <label for="name">Branch type</label>
-                        <select class="bm-input" id="name" formControlName="branchType">
-                            @for(type of branchTypeList;track $index){
-                            <option [value]="type">{{type}}</option>
-                            }
-                        </select>
+                        <app-bm-select [options]="copiedBranchType" [value]="selectBranchType"
+                            (valueChange)="onBranchTypeChange($event)"></app-bm-select>
                     </div>
                     <div class="bm-label-input">
                         <label for="city">City</label>

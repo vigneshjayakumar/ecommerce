@@ -23,10 +23,11 @@ import { Router } from '@angular/router';
 import { TProductByBranchIdRes, TransferService } from 'src/app/stocks/transfer-products/transfer.service';
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { NgClass } from '@angular/common';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-create-invoice',
-  imports: [ReactiveFormsModule, FormsModule, INRCurrency, NgClass],
+  imports: [ReactiveFormsModule, FormsModule, INRCurrency, NgClass, BmSelectComponent],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.css',
 })
@@ -53,7 +54,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     id: 0,
     email_id: '',
   };
-  branchList: { id: string, branch_name: string }[] = [];
+  branchList: { value: string, label: string }[] = [];
   branchSelect = new FormControl('');
   customerDetailsForm!: FormGroup;
   isEditMode = true;
@@ -62,7 +63,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   branchChangeSubs = this.branchSelect.valueChanges.pipe(tap(branchId => { if (branchId) { this.fetchProductListBranchWise(+branchId) } })).subscribe();
 
   ngOnInit(): void {
-    const subs = this.merchantDetails().pipe(switchMap(() => this.getBranchList())).subscribe(() => this.fetchProductListBranchWise(+this.branchList[0].id));
+    const subs = this.merchantDetails().pipe(switchMap(() => this.getBranchList())).subscribe(() => this.fetchProductListBranchWise(+this.branchList[0].value));
     this.initForm();
     this.fetchProductsList();
 
@@ -103,10 +104,16 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       }),
     );
   }
-
+  branchWiseProductDropDown: { value: string, label: string }[] = [];
+  selectedBranch = '';
+  onBranchChange(event: string) {
+    this.selectedBranch = event;
+    this.branchSelect.setValue(this.selectedBranch);
+  }
   private getBranchList() {
     return this.transferService.getBranchLists().pipe(tap(res => {
-      this.branchList = res;
+      this.branchList = res.map(ele => ({ value: ele.id, label: ele.branch_name }));
+      this.selectedBranch = this.branchList[0].label;
     }))
   }
 
@@ -222,18 +229,25 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   productList: TProduct[] = [];
   branchWiseProductList: TProductByBranchIdRes['response'] = [];
   private fetchProductsList() {
-    const subs = this.adminService.getAllProductsList()
+    const subs = this.adminService.getAllProductsList('10', '0')
       .pipe(
         tap((res) => (this.productList = res.filter((ele) => ele.is_active))),
       )
       .subscribe();
     this.subsArr.push(subs);
   }
-
+  onProductSelect(event: string) {
+    this.selectedProduct = event;
+    this.customerDetailsForm.controls['productName'].setValue(event);
+  }
+  selectedProduct = '';
   private fetchProductListBranchWise(branchId: number) {
     this.branchId = branchId;
     const subs = this.transferService.getProductListByBranchId(branchId)
-      .pipe(tap(res => this.branchWiseProductList = res))
+      .pipe(tap(res => {
+        this.branchWiseProductList = res;
+        this.branchWiseProductDropDown = this.branchWiseProductList.map(ele => ({ value: ele.product_name, label: ele.product_name }))
+      }))
       .subscribe();
     this.subsArr.push(subs)
   }

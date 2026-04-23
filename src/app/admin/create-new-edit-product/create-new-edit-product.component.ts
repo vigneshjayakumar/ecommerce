@@ -15,10 +15,11 @@ import {
 } from '../admin-product.service';
 import { TProduct } from '../all-products-list/all-products.modal';
 import { TUOM, UtilsService } from 'src/app/common/services/utils.service';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-create-new-edit-product',
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, BmSelectComponent],
   templateUrl: './create-new-edit-product.component.html',
   styleUrl: './create-new-edit-product.component.css',
 })
@@ -76,6 +77,12 @@ export class CreateNewEditProductComponent implements OnDestroy {
       isActive: this.dataToBeEdited?.is_active,
     });
     this.newProductForm.controls['skuCode'].disable();
+  }
+
+  selectedUom = '';
+  onUomChange(event: string) {
+    this.selectedUom = event;
+    this.newProductForm.controls['uom'].setValue(event);
   }
 
   initForm() {
@@ -143,7 +150,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
   }
 
   private getUOMConstants() {
-    return this.utilsService.getUOMConstants().pipe(tap(res => this.uoms = res))
+    return this.utilsService.getUOMConstants().pipe(tap(res => { this.uoms = res; this.selectedUom = this.uoms[0].value }))
   }
 
   ngOnDestroy(): void {

@@ -14,9 +14,10 @@
       </div>
     </div>
     @if (searchProductList.length) {
-    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="true" [showAction]="true"
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false" [showAction]="true"
       (actionEmit)="onTableAction($event)" [actionBtnConfig]="actionBtnConfig"></app-table>
-    <app-bm-pagination [currentPage]="1" [totalPages]="6"></app-bm-pagination>
+    <app-bm-pagination [currentPage]="1" [totalPages]="totalPages" (pageLimitChange)="onPageLimitChange($event)" (pageChange)="onPageChange($event)"
+      [pageCount]="limit"></app-bm-pagination>
     } @else {
     <div class="no-data">
       <p>No Data Found...</p>

@@ -17,4 +17,5 @@ export type TProduct = {
   sku: string;
   image: string;
   is_active: boolean;
+  total_pages: string
 };

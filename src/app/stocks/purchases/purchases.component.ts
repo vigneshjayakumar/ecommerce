@@ -51,7 +51,7 @@ export class PurchasesComponent implements OnInit, OnDestroy {
           this.defaultBranchObj = found
         }
       }),
-      switchMap(() => this.adminProductService.getAllProductsList())
+      switchMap(() => this.adminProductService.getAllProductsList('10', '0'))
     ).pipe(tap(res => this.allProductsList = res))
       .subscribe();
   }

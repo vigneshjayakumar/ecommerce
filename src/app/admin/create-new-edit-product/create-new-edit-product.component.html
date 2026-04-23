@@ -17,11 +17,7 @@
           </div>
           <div class="bm-label-input">
             <label for="uom">Unit of Mesurements*</label>
-            <select class="bm-input" name="uom" id="uom" formControlName="uom">
-              @for(uom of uoms;track $index){
-              <option [value]="uom.value">{{uom.label}}({{uom.value}})</option>
-              }
-            </select>
+            <app-bm-select [options]="uoms" [value]="selectedUom" (valueChange)="onUomChange($event)"></app-bm-select>
           </div>
           <div class="bm-label-input">
             <label for="hsnCode">HSN Code</label>

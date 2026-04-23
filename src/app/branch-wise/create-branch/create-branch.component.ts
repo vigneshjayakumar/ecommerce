@@ -1,22 +1,26 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { BranchWiseService, TCreateBranch } from '../branch-wise.service';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-create-branch',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, BmSelectComponent],
   templateUrl: './create-branch.component.html',
   styleUrl: './create-branch.component.css'
 })
 export class CreateBranchComponent {
   private branchWiseService = inject(BranchWiseService);
 
-  branchTypeList: ['HQ', 'WAREHOUSE', 'DISTRUBUTION', 'STORE'] = ['HQ', 'WAREHOUSE', 'DISTRUBUTION', 'STORE']
+  branchTypeList: ['HQ', 'WAREHOUSE', 'DISTRUBUTION', 'STORE'] = ['HQ', 'WAREHOUSE', 'DISTRUBUTION', 'STORE'];
+  copiedBranchType = this.branchTypeList.map(ele => ({ label: ele, value: ele }));
+  selectBranchType: string = this.branchTypeList[0];
 
   createBranchForm: FormGroup = new FormGroup({
     name: new FormControl(null, { validators: [Validators.required] }),
     branchCode: new FormControl(null, { validators: [Validators.required] }),
-    branchType: new FormControl(null, { validators: [Validators.required] }),
+    branchType: new FormControl(this.selectBranchType, { validators: [Validators.required] }),
     address: new FormControl(null, { validators: [Validators.required] }),
     city: new FormControl(null, { validators: [Validators.required] }),
     state: new FormControl(null, { validators: [Validators.required] }),
@@ -50,6 +54,11 @@ export class CreateBranchComponent {
 
   onClear() {
     this.createBranchForm.reset()
+  }
+
+  onBranchTypeChange(event: string) {
+    this.selectBranchType = event;
+    this.createBranchForm.controls['branchType'].setValue(event)
   }
 
 }

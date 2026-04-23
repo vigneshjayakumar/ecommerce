@@ -13,6 +13,23 @@
           <img src="assets/icons/back-arrow-black.svg" alt="back" (click)="onRouteTo('invoice-lists')">
           <p class="title">Invoice Details</p>
         </span>
+        @if(invoiceDetails.overAll.invoice_status==='DRAFT'){
+        <span class="action-btn-container">
+          <button class="bm-btn-with-edit-icon" (click)="onConfirmInvoice()">
+            Confirm
+          </button>
+          <button class="bm-btn-with-edit-icon" (click)="onCancelInvoice()">
+            Cancel
+          </button>
+        </span>
+        }
+        @if(invoiceDetails.overAll.invoice_status==='CONFIRMED'){
+        <span class="action-btn-container">
+          <button class="bm-btn-with-edit-icon" (click)="onConfirmInvoice()">
+            Mark as Paid
+          </button>
+        </span>
+        }
       </div>
       <div class="customer-details">
         <div class="bill-from_box">

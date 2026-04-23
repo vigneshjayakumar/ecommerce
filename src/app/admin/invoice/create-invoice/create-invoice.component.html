@@ -27,11 +27,13 @@
           <p class="sub-title">{{ merchantInfo.email_id }}</p>
           <div class="branch-drpdwn">
             <label class="sub-title" for="branch">Select Branch</label>
-            <select name="branch" id="branch" class="bm-input" [formControl]="branchSelect">
+            <app-bm-select [options]="branchList" [value]="selectedBranch"
+              (valueChange)="onBranchChange($event)"></app-bm-select>
+            <!-- <select name="branch" id="branch" class="bm-input" [formControl]="branchSelect">
               @for (branch of branchList; track branch.id) {
               <option [value]="branch.id">{{branch.branch_name}}</option>
               }
-            </select>
+            </select> -->
           </div>
         </div>
       </div>
@@ -111,6 +113,7 @@
                     }
                   </td>
                   <td>
+                    <!-- <app-bm-select [options]="branchWiseProductDropDown" [value]="selectedProduct" (valueChange)="onProductSelect($event)"></app-bm-select> -->
                     <select class="bm-input" formControlName="productName">
                       @for (product of branchWiseProductList; track product.id) {
                       <option [value]="product.product_id">

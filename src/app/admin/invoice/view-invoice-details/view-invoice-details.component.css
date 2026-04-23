@@ -127,3 +127,9 @@ table td {
     flex-direction: column;
     gap: 8px;
 }
+
+.action-btn-container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px
+}

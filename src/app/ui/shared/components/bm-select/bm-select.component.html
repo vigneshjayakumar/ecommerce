@@ -6,7 +6,7 @@
         </svg>
     </div>
     @if(isOpen){
-    <div class="bm-select-dropdown">
+    <div class="bm-select-dropdown" [ngClass]="[position]">
         @for(option of options;track $index){
         <div class="bm-select-option" (click)="select(option)">
             {{ option.label }}

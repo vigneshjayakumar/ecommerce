@@ -101,11 +101,15 @@ export class InvoiceService {
     );
   }
 
-  fetchInvoiceLists() {
+  fetchInvoiceLists(limit: string, offset: string) {
+    const params = {
+      limit,
+      offset
+    }
     return this.httpClient
       .get<TGetInvoiceLists>(
         `${environment.apiBaseURL}/invoice/getInvoiceLists`,
-        { withCredentials: true },
+        { params, withCredentials: true },
       )
       .pipe(map((res) => res.response.data));
   }
@@ -250,6 +254,7 @@ export type TInvoiceListEle = {
   invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED' | 'CONFIRMED';
   created_by: number;
   created_at: Date;
+  total_pages: string
 };
 
 export type TViewInvoiceDetailsRes = {

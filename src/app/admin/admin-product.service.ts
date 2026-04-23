@@ -63,8 +63,12 @@ export class AdminProductService {
   //     .pipe(map((res) => res.response.products));
   // }
 
-  getAllProductsList() {
-    return this.httpClient.get<TAdminProductList>(`${environment.apiBaseURL}/admin/products`, { withCredentials: true }).pipe(map((res) => res.response.products));
+  getAllProductsList(limit: string, offset: string) {
+    const params = {
+      limit,
+      offset
+    }
+    return this.httpClient.get<TAdminProductList>(`${environment.apiBaseURL}/admin/products`, { params, withCredentials: true }).pipe(map((res) => res.response.products));
   }
 }
 

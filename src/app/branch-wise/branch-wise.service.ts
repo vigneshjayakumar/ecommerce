@@ -11,9 +11,12 @@ import { map, Observable } from "rxjs";
 export class BranchWiseService {
     constructor(private httpClient: HttpClient) { }
 
-    getBranchList() {
+    getBranchList(limit: string, offset: string) {
+        const params = {
+            limit, offset
+        }
         return this.httpClient.get<{ message: 'SUCCESS' | 'ERROR', response: TTenantBranchDetails[] }>(
-            `${environment.apiBaseURL}/branch/branch-list`, { withCredentials: true }
+            `${environment.apiBaseURL}/branch/branch-list`, { params, withCredentials: true }
         ).pipe(map(res => res.response))
     }
 
@@ -83,4 +86,5 @@ export type TTenantBranchDetails = {
     pincode: string;
     state: string;
     tenant_id: string;
+    total_pages: string
 }

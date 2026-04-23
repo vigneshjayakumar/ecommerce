@@ -4,7 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { Subscription, switchMap } from 'rxjs';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { Router } from '@angular/router';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 import { DashboardApiService, TRevenueGraphData, TTotalRevenueTrends } from './services/dashboard-api.service';
 import { BranchWiseService } from '../branch-wise/branch-wise.service';
@@ -16,7 +16,7 @@ import { BmSelectComponent } from '../ui/shared/components/bm-select/bm-select.c
 @Component({
   selector: 'app-dashboard',
   imports: [
-    ReactiveFormsModule, TableComponent, NgxEchartsDirective, NgClass, BmSelectComponent, FormsModule
+    ReactiveFormsModule, TableComponent, NgxEchartsDirective, BmSelectComponent, FormsModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    const sub = this.branchService.getBranchList().pipe(
+    const sub = this.branchService.getBranchList('10', '0').pipe(
       tap(res => {
         this.branchList = res.map(ele => ({ value: +ele.id, label: ele.branch_name }))
         this.selectBranchId = this.branchList[0].value.toString();
@@ -216,9 +216,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.totalRevenueTrends(event);
         break;
     }
-   }
+  }
 
-  onRouteTo(path: '/admin/invoice/create-invoice' | '/admin/create-new' | '/invoice/invoice-lists' | '/branch/list') {
+  onRouteTo(path: '/admin/invoice/create-invoice' | '/admin/create-new' | '/admin/invoice/invoice-lists' | '/branch/list') {
     this.router.navigate([path])
   }
 
@@ -319,7 +319,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return styleClass
   }
   private fetchInvoiceList() {
-    const sub = this.invoiceService.fetchInvoiceLists()
+    const sub = this.invoiceService.fetchInvoiceLists('10', '1')
       .pipe(tap(res => this.mapDataIntoTableRows(res)))
       .subscribe();
     this.subs.push(sub);

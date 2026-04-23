@@ -1,20 +1,18 @@
 <div class="pagination">
     <!-- Count per page -->
     <div class="count-per-page">
-        <select name="countPerPage" id="countPerPage" class="bm-input">
-            @for (count of countPerPageOptions; track $index) {
-            <option [value]="count.value">{{count.lable}}</option>
-            }
-        </select>
+        <app-bm-select [value]="pageCount" [options]="countPerPageOptions" (valueChange)="onPageLimtChange($event)"
+            [position]="'top'"></app-bm-select>
     </div>
 
     <!-- page -->
+    @if(totalPages>1){
     <div class="page-number-btn">
-        <div class="goto">
+        <!-- <div class="goto">
             <p>Go to</p>
             <input type="text" class="bm-input">
             <p>Page</p>
-        </div>
+        </div> -->
         <!-- Prev -->
         <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-disabled':currentPage===1}"
             [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
@@ -42,7 +40,7 @@
             <button class="bm-btn bm-btn-tertiary-small">
                 {{ '...' }}
             </button>
-            <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-active': currentPage===1}"
+            <button class="bm-btn bm-btn-tertiary-small" [ngClass]="{'bm-btn-active': currentPage===totalPages}"
                 (click)="goToPage(totalPages)">
                 {{ totalPages }}
             </button>
@@ -55,6 +53,5 @@
             Next
         </button>
     </div>
-
-
+    }
 </div>

@@ -15,10 +15,11 @@ import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
 import { TableComponent, TActionBtnConfig, TActionButtonTriggers } from 'src/app/ui/shared/components/table/table.component';
 import { BmPaginationComponent } from 'src/app/ui/shared/components/bm-pagination/bm-pagination.component';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-invoice-list',
-  imports: [TableComponent, BmPaginationComponent, ReactiveFormsModule, PaymentConfirmationPopupComponent],
+  imports: [TableComponent, BmPaginationComponent, ReactiveFormsModule, PaymentConfirmationPopupComponent, BmSelectComponent],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.css',
   providers: [DatePipe, INRCurrency]
@@ -29,12 +30,30 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
   private datePipe = inject(DatePipe);
   private INRCurrency = inject(INRCurrency);
 
+  limit = '10';
+  selectedPage = '1';
+  totalPages = 1;
+
   showPaymentPopUp = false;
   popupData = { title: 'Payment Confirmation', showCancelBtn: true, showConfirmBtn: true, amount: 0 };
   invoiceId!: number;
 
   searchControl = new FormControl();
   filterControl = new FormControl();
+
+  invoiceFilterList = [{
+    value: 'all', label: 'All'
+  }, {
+    value: 'paid', label: 'Paid'
+  },
+  {
+    value: 'draft', label: 'Draft'
+  }, {
+    value: 'cancelled', label: 'Cancelled'
+  }, {
+    value: 'confirmed', label: 'Confirmed'
+  },
+  ]
 
   invoiceSubs?: Subscription;
   searchChangeSubs = this.searchControl.valueChanges
@@ -81,7 +100,9 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     )
     .subscribe();
 
-
+  onFilterChange(event: string) {
+    this.filterControl.setValue(event);
+  }
   // Table dumb component data.
   btnConfig: Partial<TActionBtnConfig> = { viewBtn: true, cancelBtn: true, payNowBtn: true, pdfDownload: true }
   productsTableColumn: { key: string, label: string }[] = [
@@ -144,6 +165,16 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     if (status === 'CANCELLED') styleClass = 'bm-chip-danger';
     return styleClass
   }
+
+  onPageLimitChange(event: string) {
+    this.limit = event;
+    this.fetchInvoiceList(this.limit).subscribe();
+  }
+
+  onPageChange(event: string) {
+    this.selectedPage = ((+event - 1) * +this.limit).toString();
+    this.fetchInvoiceList(this.limit, this.selectedPage).subscribe()
+  }
   //ending table data
 
   searchFilterList: TGetInvoiceLists['response']['data'] = [];
@@ -182,10 +213,12 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     }
     this.showPaymentPopUp = false;
   }
-  private fetchInvoiceList() {
-    return this.invoiceService.fetchInvoiceLists().pipe(
+  private fetchInvoiceList(limit = '10', offset = '0') {
+    return this.invoiceService.fetchInvoiceLists(limit, offset).pipe(
       tap((res) => {
         this.invoiceDataList = res;
+        this.totalPages = Math.ceil(+this.invoiceDataList[0].total_pages / + this.limit);
+        if (isNaN(this.totalPages)) this.totalPages = 1;
         this.searchFilterList = this.invoiceDataList;
         this.mapDataIntoTableRows(this.searchFilterList);
       }),
