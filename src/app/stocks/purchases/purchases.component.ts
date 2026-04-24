@@ -11,10 +11,11 @@ import { AdminProductService } from 'src/app/admin/admin-product.service';
 import { TProduct } from 'src/app/admin/all-products-list/all-products.modal';
 import { PurchasesService, TDefaultBranchRes, TPostPurchasesPayload } from './purchases.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-purchases',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, BmSelectComponent],
   templateUrl: './purchases.component.html',
   styleUrl: './purchases.component.css'
 })
@@ -36,7 +37,11 @@ export class PurchasesComponent implements OnInit, OnDestroy {
   })
 
   defaultBranchObj: { branch_code: string, branch_name: string, branch_type: string, is_default_branch: boolean } = { 'branch_code': '', 'branch_name': '', 'branch_type': '', is_default_branch: false };
+
   branchList: TDefaultBranchRes['response'] = [];
+  branchListCopy: { label: string, value: string }[] = [];
+  selectedBranchName = this.defaultBranchObj.branch_name;
+
   ngOnInit(): void {
     this.subs = this.authService.accessTokenObs.pipe(switchMap((s) => {
       if (!s) return EMPTY
@@ -46,6 +51,7 @@ export class PurchasesComponent implements OnInit, OnDestroy {
       catchError(() => throwError(() => new Error('FAILED TO FETCH DEFAULT BRANCH'))),
       tap(list => {
         this.branchList = list;
+        this.branchListCopy = this.branchList.map(ele => ({ value: ele.id.toString(), label: ele.branch_name }));
         const found = list.find(ele => ele.is_default_branch);
         if (found) {
           this.defaultBranchObj = found
@@ -72,7 +78,13 @@ export class PurchasesComponent implements OnInit, OnDestroy {
     })
   }
 
+  onBranchChange(event: string) {
+    this.selectedBranchName = event;
+    this.purchasesForm.controls['branchId'].setValue(this.selectedBranchName)
+  }
+
   onSubmitPurchases() {
+    console.log('form Valid', this.purchasesForm.valid, this.purchasesForm.value, this.purchasesItemArr.length)
     if (!this.purchasesForm.valid || !this.purchasesItemArr.length) return;
     if (this.idompotencyId === null) this.idompotencyId = uuidV4();
     this.isSubmitted = true;

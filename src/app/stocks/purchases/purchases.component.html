@@ -1,57 +1,65 @@
 <main>
-    <div class="container">
-        <div class="title-container">
-            <p class="title">
-                Purchase Products
-            </p>
-            <p class="sub-title">
-                add stocks to inventory [Note. Default current branch is selected
-                <b>{{defaultBranchObj.branch_name}} </b>]
-            </p>
-        </div>
-        <div class="content-box">
-            <form [formGroup]="purchasesForm">
-                <div class="input-container">
-                    <label for="branch">Branch</label>
-                    <select name="branch" id="branch" formControlName="branchId">
-                        @for (branch of branchList; track branch.id) {
-                        <option [value]="branch.id">{{branch.branch_name}}</option>
-                        }
-                    </select>
-                </div>
-                <div class="input-container">
-                    <label for="supplier">Supplier Name</label>
-                    <input type="text" [disabled]="true">
-                </div>
-                <div class="input-container">
-                    <label for="supplier">Remarks</label>
-                    <input type="text" formControlName="remarks">
-                </div>
-                <button (click)="addItem()">Add Item</button>
-                <button (click)="onSubmitPurchases()" [disabled]="isSubmitted"> Submit</button>
-                <div formArrayName="items">
-                    @for(item of purchasesItemArr.controls;track $index;let i = $index){
-                    <div [formGroupName]="i">
-                        <div class="input-container">
-                            <label for="supplier">Product Name</label>
-                            <select name="product" id="product" formControlName="productId">
-                                @for (product of allProductsList; track product.id) {
-                                <option [value]="product.id">{{product.product_name}}</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="input-container">
-                            <label for="qty">Quantity</label>
-                            <input type="number" formControlName="qty">
-                        </div>
-                        <div class="input-container">
-                            <label for="unitCost">Unit Cost</label>
-                            <input type="number" formControlName="unitCost">
-                        </div>
+    <form [formGroup]="purchasesForm" class="main-container">
+        <div class="bm-card">
+            <div class="header">
+                <label for="title" class="title">Purchase Products</label>
+            </div>
+            <div class="content">
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="productName">Source Branch*</label>
+                        <app-bm-select [options]="branchListCopy" [value]="selectedBranchName"
+                            (valueChange)="onBranchChange($event)"></app-bm-select>
                     </div>
-                    }
                 </div>
-            </form>
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="hsnCode">Remarks*</label>
+                        <input type="text" id="remarks" class="bm-input" formControlName="remarks">
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <div class="bm-card">
+            <div formArrayName="items">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(item of purchasesItemArr.controls;track $index;let i = $index){
+
+                        <tr [formGroupName]="i">
+                            <td>
+                                <select class="bm-input" name="product" id="product" formControlName="productId">
+                                    @for (product of allProductsList; track product.id) {
+                                    <option [value]="product.id">{{product.product_name}}</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input class="bm-input" type="number" formControlName="qty">
+                            </td>
+                            <td>
+                                <input class="bm-input" type="number" formControlName="unitCost">
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button class="bm-btn-with-edit-icon" (click)="addItem()">Add Item</button>
+            </div>
+        </div>
+        <div class="btn-container">
+            <button (click)="onSubmitPurchases()" class="bm-btn bm-btn-primary" [disabled]="isSubmitted">
+                Submit</button>
+        </div>
+    </form>
 </main>

@@ -4,9 +4,10 @@
         <p class="title">Branch</p>
         <div class="action-container">
             <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/transfer')">Transfer Products</button>
-            <button class="bm-btn bm-btn-secondary">Allocate Products</button>
+            <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/branch/allocate-product')">Allocate
+                Products</button>
             <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/purchases')">Purchase</button>
-            <button class="bm-btn bm-btn-primary" (click)="onRouteToCreateBranch()">Add Branch</button>
+            <button class="bm-btn bm-btn-primary" (click)="onRouteTo('/branch/create-branch')">Add Branch</button>
         </div>
     </div>
     <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"

@@ -1,32 +1,38 @@
-<button (click)="onAllocate()">Allocate</button>
-<table>
-    <thead>
-        <tr>
-            <th>Products</th>
-            <th>Available count</th>
-            @for(branch of branchesList;track branch.id){
-            <td>{{branch.branch_name}}({{branch.branch_code}})</td>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for(products of mapProductBranchArr;track products.productId){
-        <tr>
-            <td>
-                {{products.productName}}
-            </td>
-            <td>
-                {{products.availCount}}
-            </td>
-            @for (bran of products.branches; track $index) {
-            <td>
-                <input type="number" (change)="onCountChange(products.productId)"
-                    [(ngModel)]="bran.count">
-            </td>
-            }
-            <td>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<main>
+    <div class="main-container">
+        <div class="bm-card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Products</th>
+                        <th>Available Qty</th>
+                        @for(branch of branchesList;track branch.id){
+                        <th>{{branch.branch_name}}({{branch.branch_code}})</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(products of mapProductBranchArr;track products.productId){
+                    <tr>
+                        <td>
+                            {{products.productName}}
+                        </td>
+                        <td>
+                            {{products.availCount}}
+                        </td>
+                        @for (bran of products.branches; track $index) {
+                        <td>
+                            <input type="number" class="bm-input" (change)="onCountChange(products.productId)"
+                                [(ngModel)]="bran.count">
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-container">
+            <button class="bm-btn bm-btn-primary" (click)="onAllocate()">Allocate</button>
+        </div>
+    </div>
+</main>

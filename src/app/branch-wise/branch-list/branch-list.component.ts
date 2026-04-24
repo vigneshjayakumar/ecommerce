@@ -36,16 +36,12 @@ export class BranchListComponent {
 
   branchListObs = this.fetchBranchList();
 
-  onRouteToCreateBranch() {
-    this.router.navigate(['/branch/create-branch']);
-  }
-
   onPageChange(event: number) {
     this.selectedPage = ((event - 1) * +this.limit).toString();
     this.fetchBranchList().subscribe();
   }
 
-  onRouteTo(path: '/stocks/purchases' | '/stocks/transfer') {
+  onRouteTo(path: '/stocks/purchases' | '/stocks/transfer' | "/branch/allocate-product"|'/branch/create-branch') {
     this.router.navigate([path]);
   }
 

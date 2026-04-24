@@ -1,47 +1,42 @@
 <main>
     <div class="main-container">
-        <div class="title-box">
-            <p class="title">Transfer products</p>
-            <p class="sub-title">Move products from one branch to another branch.</p>
-        </div>
-        <div class="selection-box">
-            <div class="src-drpdown">
-                <div class="srcBranch_box">
-                    <label for="srcDropDown">Source Branch</label>
-                    <select name="srcDropDown" id="srcDropdown" [formControl]="srcBranchForm">
-                        @for(branch of branchList;track branch.id){
-                        <option [value]="branch.id">{{branch.branch_name}}</option>
-                        }
-                    </select>
+        <div class="bm-card">
+            <div class="header">
+                <p class="title">{{'Transfer Products'}}</p>
+            </div>
+            <div class="content">
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="productName">Source Branch*</label>
+                        <app-bm-select [options]="branchList" [value]="selectedBranchName"
+                            (valueChange)="onsrcBranchChange($event)"></app-bm-select>
+                    </div>
+                    <div class="bm-label-input">
+                        <label for="productName">Destination Branch*</label>
+                        <app-bm-select [options]="dstBranchList" [value]="selectedDstBranchName"
+                            (valueChange)="onDstBranchChange($event)"></app-bm-select>
+                    </div>
                 </div>
-                <div class="dstBranch_box">
-                    <label for="dstDropDown">
-                        Destination Branch
-                    </label>
-                    <select name="dstDropDown" id="dstDropdown" [formControl]="dstBranchForm">
-                        @for(branch of dstBranchList;track branch.id){
-                        <option [value]="branch.id">{{branch.branch_name}}</option>
-                        }
-                    </select>
+                <div class="bm-col">
+                    <div class="bm-label-input">
+                        <label for="hsnCode">Remarks*</label>
+                        <input type="text" id="remarks" class="bm-input" [(ngModel)]="payloadObj.remarks">
+                    </div>
                 </div>
             </div>
-            <div class="remarks">
-                <label for="remarks">Remarks*</label>
-                <input type="text" id="remarks" [(ngModel)]="payloadObj.remarks">
-            </div>
         </div>
-        <div class="table-content">
+        <div class="bm-card">
             <ng-container *ngTemplateOutlet="transferTable"></ng-container>
         </div>
         <div class="btn-container">
-            <button class="btn btn-outline-primary" [disabled]="isTransferOngoing" (click)="onSumbitTransfer()">Submit
+            <button class="bm-btn bm-btn-primary" [disabled]="isTransferOngoing" (click)="onSumbitTransfer()">
                 Transfer</button>
         </div>
     </div>
 </main>
 
 <ng-template #transferTable>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Product</th>
@@ -56,7 +51,8 @@
                 <td>{{products.product_name}}</td>
                 <td>{{products.current_qty}}</td>
                 <td>
-                    <input type="number" (change)="onProductQtyChange(products)" [(ngModel)]="products.shiftCount" />
+                    <input type="number" class="bm-input" (change)="onProductQtyChange(products)"
+                        [(ngModel)]="products.shiftCount" />
                 </td>
                 <td>{{products['destProductQty']}}</td>
             </tr>

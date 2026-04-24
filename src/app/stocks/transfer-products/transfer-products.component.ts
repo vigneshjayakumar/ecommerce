@@ -8,10 +8,11 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { TProductByBranchIdRes, TransferService } from './transfer.service';
 import { AuthService } from '../../auth/auth.service';
+import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
 
 @Component({
   selector: 'app-transfer-products',
-  imports: [NgTemplateOutlet, ReactiveFormsModule, FormsModule],
+  imports: [NgTemplateOutlet, ReactiveFormsModule, FormsModule, BmSelectComponent],
   templateUrl: './transfer-products.component.html',
   styleUrl: './transfer-products.component.css'
 })
@@ -21,8 +22,11 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
   private transferService = inject(TransferService);
   private idompotencyId: string | null = null;
 
-  branchList: { id: string, branch_name: string }[] = [];
-  dstBranchList: { id: string, branch_name: string }[] = [];
+  selectedBranchName = '';
+  selectedDstBranchName = '';
+
+  branchList: { value: string, label: string }[] = [];
+  dstBranchList: { value: string, label: string }[] = [];
   productsByBranch: TProductByBranchIdRes['response'] = [];
   srcBranchForm = new FormControl('');
   dstBranchForm = new FormControl('');
@@ -37,7 +41,7 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
 
   srcBranchChangeSubs = this.srcBranchForm.valueChanges.pipe(switchMap(branch => {
     if (branch) {
-      this.dstBranchList = this.branchList.filter(ele => ele.id !== branch);
+      this.dstBranchList = this.branchList.filter(ele => ele.value !== branch);
       this.payloadObj.fromBranchId = +branch;
       return this.transferService.getProductListByBranchId(+branch)
     }
@@ -62,7 +66,17 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
       if (!s) return EMPTY
       return this.transferService.getBranchLists()
     }
-    )).pipe(tap(list => this.branchList = list)).subscribe();
+    )).pipe(tap(list => this.branchList = list.map(ele => ({ value: ele.id, label: ele.branch_name })))).subscribe();
+  }
+
+  onDstBranchChange(event: string) {
+    this.selectedDstBranchName = event;
+    this.dstBranchForm.setValue(event);
+  }
+
+  onsrcBranchChange(event: string) {
+    this.selectedBranchName = event;
+    this.srcBranchForm.setValue(event);
   }
 
   onProductQtyChange(data: TProductByBranchIdRes['response'][0]) {

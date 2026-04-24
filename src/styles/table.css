@@ -1,19 +1,19 @@
 @import './chip.css';
 
-table {
+.table {
     width: 100%;
     background: var(--color-surface);
     border-collapse: separate;
     border-spacing: 0 12px;
 }
 
-table thead {
+.table thead {
     background-color: var(--color-bg);
     position: sticky;
     top: 0px;
 }
 
-table th {
+.table th {
     text-align: left;
     font-family: 'Manrope', sans-serif;
     font-size: var(--font-sm);
@@ -24,7 +24,7 @@ table th {
     margin-bottom: var(--space-md);
 }
 
-table td {
+.table td {
     padding: var(--space-md);
     border-bottom: 1px solid var(--color-border);
     font-size: var(--font-xsm);
