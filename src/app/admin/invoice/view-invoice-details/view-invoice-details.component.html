@@ -174,9 +174,11 @@
         <button class="bm-btn bm-share-ghost-btn bm-share-email" (click)="onEmailPDF()">
           <img src="assets/icons/email-cover.svg" alt="download">
           Share via email</button>
-        <button class="bm-btn bm-share-ghost-btn bm-share-email" (click)="onRouteTo('exchange',invoiceId)">
+        @if(invoiceDetails.overAll.invoice_status==='CONFIRMED'){
+        <button class="bm-btn bm-share-ghost-btn bm-share-email" (click)="showReturnorExchange=true">
           <img src="assets/icons/email-cover.svg" alt="download">
           Return / Exchange</button>
+        }
       </div>
     </div>
     @if(showWatsAppShare){
@@ -191,6 +193,11 @@
       <input type="text" [(ngModel)]="shareEmailId" class="bm-input">
       <button class="bm-btn bm-btn-primary" [disabled]="shareEmailId.length<8"
         [ngClass]="{'bm-btn-disabled':shareEmailId.length<8}" (click)="onEmailTrigger()">Send Email</button>
+    </div>
+    }
+    @if(showReturnorExchange){
+    <div class="share-contact-details bm-card bm-card-xs">
+      <app-exchange-sold [invoiceId]="invoiceId"></app-exchange-sold>
     </div>
     }
   </div>

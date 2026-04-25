@@ -46,7 +46,10 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
       return this.transferService.getProductListByBranchId(+branch)
     }
     return EMPTY
-  })).pipe(tap(products => this.productsByBranch = products)).subscribe();
+  })).pipe(tap(products => {
+    this.productsByBranch = products;
+    this.productsByBranch.sort((a, b) => +a.product_id - +b.product_id)
+  })).subscribe();
 
   dstBranchChangeSubs = this.dstBranchForm.valueChanges.pipe(switchMap(branch => {
     if (branch) {
@@ -56,7 +59,13 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
     return EMPTY
   })).pipe(tap(products => {
     if (products.length) {
-      this.productsByBranch = this.productsByBranch.map((pro, i) => ({ ...pro, 'destProductQty': +products[i].current_qty }));
+      const tempProducts = products.sort((a, b) => +a.product_id - +b.product_id)
+      this.productsByBranch = this.productsByBranch.map((pro, i) => {
+        if (tempProducts[i] && +pro.product_id === +tempProducts[i].product_id) {
+          return { ...pro, 'destProductQty': +tempProducts[i].current_qty }
+        }
+        return { ...pro, 'destProductQty': 0 }
+      });
     }
   })).subscribe();
 
@@ -90,7 +99,7 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
     const toTransferProducts = this.productsByBranch.filter(ele => !!ele.shiftCount);
     this.payloadObj.items = toTransferProducts.map(ele => ({ 'productId': +ele.product_id, 'qty': ele.shiftCount ? ele.shiftCount : 0 }));
     this.payloadObj.idomeID = this.idompotencyId;
-    this.transferService.postStockTransferBtnBranch(this.payloadObj).pipe(tap(res => console.log('RESPONSE', res)), catchError(err => {
+    this.transferService.postStockTransferBtnBranch(this.payloadObj).pipe(catchError(err => {
       this.isTransferOngoing = false;
       return throwError(() => new Error(err))
     })).subscribe(() => {

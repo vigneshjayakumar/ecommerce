@@ -1,42 +1,30 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { EMPTY } from 'rxjs/internal/observable/empty';
-import { AsyncPipe } from '@angular/common';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { tap } from 'rxjs/internal/operators/tap';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs/internal/Observable';
-import { map } from 'rxjs/internal/operators/map';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
 
 import { InvoiceService, TViewInvoiceDetailsRes } from '../invoice.service';
 
 @Component({
   selector: 'app-exchange-sold',
-  imports: [AsyncPipe, FormsModule],
+  imports: [FormsModule],
   templateUrl: './exchange-sold.component.html',
   styleUrl: './exchange-sold.component.css'
 })
-export class ExchangeSoldComponent {
-  private activatedRoute = inject(ActivatedRoute);
+export class ExchangeSoldComponent implements OnInit {
   private invoiceService = inject(InvoiceService);
 
-  private invoiceId: string | null = null;
+  @Input({ required: true }) invoiceId!: string;
 
   invoiceDetails: TViewInvoiceDetailsRes['response']['items'] = [];
   payloadItems: { invoiceItemId: number, quantity: number, ogQuantity: number }[] = [];
 
-  invoiceDetailsObs: Observable<any> = this.activatedRoute.paramMap.pipe(
-    map((params) => params.get('invoiceId')),
-    switchMap((id) => {
-      if (id) {
-        this.invoiceId = id;
-        return this.invoiceService.fetchInvoiceDetailsById(+id);
-      }
-      return EMPTY;
-    }),
-    tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response.items)),
-    tap((invoiceDetails) => this.mapPayloadItemsWithInvoiceDetails(invoiceDetails))
-  );
+  ngOnInit(): void {
+    this.invoiceService.fetchInvoiceDetailsById(+this.invoiceId).pipe(
+      tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response.items)),
+      tap((invoiceDetails) => this.mapPayloadItemsWithInvoiceDetails(invoiceDetails))
+    ).subscribe();
+  }
+
 
   onPostSalesReturn() {
     if (!this.invoiceId) return; // throw error that invoice id is not present.
@@ -48,7 +36,6 @@ export class ExchangeSoldComponent {
     }).filter(ele => !!ele)
 
     if (payloadValidation.length) {
-      console.log('Validation failed', payloadValidation);
       return;
     }
     const payload = {
@@ -62,5 +49,4 @@ export class ExchangeSoldComponent {
   private mapPayloadItemsWithInvoiceDetails(invoiceDetails: TViewInvoiceDetailsRes) {
     this.payloadItems = invoiceDetails.response.items.map(ele => ({ invoiceItemId: ele.id, quantity: 0, ogQuantity: ele.quantity }))
   }
-
 }

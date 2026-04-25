@@ -1,17 +1,16 @@
-@if(invoiceDetailsObs|async){
 <main>
     <div class="btn-container">
-        <button (click)="onPostSalesReturn()">Return</button>
+        <button class="bm-btn bm-btn-tertiary-small" (click)="onPostSalesReturn()">Return</button>
     </div>
     <div class="main-container">
         @for(invoiceProducts of invoiceDetails;track invoiceProducts.id;let i = $index){
-        <div class="content">
+        <div class="content bm-label-input">
             <label for="productName">{{invoiceProducts.product_name_snapshot}}</label>
-            <p>{{invoiceProducts.quantity}}</p>
-            <input type="text" [(ngModel)]="payloadItems[i].quantity">
+            <div class="sub-content">
+                <label>{{invoiceProducts.quantity}}</label>
+                <input class="bm-input" type="text" [(ngModel)]="payloadItems[i].quantity">
+            </div>
         </div>
         }
-
     </div>
 </main>
-}

@@ -11,6 +11,7 @@ import {
 } from '../invoice.service';
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { FormsModule } from '@angular/forms';
+import { ExchangeSoldComponent } from '../exchange-sold/exchange-sold.component';
 
 @Component({
   selector: 'app-view-invoice-details',
@@ -19,7 +20,7 @@ import { FormsModule } from '@angular/forms';
     DatePipe,
     NgClass,
     INRCurrency, TitleCasePipe,
-    FormsModule
+    FormsModule, ExchangeSoldComponent
   ],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
@@ -38,6 +39,7 @@ export class ViewInvoiceDetailsComponent {
   sharePhoneNumber: string = '';
   shareEmailId: string = '';
   showWatsAppShare = false;
+  showReturnorExchange = false;
 
   showEmailPopUp = false;
   emailModalData = {
@@ -55,7 +57,7 @@ export class ViewInvoiceDetailsComponent {
     isShare: true,
   };
   invoiceDetails!: TViewInvoiceDetailsRes['response'];
-  invoiceId: string | null = null;
+  invoiceId!: string;
   invoiceDetailsObs: Observable<any> = this.activatedRoute.paramMap.pipe(
     map((params) => params.get('id')),
     switchMap((id) => {
@@ -140,7 +142,7 @@ export class ViewInvoiceDetailsComponent {
         switchMap(() => this.fetchMerchantDetails()),
       ).subscribe();
   }
-  
+
   onCopyClipboard() {
     this.clipboard.copy(this.pdfLinkStr ?? '');
   }
@@ -172,7 +174,6 @@ export class ViewInvoiceDetailsComponent {
       this.router.navigate(['/admin/invoice/', path, this.invoiceId]);
     } else {
       this.router.navigate(['/admin/invoice/', path]);
-
     }
   }
 }
