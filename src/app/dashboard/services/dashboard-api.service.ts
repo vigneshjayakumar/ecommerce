@@ -98,7 +98,8 @@ export type TTotalItemsCountBranchwise = {
       "total_products": string,
       "total_stock_quantity": string,
       "low_stock_count": string,
-      "out_of_stock_count": string
+      "out_of_stock_count": string,
+      critical_stock_count:string
     }
   }
 }

@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalProductsCount = 0;
   lowStockCount = 0;
   outOfStockCount = 0;
+  criticalStockCount = 0;
 
   productTableRows: { [key: number]: { col: string, value: string }[] }[] = []
   insightsCardsList = [
@@ -246,6 +247,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.totalProductsCount = +totalCounts.total_products;
       this.lowStockCount = +totalCounts.low_stock_count;
       this.outOfStockCount = +totalCounts.out_of_stock_count;
+      this.criticalStockCount = +totalCounts.critical_stock_count;
     }))
   }
 
