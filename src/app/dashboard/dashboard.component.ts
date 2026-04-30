@@ -188,10 +188,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       tap(res => {
         this.branchList = res.map(ele => ({ value: +ele.id, label: ele.branch_name }))
         this.selectBranchId = this.branchList[0].value.toString();
-      })
+      }), switchMap(() => this.mapTotalItemsBranchWise())
     ).subscribe(() => {
       this.fetchInvoiceList();
       this.totalRevenueTrends();
+
     });
     this.subs.push(sub);
   }
@@ -204,7 +205,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'branch':
         this.selectBranchId = event;
-        this.mapRevenueGraphData().pipe(switchMap(() => this.mapTotalItemsBranchWise(event))).subscribe();
+        this.mapRevenueGraphData().pipe().subscribe();
         break;
       case 'Revenue':
         this.selectedRevenuDuration = event;
@@ -233,14 +234,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         switchMap(() => this.mapRevenueGraphData(duration)))
       .pipe(switchMap(() => this.mapTopSellerGraphData(duration)))
       .pipe(
-        switchMap(() => this.mapTotalItemsBranchWise(this.selectBranchId))
-      )
+
+    )
       .subscribe();
     this.subs.push(sub);
   }
 
-  private mapTotalItemsBranchWise(branchId: string) {
-    return this.dashboardApiService.getTotalItemsBranchwise(branchId).pipe(tap(res => {
+  private mapTotalItemsBranchWise() {
+    return this.dashboardApiService.getTotalItemsBranchwise().pipe(tap(res => {
       const totalCounts = res.response.totalItems;
 
       this.totalStockCount = +totalCounts.total_stock_quantity;

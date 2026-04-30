@@ -47,11 +47,8 @@ export class DashboardApiService {
     return this.httpClient.get<TTopSellerGraphData>(`${environment.apiBaseURL}/insights/top-seller`, { params, withCredentials: true })
   }
 
-  getTotalItemsBranchwise(branchId: string) {
-    const params = {
-      branchId
-    }
-    return this.httpClient.get<TTotalItemsCountBranchwise>(`${environment.apiBaseURL}/insights/total-items-branchwise`, { params, withCredentials: true })
+  getTotalItemsBranchwise() {
+    return this.httpClient.get<TTotalItemsCountBranchwise>(`${environment.apiBaseURL}/insights/total-items-branchwise`, { withCredentials: true })
   }
 }
 
@@ -99,7 +96,7 @@ export type TTotalItemsCountBranchwise = {
       "total_stock_quantity": string,
       "low_stock_count": string,
       "out_of_stock_count": string,
-      critical_stock_count:string
+      critical_stock_count: string
     }
   }
 }
