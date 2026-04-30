@@ -12,6 +12,7 @@ import { TProduct } from 'src/app/admin/all-products-list/all-products.modal';
 import { PurchasesService, TDefaultBranchRes, TPostPurchasesPayload } from './purchases.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-purchases',
@@ -23,9 +24,10 @@ export class PurchasesComponent implements OnInit, OnDestroy {
   private purchasesService = inject(PurchasesService);
   private authService = inject(AuthService);
   private adminProductService = inject(AdminProductService);
+  private router = inject(Router)
 
   private idompotencyId: string | null = null;
-  private subs!: Subscription;
+  private subs: Subscription[] = [];
 
   isSubmitted = false;
   allProductsList: TProduct[] = [];
@@ -43,7 +45,7 @@ export class PurchasesComponent implements OnInit, OnDestroy {
   selectedBranchName = this.defaultBranchObj.branch_name;
 
   ngOnInit(): void {
-    this.subs = this.authService.accessTokenObs.pipe(switchMap((s) => {
+    const sub = this.authService.accessTokenObs.pipe(switchMap((s) => {
       if (!s) return EMPTY
       return this.purchasesService.getDefaultBranch()
     }
@@ -57,9 +59,13 @@ export class PurchasesComponent implements OnInit, OnDestroy {
           this.defaultBranchObj = found
         }
       }),
-      switchMap(() => this.adminProductService.getAllProductsList('10', '0'))
+      switchMap(() => {
+        const branches = this.branchList.map(ele => ele.id);
+        return this.adminProductService.getAllProductsList('10', '0', branches)
+      })
     ).pipe(tap(res => this.allProductsList = res))
       .subscribe();
+    this.subs.push(sub)
   }
 
   get purchasesItemArr() {
@@ -84,7 +90,6 @@ export class PurchasesComponent implements OnInit, OnDestroy {
   }
 
   onSubmitPurchases() {
-    console.log('form Valid', this.purchasesForm.valid, this.purchasesForm.value, this.purchasesItemArr.length)
     if (!this.purchasesForm.valid || !this.purchasesItemArr.length) return;
     if (this.idompotencyId === null) this.idompotencyId = uuidV4();
     this.isSubmitted = true;
@@ -97,16 +102,22 @@ export class PurchasesComponent implements OnInit, OnDestroy {
       'supplierId': ''
     }
 
-    this.purchasesService.postPurchaseData(data).pipe(tap(res => {
-      if (res.message === 'SUCCESS') this.idompotencyId = null;
+    const sub = this.purchasesService.postPurchaseData(data).pipe(tap(res => {
+      if (res.message === 'SUCCESS') {
+        this.idompotencyId = null;
+        this.router.navigate(['/branch/list']);
+      };
       this.isSubmitted = false;
     }), catchError(err => {
       this.isSubmitted = false;
       return throwError(() => err)
-    })).subscribe(res => console.log('POST PURCHASES', res));
+    })).subscribe();
+    this.subs.push(sub);
   }
 
   ngOnDestroy(): void {
-    if (this.subs) this.subs.unsubscribe();
+    for (const sub of this.subs) {
+      if (sub) sub.unsubscribe();
+    }
   }
 }

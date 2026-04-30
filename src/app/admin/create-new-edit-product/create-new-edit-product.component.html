@@ -30,10 +30,6 @@
             <input class="bm-input" type="text" name="desc" formControlName="description" />
           </div>
           <div class="bm-label-input">
-            <label for="productName">Stock count*</label>
-            <input class="bm-input" type="text" name="stockCount" formControlName="stockCount" />
-          </div>
-          <div class="bm-label-input">
             <label for="taxPercentage">Tax % *</label>
             <input class="bm-input" type="number" name="taxPercentage" formControlName="taxPercentage" />
           </div>
@@ -81,7 +77,7 @@
         <div class="bm-col">
           <div class="bm-label-input">
             <label for="productName">Product Name*</label>
-            <p class="bm-readonly">{{dataToBeEdited?.product_name}}</p>
+            <p class="bm-readonly">{{dataToBeEdited?.product}}</p>
           </div>
           <div class="bm-label-input">
             <label for="productName">Price*</label>
@@ -102,12 +98,8 @@
             <p class="bm-readonly">{{dataToBeEdited?.description}}</p>
           </div>
           <div class="bm-label-input">
-            <label for="productName">Stock count*</label>
-            <p class="bm-readonly">{{dataToBeEdited?.stock_count}}</p>
-          </div>
-          <div class="bm-label-input">
             <label for="taxPercentage">Tax % *</label>
-            <p class="bm-readonly">{{dataToBeEdited?.tax_percent}}</p>
+            <p class="bm-readonly">{{dataToBeEdited?.taxpercent}}</p>
           </div>
           <div class="bm-label-input">
             <label for="skuCode">SKU Code*</label>

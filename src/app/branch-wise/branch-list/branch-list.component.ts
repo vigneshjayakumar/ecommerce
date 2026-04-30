@@ -17,8 +17,11 @@ export class BranchListComponent {
   private router = inject(Router);
 
   limit = '10';
-  selectedPage = '0';
+  selectedPage = 1;
+  offset = '0';
   totalPages = 1;
+
+  actionBtnConfig: Partial<TActionBtnConfig> = { viewBtn: true }
 
   productsTableColumn: { key: string, label: string, align?: 'left' | 'center' | 'right' }[] = [
     { key: 'sno', label: 'S.No' },
@@ -28,7 +31,7 @@ export class BranchListComponent {
     { key: 'address', label: 'Address' },
     { key: 'city', label: 'City' },
     { key: 'inventory', label: 'Inventory', align: 'center' },
-    { key: 'low_stock_count', label: 'Low Stock', align: 'center' },
+    { key: 'low_stock_count', label: 'Low Stock (<100)', align: 'center' },
     { key: 'out_of_stock', label: 'Out of Stock', align: 'center' },
   ];
 
@@ -37,38 +40,45 @@ export class BranchListComponent {
   branchListObs = this.fetchBranchList();
 
   onPageChange(event: number) {
-    this.selectedPage = ((event - 1) * +this.limit).toString();
+    this.offset = ((event - 1) * +this.limit).toString();
+    this.selectedPage = event;
     this.fetchBranchList().subscribe();
   }
 
-  onRouteTo(path: '/stocks/purchases' | '/stocks/transfer' | "/branch/allocate-product"|'/branch/create-branch') {
+  onRouteTo(path: '/stocks/purchases' | '/stocks/transfer' | "/branch/allocate-product" | '/branch/create-branch') {
     this.router.navigate([path]);
   }
 
   fetchBranchList() {
-    return this.branchService.getBranchList(this.limit, this.selectedPage).pipe(tap(res => this.mapDataIntoTableRows(res)))
+    return this.branchService.getBranchList(this.limit, this.offset).pipe(tap(res => this.mapDataIntoTableRows(res)))
   }
 
   onPageLimitChange(event: string) {
     this.limit = event;
     this.fetchBranchList().subscribe()
   }
-
+  onTableAction(event: { action: TActionButtonTriggers, id: number }) {
+    switch (event.action) {
+      case 'viewBtn':
+        // new Branch view component
+        break;
+    }
+  }
   private mapDataIntoTableRows = (schProductList: TTenantBranchDetails[]) => {
     this.productTableRows = [];
-    this.totalPages = Math.ceil(+schProductList[0].total_pages / +this.limit);
+    this.totalPages = Math.ceil(+schProductList[0].total_count / +this.limit);
     schProductList.forEach((ele, i) => {
       const tempEle = {
         [i]: [
           { col: 'sno', value: (i + 1).toString() },
-          { col: 'branch_name', value: ele.branch_name },
+          { col: 'branch_name', value: `${ele.branch_name} - ${ele.branch_type}` },
           { col: 'branch_code', value: ele.branch_code },
           { col: 'phone_number', value: ele.phone_number },
           { col: 'address', value: ele.address },
           { col: 'city', value: ele.city },
-          { col: 'inventory', value: 100 },
-          { col: 'low_stock_count', value: 20, class: 'bm-chip-warning' },
-          { col: 'out_of_stock', value: 10, class: 'bm-chip-danger' },
+          { col: 'inventory', value: Number(ele.qty).toFixed(2) },
+          { col: 'low_stock_count', value: ele.low_count, class: 'bm-chip-warning' },
+          { col: 'out_of_stock', value: ele.out_of_stock, class: 'bm-chip-danger' },
         ]
       }
       this.productTableRows.push(tempEle);

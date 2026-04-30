@@ -9,6 +9,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { TProductByBranchIdRes, TransferService } from './transfer.service';
 import { AuthService } from '../../auth/auth.service';
 import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transfer-products',
@@ -20,6 +21,7 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
 
   private authService = inject(AuthService);
   private transferService = inject(TransferService);
+  private router = inject(Router);
   private idompotencyId: string | null = null;
 
   selectedBranchName = '';
@@ -104,7 +106,8 @@ export class TransferProductsComponent implements OnInit, OnDestroy {
       return throwError(() => new Error(err))
     })).subscribe(() => {
       this.isTransferOngoing = false;
-      this.idompotencyId = null
+      this.idompotencyId = null;
+      this.router.navigate(['/branch/list'])
     })
   }
   ngOnDestroy(): void {

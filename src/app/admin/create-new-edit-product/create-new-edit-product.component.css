@@ -25,7 +25,6 @@
 .content {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     gap: var(--space-lg);
 

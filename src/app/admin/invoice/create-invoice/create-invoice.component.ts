@@ -229,7 +229,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   productList: TProduct[] = [];
   branchWiseProductList: TProductByBranchIdRes['response'] = [];
   private fetchProductsList() {
-    const subs = this.adminService.getAllProductsList('10', '0')
+    let branchId = this.branchList.find(ele => ele.label === this.selectedBranch)?.value;
+    if (!branchId) branchId = '0';
+    const subs = this.adminService.getAllProductsList('10', '0', [+branchId])
       .pipe(
         tap((res) => (this.productList = res.filter((ele) => ele.is_active))),
       )

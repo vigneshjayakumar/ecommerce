@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BranchWiseService, TUnAllocatedProductRes } from '../branch-wise.service';
-import { delay, EMPTY, Subscription, switchMap, tap, timer } from 'rxjs';
+import { EMPTY, Subscription, switchMap, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormsModule } from '@angular/forms';
 
@@ -35,9 +35,9 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
     const tempBranches: { 'branchId': number, 'count': number, 'name': string }[] = [];
     this.unallocatedProductList.forEach(ele => {
       const temp = {
-        productId: ele.id,
+        productId: +ele.id,
         productName: ele.product_name,
-        availCount: ele.stock_count,
+        availCount: +ele.stock_count,
         branches: tempBranches
       }
       this.mapProductBranchArr.push({ ...temp })
@@ -62,7 +62,7 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
   }
 
   onCountChange(productId: number) {
-    const masterCount = this.unallocatedProductList.find(ele => ele.id === productId)?.stock_count;
+    const masterCount = this.unallocatedProductList.find(ele => +ele.id === productId)?.stock_count;
     const foundProduct = this.mapProductBranchArr.find(ele => ele.productId === productId);
 
     const countChanged = foundProduct?.branches.reduce((a, b) => ({ ...a, count: a.count + b.count }), { name: '', count: 0, branchID: 0 });
@@ -70,7 +70,7 @@ export class AllocateProductBranchwiseComponent implements OnInit, OnDestroy {
     if ((countChanged && masterCount) && +countChanged?.count > +masterCount) return;
 
     if (foundProduct && countChanged && masterCount)
-      foundProduct.availCount = masterCount - countChanged.count
+      foundProduct.availCount = +masterCount - countChanged.count
   }
 
   private stitchResponse(res: TUnAllocatedProductRes['response']) {

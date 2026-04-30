@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/internal/operators/map';
 
@@ -52,22 +51,13 @@ export class AdminProductService {
     );
   }
 
-  // getAllProductsList(): Observable<TAdminProductList['response']['products']> {
-  //   return this.apiService
-  //     .apiHttp<never, TAdminProductList, never>(
-  //       'get',
-  //       environment.apiBaseURL,
-  //       'admin',
-  //       ['products']
-  //     )
-  //     .pipe(map((res) => res.response.products));
-  // }
+  getAllProductsList(limit: string, offset: string, branches: number[]) {
+    
+    const params = new HttpParams()
+      .set('branchesId', branches.join(','))
+      .set('limit', limit)
+      .set('offset', offset);
 
-  getAllProductsList(limit: string, offset: string) {
-    const params = {
-      limit,
-      offset
-    }
     return this.httpClient.get<TAdminProductList>(`${environment.apiBaseURL}/admin/products`, { params, withCredentials: true }).pipe(map((res) => res.response.products));
   }
 }

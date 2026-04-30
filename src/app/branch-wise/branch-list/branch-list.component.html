@@ -1,18 +1,16 @@
-@if(branchListObs|async){
 <main class="main-container">
     <div class="page-header">
         <p class="title">Branch</p>
         <div class="action-container">
             <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/transfer')">Transfer Products</button>
-            <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/branch/allocate-product')">Allocate
-                Products</button>
             <button class="bm-btn bm-btn-secondary" (click)="onRouteTo('/stocks/purchases')">Purchase</button>
-            <button class="bm-btn bm-btn-primary" (click)="onRouteTo('/branch/create-branch')">Add Branch</button>
+            <button class="bm-btn bm-btn-primary" (click)="onRouteTo('/branch/create-branch')">+ New Branch</button>
         </div>
     </div>
-    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"
-        [showAction]="false"></app-table>
-    <app-bm-pagination [currentPage]="1" [totalPages]="totalPages" [pageCount]="limit"
+    @if(branchListObs|async){
+    <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false" [showAction]="true"
+        [actionBtnConfig]="actionBtnConfig" (actionEmit)="onTableAction($event)"></app-table>
+    <app-bm-pagination [currentPage]="selectedPage" [totalPages]="totalPages" [pageCount]="limit"
         (pageChange)="onPageChange($event)" (pageLimitChange)="onPageLimitChange($event)"></app-bm-pagination>
+    }
 </main>
-}

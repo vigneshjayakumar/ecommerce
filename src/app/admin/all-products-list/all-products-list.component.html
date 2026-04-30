@@ -9,14 +9,16 @@
           </span>
           <input class="bm-input" type="text" placeholder="Search by Name / SKU" [formControl]="searchInput">
         </div>
-        <div class="bm-btn bm-btn-secondary">+ Bulk Products</div>
+        <app-bm-select [options]="branchesList" [value]="selectedBranch"
+          (valueChange)="onSelectChange($event)"></app-bm-select>
         <div class="bm-btn bm-btn-primary" (click)="onRoute('/admin/create-new')">+ New Product</div>
       </div>
     </div>
     @if (searchProductList.length) {
     <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false" [showAction]="true"
       (actionEmit)="onTableAction($event)" [actionBtnConfig]="actionBtnConfig"></app-table>
-    <app-bm-pagination [currentPage]="1" [totalPages]="totalPages" (pageLimitChange)="onPageLimitChange($event)" (pageChange)="onPageChange($event)"
+    <app-bm-pagination [currentPage]="selectedPage" [totalPages]="totalPages"
+      (pageLimitChange)="onPageLimitChange($event)" (pageChange)="onPageChange($event)"
       [pageCount]="limit"></app-bm-pagination>
     } @else {
     <div class="no-data">

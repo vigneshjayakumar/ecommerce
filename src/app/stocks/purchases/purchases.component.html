@@ -1,5 +1,5 @@
 <main>
-    <form [formGroup]="purchasesForm" class="main-container">
+    <form [formGroup]="purchasesForm" class="main-container" (ngSubmit)="onSubmitPurchases()">
         <div class="bm-card">
             <div class="header">
                 <label for="title" class="title">Purchase Products</label>
@@ -38,7 +38,7 @@
                             <td>
                                 <select class="bm-input" name="product" id="product" formControlName="productId">
                                     @for (product of allProductsList; track product.id) {
-                                    <option [value]="product.id">{{product.product_name}}</option>
+                                    <option [value]="product.id">{{product.product}}</option>
                                     }
                                 </select>
                             </td>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="btn-container">
-            <button (click)="onSubmitPurchases()" class="bm-btn bm-btn-primary" [disabled]="isSubmitted">
+            <button type="submit" class="bm-btn bm-btn-primary" [disabled]="isSubmitted">
                 Submit</button>
         </div>
     </form>

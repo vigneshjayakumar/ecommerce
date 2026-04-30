@@ -6,16 +6,35 @@ export type TAdminProductList = {
 };
 
 export type TProduct = {
-  id: number;
-  product_name: string;
-  price: number;
-  stock_count: number;
-  description: string;
-  tax_percent: number;
-  hsn_code: string;
+  "product": string,
+  "price": string,
+  "taxpercent": string,
+  "hsn_code": string,
+  "sku": string,
+  "is_active": boolean,
+  "overall_count": string,
+  "total_count": string,
+  'id': string,
   uom: string,
-  sku: string;
-  image: string;
-  is_active: boolean;
-  total_pages: string
+  description: string,
+  central_inventory_count: string
 };
+
+
+export type TOldTProduct = {
+  "id": string,
+  "product_name": string,
+  "description": string,
+  "price": string,
+  "stock_count": number,
+  "sku": string,
+  "tax_percent": string,
+  "is_active": boolean,
+  "tenant_id": string,
+  "updated_by": string,
+  "created_at": string,
+  "updated_at": string,
+  "hsn_code": string,
+  "uom": string,
+  "product_variant_id": null
+}

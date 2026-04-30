@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
-import { TProduct } from "../admin/all-products-list/all-products.modal";
+import { TOldTProduct, TProduct } from "../admin/all-products-list/all-products.modal";
 import { map, Observable } from "rxjs";
 
 @Injectable({
@@ -21,7 +21,7 @@ export class BranchWiseService {
     }
 
     postCreateBranch(payload: TCreateBranch) {
-        return this.httpClient.post(`${environment.apiBaseURL}/branch/create-branch`, payload, { withCredentials: true })
+        return this.httpClient.post<{ message: 'SUCCESS' | 'ERROR', response: "Created New Branch" }>(`${environment.apiBaseURL}/branch/create-branch`, payload, { withCredentials: true })
     }
 
     getUnallocatedProductsList(): Observable<TUnAllocatedProductRes['response']> {
@@ -44,7 +44,7 @@ export class BranchWiseService {
 export type TUnAllocatedProductRes = {
     message: 'SUCCESS' | 'ERROR',
     response: {
-        productsList: (TProduct & {
+        productsList: (TOldTProduct & {
             created_at: string;
             tenant_id: string;
             updated_at: string;
@@ -70,6 +70,10 @@ export type TCreateBranch = {
 }
 
 export type TTenantBranchDetails = {
+    qty: string,
+    low_count: string,
+    out_of_stock: string,
+    total_count: string
     address: string;
     branch_code: string;
     branch_name: string;
@@ -86,5 +90,4 @@ export type TTenantBranchDetails = {
     pincode: string;
     state: string;
     tenant_id: string;
-    total_pages: string
 }

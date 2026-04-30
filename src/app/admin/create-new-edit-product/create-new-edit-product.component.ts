@@ -66,12 +66,11 @@ export class CreateNewEditProductComponent implements OnDestroy {
 
   private populateForms() {
     this.newProductForm.setValue({
-      productName: this.dataToBeEdited?.product_name,
+      productName: this.dataToBeEdited?.product,
       description: this.dataToBeEdited?.description,
       price: this.dataToBeEdited?.price,
-      stockCount: this.dataToBeEdited?.stock_count,
       uom: this.dataToBeEdited?.uom,
-      taxPercentage: this.dataToBeEdited?.tax_percent,
+      taxPercentage: this.dataToBeEdited?.taxpercent,
       skuCode: this.dataToBeEdited?.sku,
       hsnCode: this.dataToBeEdited?.hsn_code,
       isActive: this.dataToBeEdited?.is_active,
@@ -90,8 +89,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
       productName: new FormControl('', { validators: [Validators.required] }),
       price: new FormControl(null, { validators: [Validators.required] }),
       description: new FormControl('', { validators: [Validators.required] }),
-      stockCount: new FormControl(null, { validators: [Validators.required] }),
-      uom: new FormControl(),
+      uom: new FormControl(this.uoms[0]?.value ?? null),
       taxPercentage: new FormControl(null, {
         validators: [Validators.required],
       }),
@@ -106,10 +104,10 @@ export class CreateNewEditProductComponent implements OnDestroy {
       productName: this.newProductForm.controls['productName'].value,
       description: this.newProductForm.controls['description'].value,
       price: this.newProductForm.controls['price'].value,
-      stockCount: this.newProductForm.controls['stockCount'].value,
+      stockCount: 0,
       taxPercent: this.newProductForm.controls['taxPercentage'].value,
       sku: this.newProductForm.controls['skuCode'].value,
-      uom: this.newProductForm.controls['uom'].value,
+      uom: this.newProductForm.controls['uom'].value ?? this.uoms[0].value,
       hsnCode: this.newProductForm.controls['hsnCode'].value,
       isActive: this.newProductForm.controls['isActive'].value ? 1 : 0,
     };
