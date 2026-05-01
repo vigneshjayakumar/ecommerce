@@ -13,6 +13,8 @@ import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { FormsModule } from '@angular/forms';
 import { ExchangeSoldComponent } from '../exchange-sold/exchange-sold.component';
 import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
+import { ElectronPrintService } from 'src/app/common/services/electron-print-agent.service';
+import { PageTitleHeaderComponent } from 'src/app/ui/shared/components/page-title-header/page-title-header.component';
 
 @Component({
   selector: 'app-view-invoice-details',
@@ -21,7 +23,7 @@ import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/comm
     DatePipe,
     NgClass,
     INRCurrency, TitleCasePipe,
-    FormsModule, ExchangeSoldComponent, PaymentConfirmationPopupComponent
+    FormsModule, ExchangeSoldComponent, PaymentConfirmationPopupComponent, PageTitleHeaderComponent
   ],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
@@ -31,6 +33,7 @@ export class ViewInvoiceDetailsComponent {
   private activatedRoute = inject(ActivatedRoute);
   private clipboard = inject(Clipboard);
   private router = inject(Router);
+  private printAgentService = inject(ElectronPrintService);
 
   showSharePanelPopup = false;
   pdfLinkStr: null | string = null;
@@ -188,6 +191,10 @@ export class ViewInvoiceDetailsComponent {
         waAnchorTag.click();
       }
     }
+  }
+
+  onPrintPDF() {
+    this.printAgentService.postPrint({ data: 'Testing' }).subscribe();
   }
 
   onRouteTo(path: 'exchange' | 'create-invoice' | 'invoice-lists', invoiceId: string | null = null) {

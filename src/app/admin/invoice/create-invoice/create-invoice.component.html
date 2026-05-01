@@ -1,17 +1,15 @@
 <main class="invoice-page">
   <div class="main-container">
     <div class="bm-card">
-      <div class="page-header">
-        <p class="title">Add Billing</p>
+      <app-page-title-header title="Add Billing" [toShowBtns]="!isEditMode && !isInvoiceAwaitingConfirm"
+        (backClick)="onRouteToInvoiceList()">
         @if(!isEditMode && !isInvoiceAwaitingConfirm){
-        <span>
-          <button class="bm-btn-with-edit-icon" (click)="addEnableEdit()">
-            <img src="assets/icons/edit-black.svg" alt="">
-            Edit
-          </button>
-        </span>
+        <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="addEnableEdit()">
+          <img src="assets/icons/edit-black.svg" alt="">
+          Edit
+        </button>
         }
-      </div>
+      </app-page-title-header>
       <!-- Merchant Header -->
       <div class="tenant-details">
         <div class="address-details">

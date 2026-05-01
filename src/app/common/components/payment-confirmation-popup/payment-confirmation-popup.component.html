@@ -1,39 +1,47 @@
 <div class="overlay">
-    <div class="custom_popup__container">
-        <div class="title_box">
+    <div class="custom_popup__container bm-card">
+        <div class="popup-header">
             <p class="title">{{ data.title }}</p>
+            <p class="sub-title">Record payment details for this invoice.</p>
         </div>
+
         <div class="content_box">
-            <div class="email_box">
-                <label for="email">Payment Type</label>
-                <select name="paymentType" id="paymentType" [(ngModel)]="paymentType">
-                    @for(type of paymentOptions;track $index){
-                    <option [value]="type">{{type}}</option>
-                    }
-                </select>
+            <div class="bm-label-input">
+                <label for="paymentType">Payment Type</label>
+                <app-bm-select [options]="paymentSelectOptions" (valueChange)="onPaymentTypeChange($event)">
+                </app-bm-select>
             </div>
 
-            <div class="email_box">
-                <label for="email">Reference Number</label>
-                <input type="email" class="form-control" [disabled]="paymentType==='CASH'"
-                    [(ngModel)]="paymentRefNumber" />
+            <div class="bm-label-input">
+                <label for="paymentRefNumber">Reference Number</label>
+                <input id="paymentRefNumber" type="text" class="bm-input" [disabled]="paymentType==='CASH'"
+                    [(ngModel)]="paymentRefNumber" placeholder="Enter reference number" />
             </div>
 
-            <div class="email_box">
-                <label for="email">Amount</label>
-                <input type="email" class="form-control" [disabled]="!isPartial" [(ngModel)]="amount" />
-                <input type="checkbox" [(ngModel)]="isPartial">
-                {{isPartial?'Partital Payment':'Full Payment'}}
+            <div class="bm-label-input">
+                <label for="amount">Amount</label>
+                <input id="amount" type="number" class="bm-input" [disabled]="!isPartial" [(ngModel)]="amount" />
+            </div>
+
+            <div class="payment-mode-row">
+                <div>
+                    <p class="mode-title">{{isPartial ? 'Partial Payment' : 'Full Payment'}}</p>
+                    <p class="mode-description">Enable partial payment to edit the amount.</p>
+                </div>
+                <label for="partialPayment" class="toggle">
+                    <input id="partialPayment" type="checkbox" [(ngModel)]="isPartial">
+                    <span class="slider"></span>
+                </label>
             </div>
 
             <div class="btn-container">
                 @if (data.showCancelBtn) {
-                <button type="button" class="btn primary" (click)="onButtonClick(false)">
+                <button type="button" class="bm-btn bm-btn-secondary" (click)="onButtonClick(false)">
                     Cancel
                 </button>
                 }
                 @if (data.showConfirmBtn) {
-                <button type="button" class="btn primary" (click)="onButtonClick(true)">
+                <button type="button" class="bm-btn bm-btn-primary" (click)="onButtonClick(true)">
                     Submit
                 </button>
                 }

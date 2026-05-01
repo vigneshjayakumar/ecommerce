@@ -2,9 +2,8 @@
   @if(!isViewMode){
   <form class="main-container" [formGroup]="newProductForm" (ngSubmit)="onSubmit()">
     <div class="bm-card">
-      <div class="header">
-        <p class="title">{{editId?'Edit Product':'Add Product'}}</p>
-      </div>
+      <app-page-title-header [title]="editId?'Edit Product':'Add Product'"
+        (backClick)="onRouteToProductList()"></app-page-title-header>
       <div class="content">
         <div class="bm-col">
           <div class="bm-label-input">
@@ -66,13 +65,12 @@
   }@else {
   <div class="main-container" (ngSubmit)="onSubmit()">
     <div class="bm-card">
-      <div class="header">
-        <p class="title">{{'Product Details'}}</p>
-        <button class="bm-btn-with-edit-icon" (click)="isViewMode=false">
+      <app-page-title-header title="Product Details" [toShowBtns]="isViewMode" (backClick)="onRouteToProductList()">
+        <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="isViewMode=false">
           <img src="assets/icons/edit-black.svg" alt="">
           Edit
         </button>
-      </div>
+      </app-page-title-header>
       <div class="content">
         <div class="bm-col">
           <div class="bm-label-input">

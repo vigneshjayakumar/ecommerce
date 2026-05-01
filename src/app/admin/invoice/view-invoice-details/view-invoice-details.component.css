@@ -21,26 +21,6 @@
     height: fit-content;
 }
 
-.page-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 48px;
-
-    .header {
-        display: flex;
-        flex-direction: row;
-        gap: 12px;
-    }
-
-    .title {
-        font-family: 'Manrope', sans-serif;
-        font-size: var(--font-xlg);
-        font-weight: var(--font-weight-bold);
-    }
-}
-
 .action-container {
     display: flex;
     flex-direction: column;
@@ -126,10 +106,4 @@ table td {
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.action-btn-container {
-    display: flex;
-    flex-direction: row;
-    gap: 16px
 }

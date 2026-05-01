@@ -16,10 +16,11 @@ import {
 import { TProduct } from '../all-products-list/all-products.modal';
 import { TUOM, UtilsService } from 'src/app/common/services/utils.service';
 import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
+import { PageTitleHeaderComponent } from 'src/app/ui/shared/components/page-title-header/page-title-header.component';
 
 @Component({
   selector: 'app-create-new-edit-product',
-  imports: [ReactiveFormsModule, FormsModule, BmSelectComponent],
+  imports: [ReactiveFormsModule, FormsModule, BmSelectComponent, PageTitleHeaderComponent],
   templateUrl: './create-new-edit-product.component.html',
   styleUrl: './create-new-edit-product.component.css',
 })
@@ -143,7 +144,7 @@ export class CreateNewEditProductComponent implements OnDestroy {
     }
   }
 
-  private onRouteToProductList() {
+  onRouteToProductList() {
     this.router.navigate(['/admin/products-list']);
   }
 

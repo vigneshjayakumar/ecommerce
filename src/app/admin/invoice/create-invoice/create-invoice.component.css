@@ -8,21 +8,6 @@
   padding-bottom: var(--space-lg);
 }
 
-.page-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 48px;
-
-  .title {
-    font-family: 'Manrope', sans-serif;
-    font-size: var(--font-xlg);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-  }
-}
-
 .tenant-details {
   display: flex;
   flex-direction: row;
@@ -115,5 +100,3 @@ table td {
 .delete_tr-container {
   padding-top: 10px;
 }
-
-/* 2.0 styles ending */

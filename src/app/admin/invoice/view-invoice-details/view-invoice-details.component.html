@@ -8,29 +8,25 @@
   </div>
   <div class="invoice-content-container">
     <div class="bm-card bm-card-small">
-      <div class="page-header">
-        <span class="header">
-          <img src="assets/icons/back-arrow-black.svg" alt="back" (click)="onRouteTo('invoice-lists')">
-          <p class="title">Invoice Details</p>
-        </span>
+      <app-page-title-header title="Invoice Details"
+        [toShowBtns]="invoiceDetails.overAll.invoice_status==='DRAFT' || invoiceDetails.overAll.invoice_status==='CONFIRMED'"
+        (backClick)="onRouteTo('invoice-lists')">
         @if(invoiceDetails.overAll.invoice_status==='DRAFT'){
-        <span class="action-btn-container">
-          <button class="bm-btn-with-edit-icon" (click)="onConfirmInvoice()">
-            Confirm
-          </button>
-          <button class="bm-btn-with-edit-icon" (click)="onCancelInvoice()">
-            Cancel
-          </button>
-        </span>
+        <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="onConfirmInvoice()">
+          Confirm
+        </button>
+        }
+        @if(invoiceDetails.overAll.invoice_status==='DRAFT'){
+        <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="onCancelInvoice()">
+          Cancel
+        </button>
         }
         @if(invoiceDetails.overAll.invoice_status==='CONFIRMED'){
-        <span class="action-btn-container">
-          <button class="bm-btn-with-edit-icon" (click)="markAsPaid()">
-            Mark as Paid
-          </button>
-        </span>
+        <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="markAsPaid()">
+          Mark as Paid
+        </button>
         }
-      </div>
+      </app-page-title-header>
       <div class="customer-details">
         <div class="bill-from_box">
           <label for="bill_from" class="bm-label-small">Bill From:</label>
@@ -165,7 +161,7 @@
         <button class="bm-btn bm-share-ghost-btn bm-download-btn" (click)="onDownloadPDF()">
           <img src="assets/icons/download-blue.svg" alt="download">
           Download pdf</button>
-        <button class="bm-btn bm-share-ghost-btn bm-share-print-btn">
+        <button class="bm-btn bm-share-ghost-btn bm-share-print-btn" (click)="onPrintPDF()">
           <img src="assets/icons/print.svg" alt="download">
           Print Invoice</button>
         <button class="bm-btn bm-share-ghost-btn bm-share-watsapp" (click)="onPDFLink()">

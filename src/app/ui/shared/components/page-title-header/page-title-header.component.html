@@ -1,0 +1,15 @@
+<div class="page-header">
+  <span class="header">
+    @if(showBackButton){
+    <button type="button" class="back-btn" aria-label="Back" (click)="backClick.emit()">
+      <img src="assets/icons/back-arrow-black.svg" alt="">
+    </button>
+    }
+    <p class="title">{{ title }}</p>
+  </span>
+  @if(toShowBtns){
+  <span class="action-btn-container">
+    <ng-content select="[header-actions]"></ng-content>
+  </span>
+  }
+</div>

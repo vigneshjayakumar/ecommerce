@@ -18,16 +18,16 @@ import {
 } from '../invoice.service';
 import { catchError, EMPTY, Subscription, switchMap, throwError } from 'rxjs';
 import { AdminProductService } from '../../admin-product.service';
-import { TProduct } from '../../all-products-list/all-products.modal';
 import { Router } from '@angular/router';
 import { TProductByBranchIdRes, TransferService } from 'src/app/stocks/transfer-products/transfer.service';
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { NgClass } from '@angular/common';
 import { BmSelectComponent } from 'src/app/ui/shared/components/bm-select/bm-select.component';
+import { PageTitleHeaderComponent } from 'src/app/ui/shared/components/page-title-header/page-title-header.component';
 
 @Component({
   selector: 'app-create-invoice',
-  imports: [ReactiveFormsModule, FormsModule, INRCurrency, NgClass, BmSelectComponent],
+  imports: [ReactiveFormsModule, FormsModule, INRCurrency, NgClass, BmSelectComponent, PageTitleHeaderComponent],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.css',
 })
@@ -293,6 +293,10 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.invoiceService.confirmInvoiceById(this.generatedInvoiceId).subscribe((res) => {
       this.router.navigate(['/admin/invoice/invoice-lists']);
     });
+  }
+
+  onRouteToInvoiceList() {
+    this.router.navigate(['/admin/invoice/invoice-lists']);
   }
 
   addFormEle() {
