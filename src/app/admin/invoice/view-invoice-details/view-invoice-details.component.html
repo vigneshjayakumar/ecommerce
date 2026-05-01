@@ -25,7 +25,7 @@
         }
         @if(invoiceDetails.overAll.invoice_status==='CONFIRMED'){
         <span class="action-btn-container">
-          <button class="bm-btn-with-edit-icon" (click)="onConfirmInvoice()">
+          <button class="bm-btn-with-edit-icon" (click)="markAsPaid()">
             Mark as Paid
           </button>
         </span>
@@ -204,4 +204,8 @@
 </main>
 }
 
+@if (showPaymentPopUp) {
+<app-payment-confirmation-popup [data]="popupData"
+  (btnTriggerEvent)="onMarkAsPayTrigger($event)"></app-payment-confirmation-popup>
+}
 <a [href]="waURL" target="_blank" [hidden]="true" id="waAnchor"></a>

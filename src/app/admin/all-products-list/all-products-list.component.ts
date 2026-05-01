@@ -20,7 +20,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AllProductsListComponent implements OnInit, OnDestroy {
   // Refactoring for new UI.
-  actionBtnConfig: Partial<TActionBtnConfig> = { viewBtn: true, editBtn: true, deleteBtn: true }
+  actionBtnConfig: Partial<TActionBtnConfig> = { viewBtn: true, editBtn: true }
   productsTableColumn: { key: string, label: string, align?: 'left' | 'center' | 'right' }[] = [
     { key: 'sno', label: 'S.No', align: 'left' },
     { key: 'product_name', label: 'Product Name' },

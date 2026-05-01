@@ -322,7 +322,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return styleClass
   }
   private fetchInvoiceList() {
-    const sub = this.invoiceService.fetchInvoiceLists('10', '1')
+    const sub = this.invoiceService.fetchInvoiceLists('10', '0')
       .pipe(tap(res => this.mapDataIntoTableRows(res)))
       .subscribe();
     this.subs.push(sub);

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-bm-select',
@@ -7,24 +7,25 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './bm-select.component.html',
   styleUrl: './bm-select.component.css'
 })
-export class BmSelectComponent {
+export class BmSelectComponent implements OnInit {
   @Input({ required: true }) options: { label: string; value: any }[] = [];
   @Input() position: string = ''
-  // @Input({ required: true }) value: string = '';
-  @Input() value: string = '';
 
   @Output() valueChange = new EventEmitter;
   isOpen = false;
 
-  select(option: any) {
+  selectedValue = 'Select';
+
+  ngOnInit(): void {
+    if (this.options.length) {
+      this.selectedValue = this.options[0].label;
+    }
+  }
+
+  select(option: { label: string, value: any }) {
+    this.selectedValue = option.label
     this.valueChange.emit(option.value)
     // this.value = option.value;
     this.isOpen = false;
-  }
-
-
-  get selectedLabel(): string {
-    const found = this.options.find(o => o.value === this.value);
-    return found ? found.label : 'Select';
   }
 }

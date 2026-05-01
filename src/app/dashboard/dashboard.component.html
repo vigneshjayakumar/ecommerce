@@ -3,10 +3,9 @@
     <p class="title">Billing</p>
     <div class="action-container">
       <div class="branch-drp_down">
-        <app-bm-select [options]="branchList" [value]="selectBranchId"
-          (valueChange)="onSelectChange($event,'branch')"></app-bm-select>
+        <app-bm-select [options]="branchList" (valueChange)="onSelectChange($event,'branch')"></app-bm-select>
       </div>
-      <app-bm-select [options]="chartDurationSelect" [value]="selectDuration"
+      <app-bm-select [options]="chartDurationSelect"
         (valueChange)="onSelectChange($event,'overallDuration')"></app-bm-select>
       <div class="bm-btn bm-btn-secondary" (click)="onRouteTo('/admin/create-new')">New Product</div>
       <div class="bm-btn bm-btn-primary" (click)="onRouteTo('/admin/invoice/create-invoice')">New Billing</div>
@@ -38,7 +37,7 @@
       <div class="header">
         <p class="title">Revenue</p>
         <div>
-          <app-bm-select [options]="chartDurationSelect" [value]="selectedRevenuDuration"
+          <app-bm-select [options]="chartDurationSelect"
             (valueChange)="onSelectChange($event,'Revenue')"></app-bm-select>
         </div>
       </div>
@@ -65,7 +64,7 @@
       <div class="header">
         <p class="title">Top Seller</p>
         <div>
-          <app-bm-select [options]="chartDurationSelect" [value]="selectedTopSellerDuration"
+          <app-bm-select [options]="chartDurationSelect"
             (valueChange)="onSelectChange($event,'top-seller')"></app-bm-select>
         </div>
       </div>

@@ -46,6 +46,7 @@ export type TProductByBranchIdRes = {
         tax_percent: string,
         product_name: string,
         destProductQty?: number,
-        shiftCount?: number
+        shiftCount?: number,
+        is_active: boolean
     }[]
 }

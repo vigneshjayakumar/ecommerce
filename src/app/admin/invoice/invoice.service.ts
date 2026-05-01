@@ -254,7 +254,7 @@ export type TInvoiceListEle = {
   invoice_status: 'DRAFT' | 'PAID' | 'CANCELLED' | 'CONFIRMED';
   created_by: number;
   created_at: Date;
-  total_pages: string
+  total_pages?: string
 };
 
 export type TViewInvoiceDetailsRes = {

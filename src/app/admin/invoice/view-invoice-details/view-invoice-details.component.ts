@@ -12,6 +12,7 @@ import {
 import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { FormsModule } from '@angular/forms';
 import { ExchangeSoldComponent } from '../exchange-sold/exchange-sold.component';
+import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
 
 @Component({
   selector: 'app-view-invoice-details',
@@ -20,7 +21,7 @@ import { ExchangeSoldComponent } from '../exchange-sold/exchange-sold.component'
     DatePipe,
     NgClass,
     INRCurrency, TitleCasePipe,
-    FormsModule, ExchangeSoldComponent
+    FormsModule, ExchangeSoldComponent, PaymentConfirmationPopupComponent
   ],
   templateUrl: './view-invoice-details.component.html',
   styleUrl: './view-invoice-details.component.css',
@@ -34,6 +35,9 @@ export class ViewInvoiceDetailsComponent {
   showSharePanelPopup = false;
   pdfLinkStr: null | string = null;
   waURL = '';
+
+  showPaymentPopUp = false;
+  popupData = { title: 'Payment Confirmation', showCancelBtn: true, showConfirmBtn: true, amount: 0 };
 
   showWatsAppDialog = false;
   sharePhoneNumber: string = '';
@@ -96,6 +100,23 @@ export class ViewInvoiceDetailsComponent {
       });
   }
 
+  markAsPaid() {
+    this.popupData.amount = +this.invoiceDetails.overAll.total_amount
+    this.showPaymentPopUp = true;
+  }
+
+  onMarkAsPayTrigger(event: { paymentType: TPaymentOptions, amount: number, refId?: string } | false) {
+    if (event) {
+      const payload = { paymentType: event.paymentType, amount: event.amount, refId: event.refId };
+      this.invoiceService.markAsPaid(+this.invoiceId, payload).pipe(
+        switchMap(() =>
+          this.invoiceService.fetchInvoiceDetailsById(+this.invoiceId!)),
+        tap((invoiceDetails) => (this.invoiceDetails = invoiceDetails.response)),
+        switchMap(() => this.fetchMerchantDetails()),
+      ).subscribe()
+    }
+    this.showPaymentPopUp = false;
+  }
   onPDFLink() {
     this.invoiceService
       .generateLink(this.invoiceDetails.overAll.id)

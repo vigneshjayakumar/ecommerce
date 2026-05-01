@@ -104,7 +104,7 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     this.filterControl.setValue(event);
   }
   // Table dumb component data.
-  btnConfig: Partial<TActionBtnConfig> = { viewBtn: true, cancelBtn: true, payNowBtn: true, pdfDownload: true }
+  btnConfig: Partial<TActionBtnConfig> = { viewBtn: true }
   productsTableColumn: { key: string, label: string }[] = [
     { key: 'sno', label: 'S.No' },
     { key: 'customer_name', label: 'Customer Name' },
@@ -217,8 +217,10 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     return this.invoiceService.fetchInvoiceLists(limit, offset).pipe(
       tap((res) => {
         this.invoiceDataList = res;
-        this.totalPages = Math.ceil(+this.invoiceDataList[0].total_pages / + this.limit);
-        if (isNaN(this.totalPages)) this.totalPages = 1;
+        if (this.invoiceDataList[0]?.total_pages) {
+          this.totalPages = Math.ceil(+this.invoiceDataList[0].total_pages / + this.limit);
+          if (isNaN(this.totalPages)) this.totalPages = 1;
+        }
         this.searchFilterList = this.invoiceDataList;
         this.mapDataIntoTableRows(this.searchFilterList);
       }),

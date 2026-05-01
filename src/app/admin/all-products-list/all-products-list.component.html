@@ -9,8 +9,7 @@
           </span>
           <input class="bm-input" type="text" placeholder="Search by Name / SKU" [formControl]="searchInput">
         </div>
-        <app-bm-select [options]="branchesList" [value]="selectedBranch"
-          (valueChange)="onSelectChange($event)"></app-bm-select>
+        <app-bm-select [options]="branchesList" (valueChange)="onSelectChange($event)"></app-bm-select>
         <div class="bm-btn bm-btn-primary" (click)="onRoute('/admin/create-new')">+ New Product</div>
       </div>
     </div>

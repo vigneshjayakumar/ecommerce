@@ -16,7 +16,7 @@ import {
   TInvoicePostPayload,
   TMerchantInfo,
 } from '../invoice.service';
-import { catchError, Subscription, switchMap, throwError } from 'rxjs';
+import { catchError, EMPTY, Subscription, switchMap, throwError } from 'rxjs';
 import { AdminProductService } from '../../admin-product.service';
 import { TProduct } from '../../all-products-list/all-products.modal';
 import { Router } from '@angular/router';
@@ -59,23 +59,34 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   customerDetailsForm!: FormGroup;
   isEditMode = true;
 
+
+  branchWiseProductList: TProductByBranchIdRes['response'] = [];
   branchId = 0;
-  branchChangeSubs = this.branchSelect.valueChanges.pipe(tap(branchId => { if (branchId) { this.fetchProductListBranchWise(+branchId) } })).subscribe();
+  branchChangeSubs = this.branchSelect.valueChanges
+    .pipe(
+      switchMap(branchId => {
+        if (branchId) return this.fetchProductListBranchWise(+branchId)
+        return EMPTY
+      })).subscribe();
 
   ngOnInit(): void {
-    const subs = this.merchantDetails().pipe(switchMap(() => this.getBranchList())).subscribe(() => this.fetchProductListBranchWise(+this.branchList[0].value));
+    const subs = this.merchantDetails()
+      .pipe(
+        switchMap(() => this.getBranchList()),
+        switchMap(() => this.fetchProductListBranchWise(+this.branchList[0].value))
+      ).subscribe();
     this.initForm();
-    this.fetchProductsList();
+    // this.fetchProductsList();
 
     this.subsArr.push(subs);
   }
   private onVerifyInvoice(items: { productId: number; quantity: number }[]) {
     const currentDate = new Date();
     const customerDetails = {
-      address: this.customerDetailsForm.controls['address'].value,
-      gstin: this.customerDetailsForm.controls['gstin'].value,
-      name: this.customerDetailsForm.controls['name'].value,
-      phoneNumber: this.customerDetailsForm.controls['phoneNumber'].value,
+      address: this.customerDetailsForm.controls['address'].value ? this.customerDetailsForm.controls['address'].value : null,
+      gstin: this.customerDetailsForm.controls['gstin'].value ? this.customerDetailsForm.controls['gstin'].value : null,
+      name: this.customerDetailsForm.controls['name'].value ? this.customerDetailsForm.controls['name'].value : null,
+      phoneNumber: this.customerDetailsForm.controls['phoneNumber'].value ? this.customerDetailsForm.controls['phoneNumber'].value : null,
     };
     const payload: TInvoicePostPayload = {
       invoiceType: this.invoiceType === true ? 'GST' : 'NON-GST',
@@ -90,15 +101,16 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.subsArr.push(subs);
   }
   onInvoiceTypeChange() {
-    if (this.invoiceType)
+    if (this.invoiceType) {
       return this.customerDetailsForm.get('gstin')?.enable();
+    }
     this.customerDetailsForm.get('gstin')?.disable();
   }
   private merchantDetails() {
     return this.invoiceService.fetchMerchentDetails().pipe(
       tap((details) => {
         this.merchantInfo = details;
-        if (this.merchantInfo.gstin !== '') {
+        if (this.merchantInfo.gstin) {
           this.showInvoiceToggleBtn = true;
         }
       }),
@@ -141,7 +153,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     const productIdQtyArr: { productId: number; quantity: number }[] = [];
     itemsArr.forEach((ele) => {
       const found = this.branchWiseProductList.find(
-        (product) => +product.product_id === +ele.productName,
+        (product) => product.product_name === ele.productName,
       );
       if (found) {
         productIdQtyArr.push({ productId: +found.product_id, quantity: ele.quantity });
@@ -151,10 +163,10 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   }
   private initForm() {
     this.customerDetailsForm = new FormGroup({
-      name: new FormControl('', { validators: [Validators.required] }),
-      phoneNumber: new FormControl(null, { validators: [Validators.required] }),
+      name: new FormControl(''),
+      phoneNumber: new FormControl(null),
       gstin: new FormControl(''),
-      address: new FormControl('', { validators: [Validators.required] }),
+      address: new FormControl(''),
       invoiceItemsArr: new FormArray([]),
     });
     const formInitGroup = this.initInvoiceItemForm();
@@ -167,6 +179,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   }
   onDeleteFormEle(index: number) {
     this.invoiceItemArr.removeAt(index);
+    this.updateDropdownBySelectedForm();
   }
 
   validatedProductsList: TCalculatedInvoiceRes['response'] = {
@@ -226,32 +239,32 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  productList: TProduct[] = [];
-  branchWiseProductList: TProductByBranchIdRes['response'] = [];
-  private fetchProductsList() {
-    let branchId = this.branchList.find(ele => ele.label === this.selectedBranch)?.value;
-    if (!branchId) branchId = '0';
-    const subs = this.adminService.getAllProductsList('10', '0', [+branchId])
-      .pipe(
-        tap((res) => (this.productList = res.filter((ele) => ele.is_active))),
-      )
-      .subscribe();
-    this.subsArr.push(subs);
+
+  onProductSelect(productName: string, index: number) {
+    const group = this.invoiceItemArr.at(index) as FormGroup;
+
+
+    group.get('productName')?.setValue(productName);
+
+    const product = this.branchWiseProductList.find(p => p.product_name === productName);
+    if (product) {
+      group.patchValue({
+        uom: product.uom
+      });
+      this.calculateTaxForProduct(group, product.id);
+    }
+    this.updateDropdownBySelectedForm();
   }
-  onProductSelect(event: string) {
-    this.selectedProduct = event;
-    this.customerDetailsForm.controls['productName'].setValue(event);
-  }
-  selectedProduct = '';
+
   private fetchProductListBranchWise(branchId: number) {
     this.branchId = branchId;
-    const subs = this.transferService.getProductListByBranchId(branchId)
+    return this.transferService.getProductListByBranchId(branchId)
       .pipe(tap(res => {
-        this.branchWiseProductList = res;
-        this.branchWiseProductDropDown = this.branchWiseProductList.map(ele => ({ value: ele.product_name, label: ele.product_name }))
+        this.branchWiseProductList = res.filter((ele) => ele.is_active);
+        this.branchWiseProductDropDown = this.branchWiseProductList.map(
+          ele => ({ value: ele.product_name, label: ele.product_name })
+        )
       }))
-      .subscribe();
-    this.subsArr.push(subs)
   }
 
   onGenerateInvoice() {
@@ -291,6 +304,16 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.customerDetailsForm.enable();
     this.onInvoiceTypeChange();
   }
+
+  private updateDropdownBySelectedForm() {
+    const selectedProducts = this.filterChoosenProductIdAndQuantity();
+    const selectedProductSet = new Set(selectedProducts.map(product => product.productId));
+
+    const same = this.branchWiseProductList.filter(item => !selectedProductSet.has(+item.product_id))
+
+    this.branchWiseProductDropDown = same.map(ele => ({ value: ele.product_name, label: ele.product_name }));
+  }
+
   ngOnDestroy(): void {
     this.subsArr.forEach((subs) => {
       if (subs) subs.unsubscribe();

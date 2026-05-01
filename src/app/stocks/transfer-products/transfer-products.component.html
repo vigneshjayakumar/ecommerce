@@ -8,12 +8,11 @@
                 <div class="bm-col">
                     <div class="bm-label-input">
                         <label for="productName">Source Branch*</label>
-                        <app-bm-select [options]="branchList" [value]="selectedBranchName"
-                            (valueChange)="onsrcBranchChange($event)"></app-bm-select>
+                        <app-bm-select [options]="branchList" (valueChange)="onsrcBranchChange($event)"></app-bm-select>
                     </div>
                     <div class="bm-label-input">
                         <label for="productName">Destination Branch*</label>
-                        <app-bm-select [options]="dstBranchList" [value]="selectedDstBranchName"
+                        <app-bm-select [options]="dstBranchList"
                             (valueChange)="onDstBranchChange($event)"></app-bm-select>
                     </div>
                 </div>
