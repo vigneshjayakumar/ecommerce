@@ -164,6 +164,10 @@ export class InvoiceService {
   getOverallSalesReport() {
     return this.httpClient.get(`${environment.apiBaseURL}/insights/cummilativeSalesReport`, { withCredentials: true })
   }
+
+  getPaymentDetails(invoiceId: number) {
+    return this.httpClient.get<{ message: 'SUCCESS' | 'ERROR', response: [{ total: string }] }>(`${environment.apiBaseURL}/invoice/payment-details/${invoiceId}`)
+  }
 }
 
 export type TMerchantDataResponse = {

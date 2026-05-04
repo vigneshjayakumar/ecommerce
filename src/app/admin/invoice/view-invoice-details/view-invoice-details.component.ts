@@ -13,7 +13,7 @@ import { INRCurrency } from 'src/app/common/pipes/inr-currency.pipe';
 import { FormsModule } from '@angular/forms';
 import { ExchangeSoldComponent } from '../exchange-sold/exchange-sold.component';
 import { PaymentConfirmationPopupComponent, TPaymentOptions } from 'src/app/common/components/payment-confirmation-popup/payment-confirmation-popup.component';
-import { ElectronPrintService } from 'src/app/common/services/electron-print-agent.service';
+import { ElectronPrintService, TPrinterPayload } from 'src/app/common/services/electron-print-agent.service';
 import { PageTitleHeaderComponent } from 'src/app/ui/shared/components/page-title-header/page-title-header.component';
 
 @Component({
@@ -104,8 +104,14 @@ export class ViewInvoiceDetailsComponent {
   }
 
   markAsPaid() {
-    this.popupData.amount = +this.invoiceDetails.overAll.total_amount
-    this.showPaymentPopUp = true;
+    this.invoiceService.getPaymentDetails(this.invoiceDetails.overAll.id).subscribe((res) => {
+      this.popupData.amount = +this.invoiceDetails.overAll.total_amount
+      if (res.response.length) {
+        this.popupData.amount = +this.invoiceDetails.overAll.total_amount - +res.response[0].total
+      }
+      this.showPaymentPopUp = true;
+    })
+
   }
 
   onMarkAsPayTrigger(event: { paymentType: TPaymentOptions, amount: number, refId?: string } | false) {
@@ -194,7 +200,34 @@ export class ViewInvoiceDetailsComponent {
   }
 
   onPrintPDF() {
-    this.printAgentService.postPrint({ data: 'Testing' }).subscribe();
+    this.printAgentService.getUSBDetails()
+      .pipe(switchMap(() => this.postPrinterPayload()))
+      .subscribe();
+  }
+
+  private postPrinterPayload() {
+    const date = new Date().toString();
+    const payload: TPrinterPayload = {
+      'transport': 'usb',
+      'title': 'Invoice',
+      'subtitle': this.merchantInfo.tenant_name,
+      'address': this.merchantInfo.address,
+      'date': date,
+      'balance': '0.00',
+      'discount': '0.00',
+      'footer': 'Thank You!!!',
+      'invoiceNo': this.invoiceDetails.overAll.invoice_number,
+      'items': this.invoiceDetails.items.map(ele => ({ name: ele.product_name_snapshot, qty: ele.quantity, price: ele.price_snapshot, total: ele.line_total })),
+      'paid': this.invoiceDetails.overAll.total_amount,
+      'subtotal': this.invoiceDetails.overAll.subtotal,
+      'total': this.invoiceDetails.overAll.total_amount,
+      'orderNo': this.invoiceDetails.overAll.invoice_number.split('/')[2],
+      'tax': this.invoiceDetails.overAll.tax_amount,
+      'vendorId': 4070,
+      productId: 33054,
+      cut: true
+    }
+    return this.printAgentService.postPrint(payload);
   }
 
   onRouteTo(path: 'exchange' | 'create-invoice' | 'invoice-lists', invoiceId: string | null = null) {

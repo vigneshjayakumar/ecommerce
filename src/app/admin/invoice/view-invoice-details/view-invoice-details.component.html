@@ -16,7 +16,7 @@
           Confirm
         </button>
         }
-        @if(invoiceDetails.overAll.invoice_status==='DRAFT'){
+        @if(invoiceDetails.overAll.invoice_status==='DRAFT' || invoiceDetails.overAll.invoice_status==='CONFIRMED'){
         <button header-actions class="bm-btn bm-btn-with-edit-icon" (click)="onCancelInvoice()">
           Cancel
         </button>

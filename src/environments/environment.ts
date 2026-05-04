@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: false,
-  // apiBaseURL: 'http://localhost:3000',
+  printAgent: 'http://localhost:3001',
+  // apiBaseURL: 'http://localhost:8080',
   apiBaseURL: 'https://one-stop-bazzaar-be.onrender.com',
 };
 /*
