@@ -1,0 +1,88 @@
+.bm-date-range {
+    position: relative;
+    width: 100%;
+}
+
+.bm-date-trigger {
+    height: 36px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.bm-date-trigger:hover {
+    border-color: #1A7C85;
+}
+
+.bm-date-value {
+    color: #374151;
+    font-size: 14px;
+}
+
+.bm-date-icon {
+    font-size: 14px;
+    color: #006D77;
+}
+
+.bm-date-dropdown {
+    position: absolute;
+    top: 42px;
+    left: 0;
+    width: 260px;
+    background: #FFFFFF;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    padding: 12px;
+    z-index: 100;
+}
+
+.bm-date-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.bm-date-row label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.bm-date-row input {
+    height: 32px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0 8px;
+}
+
+.bm-date-row input:focus {
+    outline: none;
+    border-color: #1A7C85;
+}
+
+.bm-date-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.bm-date-actions button {
+    background: #1A7C85;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bm-date-actions button:first-child {
+    background: #EDEDED;
+    color: #374151;
+}

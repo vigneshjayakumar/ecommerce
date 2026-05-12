@@ -2,6 +2,7 @@
   <div class="page-header">
     <p class="title">Billing</p>
     <div class="action-container">
+      <img class="delete-img" src="assets/icons/pdf-download.svg" alt="delete" (click)="onPrintPopup = true" />
       <div class="branch-drp_down">
         <app-bm-select [options]="branchList" (valueChange)="onSelectChange($event,'branch')"></app-bm-select>
       </div>
@@ -22,12 +23,6 @@
         <p>
           {{card.data}}
         </p>
-        <!-- @if(card.trends){
-        <div class="trends" [ngClass]="card.trends.class">
-          <img [src]="card.trends.icon" alt="">
-          {{card.trends.trendsValue}}
-        </div>
-        } -->
       </div>
     </div>
     }
@@ -51,9 +46,6 @@
           <p class="title">Invoice</p>
           <img src="assets/icons/expand-window.svg" alt="" (click)="onRouteTo('/admin/invoice/invoice-lists')">
         </span>
-        <!-- <div class="bm-select-medium">
-          <app-bm-select [options]="chartDurationSelect" [(ngModel)]="selectDuration"></app-bm-select>
-        </div> -->
       </div>
       <div class="content">
         <app-table [columns]="productsTableColumn" [rows]="productTableRows" [showCheckbox]="false"
@@ -105,3 +97,7 @@
     </div>
   </div>
 </main>
+
+@if(onPrintPopup){
+<app-closing-report-print (buttonAction)="onPrintActionEvent($event)"></app-closing-report-print>
+}

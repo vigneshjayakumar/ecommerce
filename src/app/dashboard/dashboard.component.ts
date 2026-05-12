@@ -12,11 +12,13 @@ import { InvoiceService, TInvoiceListEle } from '../admin/invoice/invoice.servic
 import { INRCurrency } from '../common/pipes/inr-currency.pipe';
 import { TableComponent } from '../ui/shared/components/table/table.component';
 import { BmSelectComponent } from '../ui/shared/components/bm-select/bm-select.component';
+import { ClosingReportPrintComponent } from "../common/components/closing-report-print/closing-report-print.component";
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    ReactiveFormsModule, TableComponent, NgxEchartsDirective, BmSelectComponent, FormsModule
+    ReactiveFormsModule, TableComponent, NgxEchartsDirective, BmSelectComponent, FormsModule,
+    ClosingReportPrintComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -43,6 +45,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: '60 Days', value: '60'
     }
   ];
+
+  onPrintPopup = false;
 
   selectDuration = this.chartDurationSelect[0].value;
   selectedTopSellerDuration = this.chartDurationSelect[0].value;
@@ -222,6 +226,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onRouteTo(path: '/admin/invoice/create-invoice' | '/admin/create-new' | '/admin/invoice/invoice-lists' | '/branch/list') {
     this.router.navigate([path])
+  }
+
+  onPrintActionEvent(event: 'Cancel' | 'Print') {
+    if (event === 'Cancel') return this.onPrintPopup = false;
+
+    return;
   }
 
   private totalRevenueTrends(duration = '60') {

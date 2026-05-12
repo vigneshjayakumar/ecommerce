@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { TInvoiceSummary, TStockSummaryRes } from '../dashboard.component';
 import { map, Observable } from 'rxjs';
+import { IDateRange } from 'src/app/ui/shared/components/bm-date-range/bm-date-range.component';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,20 @@ export class DashboardApiService {
   getTotalItemsBranchwise() {
     return this.httpClient.get<TTotalItemsCountBranchwise>(`${environment.apiBaseURL}/insights/total-items-branchwise`, { withCredentials: true })
   }
+
+  getInvocieDailyPrint(dateRange: IDateRange) {
+    return this.httpClient.post<TOverallInvoicePrintRes>(`${environment.apiBaseURL}/insights/print-invoice-report`, { dateRange }, { withCredentials: true })
+  }
+
+  getPurchaseDailyPrint(dateRange: IDateRange) {
+    return this.httpClient.post<TOverAllPurchasePrintRes>(`${environment.apiBaseURL}/insights/print-purchase-report`, { dateRange }, { withCredentials: true })
+  }
+
+  getTransferDailyPrint(dateRange: IDateRange) {
+    return this.httpClient.post<TOverallTransferPrintRes>(`${environment.apiBaseURL}/insights/print-transfer-report`, { dateRange }, { withCredentials: true })
+  }
+
+
 }
 
 export type TTotalRevenueTrends = {
@@ -100,3 +115,34 @@ export type TTotalItemsCountBranchwise = {
     }
   }
 }
+
+export type TOverAllPurchasePrintRes = TGenericMessageRes & {
+  response: {
+    "created_at": string,
+    "branch_name": string,
+    "total_qty": string,
+    "total_cost": string,
+    "purchase_no": string,
+  }[]
+}
+
+export type TOverallInvoicePrintRes = TGenericMessageRes & {
+  response: {
+    "invoice_number": string,
+    "total_amount": string,
+    "invoice_status": string,
+    "created_at": string,
+  }[],
+}
+
+export type TOverallTransferPrintRes = TGenericMessageRes & {
+  response: {
+    "from_branch_id": string,
+    "to_branch_id": string,
+    "total_qty": string,
+    "total_items": number,
+    "transfer_no": string,
+  }[]
+}
+
+export type TGenericMessageRes = { message: 'ERROR' | 'SUCCESS' }

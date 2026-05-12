@@ -1,0 +1,35 @@
+<div class="overlay">
+    <div class="custom_popup__container bm-card">
+        <div class="popup-header">
+            <p class="title">Closure Report</p>
+            <p class="sub-title">Instant Print.</p>
+        </div>
+
+        <div class="content_box">
+            <span class='input-container'>
+                <div class="bm-label-input">
+                    <label for="paymentType">Date Range</label>
+                    <app-bm-date-range [(ngModel)]="selectedDateRange"
+                        (emitDate)="onDateRangeChange($event)"></app-bm-date-range>
+                </div>
+                <div class="bm-label-input">
+                    <label for="paymentType">Type</label>
+                    <app-bm-select [options]="printTypes" (valueChange)="onSelectedChanges($event)"></app-bm-select>
+                </div>
+            </span>
+            <span class="preview-table">
+                <app-table [columns]="tableColumn" [rows]="tableRowContent" [showCheckbox]="false"
+                    [showAction]="false"></app-table>
+            </span>
+            <div class="btn-container">
+                <button type="button" class="bm-btn bm-btn-secondary" (click)="onButtonClick('Cancel')">
+                    Cancel
+                </button>
+
+                <button type="button" class="bm-btn bm-btn-primary" (click)="onButtonClick('Print')">
+                    Print
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

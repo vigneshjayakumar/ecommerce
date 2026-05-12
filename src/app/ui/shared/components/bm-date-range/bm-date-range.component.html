@@ -1,0 +1,34 @@
+<div class="bm-date-range">
+
+    <!-- Trigger -->
+    <div class="bm-date-trigger" (click)="toggle()">
+        <span class="bm-date-value">
+            {{ label }}
+        </span>
+
+        <span class="bm-date-icon">📅</span>
+    </div>
+
+    <!-- Dropdown -->
+    @if (isOpen) {
+    <div class="bm-date-dropdown">
+
+        <div class="bm-date-row">
+            <label>From</label>
+            <input type="date" [value]="value.from" (change)="updateFrom($any($event.target).value)" />
+        </div>
+
+        <div class="bm-date-row">
+            <label>To</label>
+            <input type="date" [value]="value.to" (change)="updateTo($any($event.target).value)" />
+        </div>
+
+        <div class="bm-date-actions">
+            <button type="button" (click)="clear()">Clear</button>
+            <button type="button" (click)="onApplyDate()">Apply</button>
+        </div>
+
+    </div>
+    }
+
+</div>

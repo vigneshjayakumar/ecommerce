@@ -11,8 +11,12 @@ import { environment } from "src/environments/environment";
 export class ElectronPrintService {
     private httpClient = inject(HttpClient);
 
-    postPrint(payload: TPrinterPayload) {
+    postPrint(payload: TPrinterPayload | TOverallPrintPayload) {
         return this.httpClient.post(`${environment.printAgent}/print`, payload)
+    }
+
+    postOverallPrint(payload: TOverallPrintPayload) {
+        return this.httpClient.post(`${environment.printAgent}/print-report`, payload)
     }
 
     getUSBDetails() {
@@ -54,6 +58,18 @@ export type TPrinterPayload = {
     "total": string,
     "paid": string,
     "balance": string,
+    "footer": "Thank You!!!",
+    "cut": true
+}
+
+export type TOverallPrintPayload = {
+    "transport": "usb",
+    "title": string,
+    "vendorId": 4070,
+    "productId": 33054,
+    "subtitle": string,
+    "date": string,
+    "items": any[],
     "footer": "Thank You!!!",
     "cut": true
 }
