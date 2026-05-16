@@ -1,0 +1,13 @@
+<div class="bm-toast-wrapper">
+    @for(item of toaster.toastSig(); track item.id) {
+    <div class="bm-toast" [class.success]="item.type === 'SUCCESS'" [class.error]="item.type === 'ERROR'"
+        [class.info]="item.type === 'INFO'" [class.warning]="item.type === 'WARNING'">
+        <div class="bm-toast-message">
+            {{ item.message }}
+        </div>
+        <button class="bm-toast-close" (click)="toaster.removeToast(item.id)">
+            ✕
+        </button>
+    </div>
+    }
+</div>

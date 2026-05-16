@@ -4,13 +4,14 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { LoaderComponent } from './common/loader/loader.component/loader.component';
 import { BmHeaderComponent } from './ui/shared/components/bm-header/bm-header.component';
+import { ToasterComponent } from './common/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, LoaderComponent, BmHeaderComponent],
+  imports: [RouterOutlet, LoaderComponent, BmHeaderComponent, ToasterComponent],
 })
 export class AppComponent {
   private authService = inject(AuthService);
