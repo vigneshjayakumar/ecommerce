@@ -22,16 +22,16 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   const getErrorMessage = (err: HttpErrorResponse) => {
     if (err.status === 0) return 'Network error';
-    if (err.status === 401) return 'Unauthorized access';
+    // if (err.status === 401) return 'Unauthorized access';
     if (err.status === 403) return 'Access denied';
     if (err.status === 404) return 'API not found';
     if (err.status >= 500) return 'Internal server error';
 
     if (err.error && typeof err.error === 'object') {
       const errorBody = err.error as { message?: string; errorMsg?: string | string[] };
-
-      if (errorBody.message) return errorBody.message;
+      
       if (Array.isArray(errorBody.errorMsg)) return errorBody.errorMsg.join(', ');
+      if (errorBody.message) return errorBody.message;
       if (errorBody.errorMsg) return errorBody.errorMsg;
     }
 

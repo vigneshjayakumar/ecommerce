@@ -263,7 +263,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private mapTopSellerGraphData(duration: string = '60') {
-    return this.dashboardApiService.getTopSeller(duration, '1').pipe(tap(res => {
+    return this.dashboardApiService.getTopSeller(duration, this.selectBranchId).pipe(tap(res => {
       let data = res.response.topSeller.map(ele => ({ ...ele, value: +ele.value }));
       this.updateTopSellerOptions = {
         series: [{
